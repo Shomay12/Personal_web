@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shomay Singh Parihar — AI/ML Engineer · Researcher · Software Developer</title>
+  <meta name="description"
+    content="AI/ML Engineer & Researcher focused on intelligent systems, modern deep learning, and AI research." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23c1ff72'>S</text></svg>">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shomay12.github.io/shomay-portfolio.in/">
+  <meta property="og:title" content="Shomay Singh Parihar — AI/ML Engineer · Researcher · Software Developer">
+  <meta property="og:description" content="AI/ML Engineer & Researcher focused on intelligent systems, modern deep learning, and AI research.">
+  <meta property="og:image" content="assets/images/me.JPG">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://shomay12.github.io/shomay-portfolio.in/">
+  <meta property="twitter:title" content="Shomay Singh Parihar — AI/ML Engineer · Researcher · Software Developer">
+  <meta property="twitter:description" content="AI/ML Engineer & Researcher focused on intelligent systems, modern deep learning, and AI research.">
+  <meta property="twitter:image" content="assets/images/me.JPG">
+
+  <!-- Three.js & GSAP via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- AMBIENT GLOW MESH FOR FROSTED GLASS REFRACTION -->
+  <div class="ambient-glow-mesh">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+      <div class="loader-count" id="loaderCount">00</div>
+      <p class="loader-text">SYSTEM // AI & SYSTEMS</p>
+    </div>
+  </div>
+
+  <!-- WebGL Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">S<span>.</span></a>
+    <div class="nav-links" id="nav-links">
+      <a href="#about">About</a>
+      <a href="#exploring">Exploring</a>
+      <a href="#projects">Projects</a>
+      <a href="#research">Research</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact" class="nav-cta">Let's Talk</a>
+    </div>
+    <div class="nav-right">
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <svg id="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg id="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-content">
+        <div class="glass-badge hero-badge reveal-up">
+          <span class="badge-dot"></span>
+          <span>✦ AI/ML ENGINEER & RESEARCHER</span>
+        </div>
+        
+        <h1 class="hero-name glitch-text" data-text="SHOMAY">SHOMAY</h1>
+        <h1 class="hero-name hero-name-2 glitch-text" data-text="SINGH">SINGH</h1>
+        <h1 class="hero-name hero-accent glitch-text" data-text="PARIHAR">PARIHAR</h1>
+        
+        <div class="hero-role reveal-up">
+          <span>AI/ML Engineer</span>
+          <span class="role-sep">·</span>
+          <span>Researcher</span>
+          <span class="role-sep">·</span>
+          <span>Software Developer</span>
+        </div>
+
+        <div class="hero-stripe"></div>
+
+        <div class="hero-bottom">
+          <div class="hero-desc-wrap">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4;">Building Intelligent Systems. Understanding How They Work.</h2>
+            <p class="hero-statement">I build and study intelligent systems at the intersection of machine learning, deep learning, software engineering, and AI research.</p>
+            <div class="hero-location-pill">
+              <span>Machine Learning · Deep Learning · NLP · Generative AI · AI Systems</span>
+            </div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><span class="stat-num">8.22</span><span class="stat-lbl">CGPA</span></div>
+            <div class="stat"><span class="stat-num">BCA</span><span class="stat-lbl">Degree</span></div>
+            <div class="stat"><span class="stat-num">AI/ML</span><span class="stat-lbl">Primary Focus</span></div>
+            <div class="stat"><span class="stat-num">India</span><span class="stat-lbl">Based In</span></div>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="#projects" class="btn-wild">
+            <span class="btn-fill"></span>
+            <span class="btn-label">Explore My Work ↗</span>
+          </a>
+          <a href="https://github.com/shomay12" target="_blank" class="btn-ghost">View GitHub ↗</a>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </section>
+
+    <!-- ABOUT ME -->
+    <section id="about" class="section-block">
+      <div class="about-glass-panel reveal-up">
+        <div class="about-grid">
+          <div class="about-left reveal-left">
+            <span class="section-label">BACKGROUND</span>
+            <h2 class="section-heading">About<br><em>Me</em></h2>
+            <div class="about-tag-row">
+              <span class="chip">AI & ML Systems</span>
+              <span class="chip">Transformers & Attention</span>
+              <span class="chip">Representation Learning</span>
+              <span class="chip">RAG & Agents</span>
+            </div>
+          </div>
+          <div class="about-right reveal-right">
+            <p>I am a BCA student at <strong>Amity University, Noida</strong>, focused on <strong>Artificial Intelligence, Machine Learning, Deep Learning</strong>, and intelligent software systems.</p>
+            <p>My approach combines theoretical understanding with practical engineering. Rather than treating machine learning models as black boxes, I focus on understanding the mechanisms behind them—from optimization and representation learning to attention mechanisms, Transformers, retrieval systems, and modern generative AI architectures.</p>
+            <p>I build software and AI systems to turn these concepts into practical implementations. My work spans machine learning experimentation, NLP, automation, backend engineering, API-driven systems, and AI-powered applications.</p>
+            <p>My current technical direction is centered around modern AI systems, including <strong>Retrieval-Augmented Generation, model fine-tuning, AI agents</strong>, and the engineering challenges involved in building reliable intelligent applications.</p>
+            <p>Long term, I want to work at the intersection of AI research and systems engineering, where understanding fundamental machine learning concepts can lead to better and more capable intelligent systems.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CURRENT TECHNICAL DIRECTION / WHAT I'M EXPLORING -->
+    <section id="exploring" class="section-block">
+      <span class="section-label centered-heading" style="margin-bottom: 8px;">TECHNICAL DIRECTION</span>
+      <h2 class="section-heading centered-heading reveal-up">What I’m<br><em>Exploring</em></h2>
+
+      <div class="exploring-grid">
+        <div class="exploring-card reveal-up" style="--delay:0s">
+          <h3>Modern Deep Learning</h3>
+          <p>Studying neural architectures beyond conventional machine learning, with emphasis on representation learning, optimization, sequence modeling, and architectures capable of learning complex patterns from large datasets.</p>
+        </div>
+
+        <div class="exploring-card reveal-up" style="--delay:0.08s">
+          <h3>Transformers & Attention</h3>
+          <p>Understanding self-attention, multi-head attention, positional representations, encoder-decoder architectures, and the architectural ideas that enabled modern language models.</p>
+        </div>
+
+        <div class="exploring-card reveal-up" style="--delay:0.16s">
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Exploring how retrieval systems, embeddings, vector search, and language models can be combined to ground generated responses in external knowledge.</p>
+        </div>
+
+        <div class="exploring-card reveal-up" style="--delay:0.24s">
+          <h3>Model Fine-Tuning</h3>
+          <p>Studying techniques for adapting pretrained models to specialized tasks and datasets while balancing performance, compute requirements, and generalization.</p>
+        </div>
+
+        <div class="exploring-card reveal-up" style="--delay:0.32s">
+          <h3>AI Agents</h3>
+          <p>Exploring systems where language models can reason over tasks, use tools, interact with external systems, maintain context, and execute multi-step workflows.</p>
+        </div>
+
+        <div class="exploring-card reveal-up" style="--delay:0.4s">
+          <h3>AI Systems</h3>
+          <p>Interested in the engineering layer behind intelligent applications: model serving, APIs, retrieval pipelines, automation, infrastructure, evaluation, and system reliability.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTED PROJECTS -->
+    <section id="projects" class="section-block">
+      <span class="section-label centered-heading" style="margin-bottom: 8px;">ENGINEERED SYSTEMS</span>
+      <h2 class="section-heading centered-heading reveal-up">Selected<br><em>Projects</em></h2>
+
+      <div class="projects-grid">
+        <!-- Project 01: ReplyNest -->
+        <article class="project-card reveal-up" style="--delay:0s">
+          <div class="project-visual">
+            <img src="assets/images/one.png" alt="ReplyNest" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">Automation SaaS · Backend</span>
+              <span class="pill live">● PRODUCTION / SAAS</span>
+            </div>
+            <h3>ReplyNest</h3>
+            <div class="card-subtitle">Instagram Automation Platform</div>
+            <p>An Instagram automation platform designed to help businesses automate conversations and engagement workflows through Meta’s platform APIs.</p>
+            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Handles authentication, account connectivity, messaging workflows, database persistence, and containerized deployment with robust webhook handling.</p>
+            <div class="card-tech">
+              <span>Instagram Business APIs</span><span>OAuth Flows</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span><span>Traefik</span><span>VPS</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+              Focus: API Architecture · Authentication · Automation · Backend Systems
+            </div>
+            <div style="display: flex; gap: 16px;">
+              <a href="https://shomay12.github.io/shomay-portfolio.in/" target="_blank" class="card-link">Live Demo ↗</a>
+              <a href="https://github.com/shomay12" target="_blank" class="card-link">GitHub ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 02: QuAxiomOS -->
+        <article class="project-card reveal-up" style="--delay:0.1s">
+          <div class="project-visual">
+            <img src="assets/images/two.png" alt="QuAxiomOS" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">AI Systems · Agents</span>
+              <span class="pill published">● RESEARCH & DEV</span>
+            </div>
+            <h3>QuAxiomOS</h3>
+            <div class="card-subtitle">AI-Native Operating Environment</div>
+            <p>A long-term exploration into an AI-native operating environment designed around intelligent agents, automation, and human-computer interaction.</p>
+            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Explores what an operating environment could look like when AI is treated as a fundamental system capability rather than an external application, focusing on agent workflows and tool coordination.</p>
+            <div class="card-tech">
+              <span>AI Agents</span><span>Operating Systems</span><span>Automation</span><span>Intelligent Interfaces</span><span>Systems Engineering</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+              Focus: Agent Architecture · Tool Coordination · HCI · Systems Engineering
+            </div>
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">Architecture Specs ↗</a>
+          </div>
+        </article>
+
+        <!-- Project 03: YouTube Analytics Platform -->
+        <article class="project-card reveal-up" style="--delay:0.2s">
+          <div class="project-visual">
+            <img src="assets/images/three.png" alt="YouTube Analytics Platform" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">Data Engineering · Analytics</span>
+              <span class="pill live">● ACTIVE DEV</span>
+            </div>
+            <h3>YouTube Analytics Platform</h3>
+            <div class="card-subtitle">Creator Analytics & Intelligence</div>
+            <p>A platform concept for collecting, processing, and presenting YouTube channel and video analytics using the YouTube Data API.</p>
+            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Transforms public YouTube data into useful analytics for understanding channels, videos, engagement metrics, and creator performance over time.</p>
+            <div class="card-tech">
+              <span>YouTube Data API</span><span>Python</span><span>Node.js</span><span>Data Processing</span><span>Analytics</span><span>Visualization</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+              Focus: Data Pipelines · API Integration · Analytics · Backend Engineering
+            </div>
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">View Specs ↗</a>
+          </div>
+        </article>
+
+        <!-- Project 04: AI Automation Systems -->
+        <article class="project-card reveal-up" style="--delay:0.3s">
+          <div class="project-visual">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="AI Automation Systems" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">AI Agents · Workflow Engineering</span>
+              <span class="pill status">● EXPERIMENTAL</span>
+            </div>
+            <h3>AI Automation Systems</h3>
+            <div class="card-subtitle">Intelligent Workflow Automation</div>
+            <p>Experiments combining language models, APIs, automation platforms, and external services to create intelligent workflows.</p>
+            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Connects models with tools, APIs, databases, and automation platforms to move beyond generating text into executing multi-step autonomous tasks.</p>
+            <div class="card-tech">
+              <span>OpenAI</span><span>Ollama</span><span>n8n</span><span>APIs</span><span>Node.js</span><span>Python</span><span>LLM Orchestration</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+              Focus: Tool Calling · Agentic Workflows · LLM Orchestration · API Integration
+            </div>
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">View Systems ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- RESEARCH INTERESTS -->
+    <section id="research" class="section-block">
+      <span class="section-label centered-heading" style="margin-bottom: 8px;">INQUIRY & RESEARCH</span>
+      <h2 class="section-heading centered-heading reveal-up">Research<br><em>Interests</em></h2>
+
+      <div class="research-grid">
+        <div class="research-card reveal-up" style="--delay:0s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">Machine Learning</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Understanding algorithms, optimization, generalization, representation learning, and model evaluation.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.05s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">Deep Learning</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Exploring neural architectures and learning mechanisms for increasingly complex data and tasks.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.1s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">Natural Language Processing</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Studying how computational systems represent, process, retrieve, and generate human language.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.15s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">Large Language Models</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Interested in architectures, training methods, inference behavior, adaptation techniques, and system-level applications.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.2s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">Retrieval-Augmented Generation</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Exploring retrieval, embeddings, vector databases, contextual grounding, and knowledge-intensive generation.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.25s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">AI Agents</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Researching systems capable of reasoning, planning, tool use, memory, and multi-step execution.</p>
+          </div>
+        </div>
+
+        <div class="research-card reveal-up" style="--delay:0.3s">
+          <div class="research-icon">◈</div>
+          <div>
+            <div class="research-title">AI Systems</div>
+            <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">Investigating the infrastructure and engineering required to turn machine learning models into reliable, useful software systems.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGINEERING PHILOSOPHY -->
+    <section id="philosophy" class="section-block">
+      <span class="section-label centered-heading" style="margin-bottom: 8px;">CORE PRINCIPLES</span>
+      <h2 class="section-heading centered-heading reveal-up">How I Think About<br><em>Engineering</em></h2>
+
+      <div class="philosophy-grid">
+        <div class="philosophy-card reveal-up" style="--delay:0s">
+          <h3>Understand Before Abstracting</h3>
+          <p>I prefer understanding the mechanism behind a technology before relying on high-level abstractions.</p>
+        </div>
+
+        <div class="philosophy-card reveal-up" style="--delay:0.1s">
+          <h3>Build to Learn</h3>
+          <p>Projects are a way to test whether theoretical concepts actually translate into working systems.</p>
+        </div>
+
+        <div class="philosophy-card reveal-up" style="--delay:0.2s">
+          <h3>Systems Over Isolated Models</h3>
+          <p>A strong model is only one component of an intelligent product. Data, retrieval, infrastructure, evaluation, APIs, and user interaction all matter.</p>
+        </div>
+
+        <div class="philosophy-card reveal-up" style="--delay:0.3s">
+          <h3>Experimentation</h3>
+          <p>I learn through implementation, experimentation, failure analysis, and iteration rather than relying solely on theoretical study.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNICAL SKILLS -->
+    <section id="skills" class="section-block">
+      <div class="skills-layout">
+        <div class="skills-left reveal-left">
+          <span class="section-label">TECHNICAL TOOLKIT</span>
+          <h2 class="section-heading">Technical<br><em>Skills</em></h2>
+          <p>Organized into core computational and machine learning competencies used to build and study intelligent systems.</p>
+        </div>
+        <div class="skills-right">
+          <!-- Programming -->
+          <div class="skill-group reveal-up" style="--delay:0s">
+            <h4>Programming</h4>
+            <div class="tags-flow">
+              <span>Python</span>
+              <span>Java</span>
+              <span>JavaScript</span>
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>PHP</span>
+            </div>
+          </div>
+          <!-- Machine Learning -->
+          <div class="skill-group reveal-up" style="--delay:0.05s">
+            <h4>Machine Learning</h4>
+            <div class="tags-flow">
+              <span>Supervised Learning</span>
+              <span>Unsupervised Learning</span>
+              <span>Feature Engineering</span>
+              <span>Data Preprocessing</span>
+              <span>Model Evaluation</span>
+              <span>Hyperparameter Optimization</span>
+              <span>Ensemble Learning</span>
+              <span>Regression</span>
+              <span>Classification</span>
+            </div>
+          </div>
+          <!-- Deep Learning -->
+          <div class="skill-group reveal-up" style="--delay:0.1s">
+            <h4>Deep Learning</h4>
+            <div class="tags-flow">
+              <span>Neural Networks</span>
+              <span>CNNs</span>
+              <span>RNNs</span>
+              <span>LSTM</span>
+              <span>GRU</span>
+              <span>Sequence-to-Sequence</span>
+              <span>Attention Mechanisms</span>
+              <span>Transformers</span>
+            </div>
+          </div>
+          <!-- NLP & Generative AI -->
+          <div class="skill-group reveal-up" style="--delay:0.15s">
+            <h4>NLP & Generative AI</h4>
+            <div class="tags-flow">
+              <span>Natural Language Processing</span>
+              <span>Word Representations</span>
+              <span>Embeddings</span>
+              <span>Sequence Modeling</span>
+              <span>Transformers</span>
+              <span>RAG</span>
+              <span>Fine-Tuning</span>
+              <span>Large Language Models</span>
+              <span>AI Agents</span>
+            </div>
+          </div>
+          <!-- Python Ecosystem -->
+          <div class="skill-group reveal-up" style="--delay:0.2s">
+            <h4>Python Ecosystem</h4>
+            <div class="tags-flow">
+              <span>NumPy</span>
+              <span>Pandas</span>
+              <span>Scikit-learn</span>
+              <span>Matplotlib</span>
+              <span>Seaborn</span>
+              <span>Statsmodels</span>
+            </div>
+          </div>
+          <!-- AI Frameworks / Platforms -->
+          <div class="skill-group reveal-up" style="--delay:0.25s">
+            <h4>AI Frameworks / Platforms</h4>
+            <div class="tags-flow">
+              <span>PyTorch</span>
+              <span>TensorFlow</span>
+              <span>Hugging Face</span>
+              <span>OpenAI</span>
+              <span>Ollama</span>
+            </div>
+          </div>
+          <!-- Backend & Infrastructure -->
+          <div class="skill-group reveal-up" style="--delay:0.3s">
+            <h4>Backend & Infrastructure</h4>
+            <div class="tags-flow">
+              <span>Node.js</span>
+              <span>Express</span>
+              <span>REST APIs</span>
+              <span>PostgreSQL</span>
+              <span>API Integration</span>
+              <span>Linux</span>
+              <span>Docker</span>
+              <span>Docker Compose</span>
+              <span>Traefik</span>
+              <span>VPS Deployment</span>
+              <span>Git / GitHub</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section-block">
+      <div class="education-glass-card reveal-up">
+        <div class="education-left">
+          <span class="section-label">ACADEMIC BACKGROUND</span>
+          <h3>Amity University, Noida</h3>
+          <div class="education-degree">Bachelor of Computer Applications (BCA)</div>
+          <div class="education-focus">Focus: Computer Science · Artificial Intelligence · Machine Learning</div>
+        </div>
+        <div class="cgpa-badge">
+          <span class="cgpa-num">8.22</span>
+          <span class="cgpa-lbl">Cumulative GPA</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section-block">
+      <div class="contact-glass-terminal reveal-up">
+        <div class="contact-wrap">
+          <div>
+            <span class="section-label">TRANSMISSION</span>
+            <h2 class="contact-headline">Let’s Build<br>Something<br><em>Intelligent.</em></h2>
+          </div>
+          <div class="contact-right">
+            <p>I am interested in AI/ML research, intelligent systems, engineering projects, and technically challenging problems.</p>
+            <div class="contact-links">
+              <a href="https://github.com/shomay12" target="_blank" class="social-btn">GitHub ↗</a>
+              <a href="https://www.linkedin.com/in/shomay-singh-parihar-b09b2931a/" target="_blank" class="social-btn">LinkedIn ↗</a>
+              <a href="mailto:shomaysinghparihar@gmail.com" class="social-btn">Email ↗</a>
+            </div>
+            <form id="contact-form" class="contact-form">
+              <div class="form-row">
+                <div class="field"><label>Name</label><input type="text" name="name" placeholder="Your name" required />
+                </div>
+                <div class="field"><label>Email</label><input type="email" name="email" placeholder="your@email.com"
+                    required /></div>
+              </div>
+              <div class="field"><label>Message</label><textarea name="message" rows="4"
+                  placeholder="What's on your mind?" required></textarea></div>
+              <button type="submit" class="btn-wild full-width">
+                <span class="btn-fill"></span>
+                <span class="btn-label">Send Message</span>
+              </button>
+              <p id="form-status"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLLING TICKER -->
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <div class="ticker-item">SYSTEM STATUS: ACTIVE</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">SHOMAY SINGH PARIHAR</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">AI/ML ENGINEER & RESEARCHER</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">RESEARCH: RAG · AGENTS · DEEP LEARNING</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">LOCATION: INDIA</div>
+        <div class="ticker-item sep">//</div>
+        <!-- Duplicate for loop -->
+        <div class="ticker-item">SYSTEM STATUS: ACTIVE</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">SHOMAY SINGH PARIHAR</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">AI/ML ENGINEER & RESEARCHER</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">RESEARCH: RAG · AGENTS · DEEP LEARNING</div>
+        <div class="ticker-item sep">//</div>
+        <div class="ticker-item">LOCATION: INDIA</div>
+        <div class="ticker-item sep">//</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Shomay Singh Parihar · AI/ML Engineer · Researcher · Software Developer</span>
+      <span style="font-size: 0.72rem; color: var(--text-subtle);">© 2026 Shomay Singh Parihar. All rights reserved.</span>
+      <a href="#hero" class="back-top">↑ Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

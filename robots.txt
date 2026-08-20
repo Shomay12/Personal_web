@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shomay12.github.io/shomay-portfolio.in/sitemap.xml

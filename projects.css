@@ -1,0 +1,124 @@
+/* ===========================
+   PROJECTS ARCHIVE PAGE (GLASS EDITION)
+   Leverages Glass Edition variables from style.css
+=========================== */
+
+.page-header {
+  padding-top: clamp(100px, 14vw, 160px) !important;
+  padding-bottom: 2rem !important;
+  position: relative;
+  z-index: 2;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-header .section-heading {
+  margin-top: 0.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: 1rem !important;
+  position: relative;
+  z-index: 2;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Glass Number Watermark */
+.project-number {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.05);
+  text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.1);
+  z-index: 2;
+  pointer-events: none;
+  transition: all 0.4s var(--ease);
+}
+
+body.light .project-number {
+  color: rgba(91, 46, 255, 0.08);
+}
+
+.project-card:hover .project-number {
+  color: rgba(var(--accent-rgb), 0.15);
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* Specific overrides for projects page cards */
+.project-card .project-visual {
+  height: clamp(200px, 22vw, 260px);
+}
+
+@media (max-width: 768px) {
+  .project-card .project-visual {
+    height: 190px;
+  }
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.project-links .card-link {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s var(--ease);
+}
+
+.project-links .card-link:hover {
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(var(--accent-rgb), 0.15);
+}
+
+/* Ensure the back-top link in footer works nicely */
+.back-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.card-body h3 {
+  color: var(--text);
+  transition: color 0.3s;
+}
+
+.project-card:hover h3 {
+  color: var(--accent);
+}

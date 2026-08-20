@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects Archive | Shomay Singh Parihar — AI/ML Engineer</title>
+  <meta name="description" content="Visual showcase of engineering and AI projects by Shomay Singh Parihar." />
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="projects.css" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23c1ff72'>S</text></svg>">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shomay12.github.io/shomay-portfolio.in/projects.html">
+  <meta property="og:title" content="Projects Archive | Shomay Singh Parihar">
+  <meta property="og:description" content="Visual showcase of engineering and AI projects by Shomay Singh Parihar.">
+  <meta property="og:image" content="assets/images/me.JPG">
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- AMBIENT GLOW MESH FOR FROSTED GLASS REFRACTION -->
+  <div class="ambient-glow-mesh">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">S<span>.</span></a>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#exploring">Exploring</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#research">Research</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#education">Education</a>
+      <a href="index.html#contact" class="nav-cta">Let's Talk</a>
+    </div>
+    <div class="nav-right">
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <svg id="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg id="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- WebGL Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <main id="main-content">
+    <!-- Page Header -->
+    <section class="page-header section-block">
+      <div class="glass-badge reveal-up">
+        <span class="badge-dot"></span>
+        <span>✦ GLASS EDITION // ARCHIVE</span>
+      </div>
+      <div class="section-label">PROJECTS ARCHIVE</div>
+      <h1 class="section-heading reveal-up">Things I've<br><em>Built</em></h1>
+      <p class="reveal-up" style="--delay:0.1s; margin-top: 1.5rem; color: var(--text-dim);">Selected works showcasing machine learning, AI agents, software engineering, and systems research.</p>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-grid section-block">
+      <!-- Project 01: ReplyNest -->
+      <article class="project-card reveal-up" style="--delay:0s">
+        <div class="project-number">01</div>
+        <div class="project-visual">
+          <img src="assets/images/one.png" alt="ReplyNest" class="project-img" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="tag">Automation SaaS · Backend</span>
+            <span class="pill live">● PRODUCTION / SAAS</span>
+          </div>
+          <h3>ReplyNest</h3>
+          <div class="card-subtitle">Instagram Automation Platform</div>
+          <p>An Instagram automation platform designed to help businesses automate conversations and engagement workflows through Meta’s platform APIs.</p>
+          <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Handles authentication, account connectivity, messaging workflows, database persistence, and containerized deployment with robust webhook handling.</p>
+          <div class="card-tech">
+            <span>Instagram Business APIs</span><span>OAuth Flows</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span><span>Traefik</span><span>VPS</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+            Focus: API Architecture · Authentication · Automation · Backend Systems
+          </div>
+          <div class="project-links">
+            <a href="https://shomay12.github.io/shomay-portfolio.in/" target="_blank" class="card-link">Live Demo ↗</a>
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">GitHub ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 02: QuAxiomOS -->
+      <article class="project-card reveal-up" style="--delay:0.1s">
+        <div class="project-number">02</div>
+        <div class="project-visual">
+          <img src="assets/images/two.png" alt="QuAxiomOS" class="project-img" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="tag">AI Systems · Agents</span>
+            <span class="pill published">● RESEARCH & DEV</span>
+          </div>
+          <h3>QuAxiomOS</h3>
+          <div class="card-subtitle">AI-Native Operating Environment</div>
+          <p>A long-term exploration into an AI-native operating environment designed around intelligent agents, automation, and human-computer interaction.</p>
+          <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Explores what an operating environment could look like when AI is treated as a fundamental system capability rather than an external application, focusing on agent workflows and tool coordination.</p>
+          <div class="card-tech">
+            <span>AI Agents</span><span>Operating Systems</span><span>Automation</span><span>Intelligent Interfaces</span><span>Systems Engineering</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+            Focus: Agent Architecture · Tool Coordination · HCI · Systems Engineering
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">Architecture Specs ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 03: YouTube Analytics Platform -->
+      <article class="project-card reveal-up" style="--delay:0.2s">
+        <div class="project-number">03</div>
+        <div class="project-visual">
+          <img src="assets/images/three.png" alt="YouTube Analytics Platform" class="project-img" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="tag">Data Engineering · Analytics</span>
+            <span class="pill live">● ACTIVE DEV</span>
+          </div>
+          <h3>YouTube Analytics Platform</h3>
+          <div class="card-subtitle">Creator Analytics & Intelligence</div>
+          <p>A platform concept for collecting, processing, and presenting YouTube channel and video analytics using the YouTube Data API.</p>
+          <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Transforms public YouTube data into useful analytics for understanding channels, videos, engagement metrics, and creator performance over time.</p>
+          <div class="card-tech">
+            <span>YouTube Data API</span><span>Python</span><span>Node.js</span><span>Data Processing</span><span>Analytics</span><span>Visualization</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+            Focus: Data Pipelines · API Integration · Analytics · Backend Engineering
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">View Specs ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 04: AI Automation Systems -->
+      <article class="project-card reveal-up" style="--delay:0.3s">
+        <div class="project-number">04</div>
+        <div class="project-visual">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="AI Automation Systems" class="project-img" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="tag">AI Agents · Workflow Engineering</span>
+            <span class="pill status">● EXPERIMENTAL</span>
+          </div>
+          <h3>AI Automation Systems</h3>
+          <div class="card-subtitle">Intelligent Workflow Automation</div>
+          <p>Experiments combining language models, APIs, automation platforms, and external services to create intelligent workflows.</p>
+          <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Connects models with tools, APIs, databases, and automation platforms to move beyond generating text into executing multi-step autonomous tasks.</p>
+          <div class="card-tech">
+            <span>OpenAI</span><span>Ollama</span><span>n8n</span><span>APIs</span><span>Node.js</span><span>Python</span><span>LLM Orchestration</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
+            Focus: Tool Calling · Agentic Workflows · LLM Orchestration · API Integration
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/shomay12" target="_blank" class="card-link">View Systems ↗</a>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Shomay Singh Parihar · AI/ML Engineer · Researcher · Software Developer</span>
+      <span style="font-size: 0.72rem; color: var(--text-subtle);">© 2026 Shomay Singh Parihar. All rights reserved.</span>
+      <a href="index.html" class="back-top">← Home</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
