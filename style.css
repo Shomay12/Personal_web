@@ -1146,6 +1146,7 @@ body.light .glitch-text {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   display: block;
   transition: transform 0.8s var(--ease), filter 0.5s ease;
   filter: contrast(1.05) brightness(0.9);
@@ -1459,34 +1460,34 @@ body.light .glitch-text {
   color: var(--text-dim);
 }
 
-.cgpa-badge {
-  display: flex;
-  flex-direction: column;
+.education-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 16px 28px;
+  gap: 10px;
+  padding: 14px 28px;
   background: rgba(var(--accent-rgb), 0.08);
   border: 1px solid rgba(var(--accent-rgb), 0.3);
-  border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.12);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
 }
 
-.cgpa-num {
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  font-weight: 800;
+.edu-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.edu-badge-text {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 700;
   color: var(--accent);
-  line-height: 1;
-}
-
-.cgpa-lbl {
-  font-size: 0.62rem;
-  letter-spacing: 2px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  margin-top: 4px;
+  letter-spacing: 1.5px;
 }
 
 /* ===========================
@@ -1893,7 +1894,7 @@ body.js-ready .reveal-right {
     width: 100%;
     height: 100vh;
     height: 100svh;
-    background: rgba(4, 4, 7, 0.96);
+    background: rgba(4, 4, 7, 0.97);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     z-index: 9999;
@@ -1908,6 +1909,10 @@ body.js-ready .reveal-right {
     padding: 2rem;
   }
 
+  body.light .nav-links {
+    background: rgba(248, 248, 252, 0.98);
+  }
+
   .nav-links.open {
     opacity: 1;
     visibility: visible;
@@ -1919,6 +1924,10 @@ body.js-ready .reveal-right {
     letter-spacing: 2px !important;
     display: block !important;
     color: var(--text) !important;
+    padding: 10px 20px !important;
+    min-height: 44px;
+    display: inline-flex !important;
+    align-items: center;
   }
 
   .nav-links .nav-cta {
@@ -1931,7 +1940,7 @@ body.js-ready .reveal-right {
   }
 
   section {
-    padding: 60px 16px;
+    padding: clamp(50px, 8vw, 80px) 16px;
   }
 
   #hero {
@@ -1967,16 +1976,17 @@ body.js-ready .reveal-right {
   }
 
   .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
   }
 
   .stat {
-    padding: 12px 14px;
+    padding: 12px 10px;
+    text-align: center;
   }
 
   .stat-num {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
   }
 
   .stat-lbl {
@@ -1994,12 +2004,16 @@ body.js-ready .reveal-right {
     justify-content: center;
     text-align: center;
     font-size: 0.9rem;
+    min-height: 48px;
   }
 
   .btn-ghost {
     justify-content: center;
     padding: 12px;
     font-size: 0.82rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .scroll-hint {
@@ -2019,7 +2033,7 @@ body.js-ready .reveal-right {
   .philosophy-card,
   .focus-card,
   .skill-group {
-    padding: 22px 18px;
+    padding: clamp(20px, 4vw, 24px) 18px;
     border-radius: var(--radius-md);
   }
 
@@ -2028,7 +2042,7 @@ body.js-ready .reveal-right {
   }
 
   .project-visual {
-    height: 200px;
+    height: clamp(190px, 45vw, 230px);
   }
 
   .card-body {
@@ -2070,22 +2084,26 @@ body.js-ready .reveal-right {
   .contact-links {
     justify-content: center;
     flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .social-btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .education-glass-card {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1.2rem;
   }
 
-  .cgpa-badge {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 12px 20px;
-  }
-
-  .cgpa-num {
-    font-size: 1.8rem;
+  .education-badge {
+    align-self: flex-start;
+    padding: 10px 20px;
+    font-size: 0.85rem;
   }
 
   footer {
@@ -2106,20 +2124,21 @@ body.js-ready .reveal-right {
   }
 
   .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
   }
 
   .stat {
-    padding: 10px 8px;
+    padding: 10px 6px;
   }
 
   .stat-num {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
 
   .stat-lbl {
     font-size: 0.48rem;
+    letter-spacing: 0.5px;
   }
 }
 
@@ -2131,5 +2150,17 @@ body.js-ready .reveal-right {
 
   section {
     max-width: 1440px;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

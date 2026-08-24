@@ -66,9 +66,16 @@ body.light .project-number {
   height: clamp(200px, 22vw, 260px);
 }
 
+.project-card .project-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
 @media (max-width: 768px) {
   .project-card .project-visual {
-    height: 190px;
+    height: clamp(190px, 45vw, 220px);
   }
 }
 
@@ -88,7 +95,8 @@ body.light .project-number {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 8px 16px;
+  min-height: 40px;
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
