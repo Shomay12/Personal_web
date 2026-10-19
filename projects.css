@@ -1,132 +1,89 @@
-/* ===========================
-   PROJECTS ARCHIVE PAGE (GLASS EDITION)
-   Leverages Glass Edition variables from style.css
-=========================== */
+/* ==========================================================================
+   PROJECTS ARCHIVE PAGE (GEN-Z DEVELOPER REDESIGN)
+   ========================================================================== */
 
 .page-header {
-  padding-top: clamp(100px, 14vw, 160px) !important;
+  padding-top: clamp(120px, 15vw, 170px) !important;
   padding-bottom: 2rem !important;
   position: relative;
   z-index: 2;
-  max-width: 1320px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1220px;
+  margin: 0 auto;
 }
 
 .page-header .section-heading {
   margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 650px;
+  line-height: 1.7;
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+  gap: 28px;
   padding-top: 1rem !important;
-  position: relative;
-  z-index: 2;
-  max-width: 1320px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1220px;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-
-/* Glass Number Watermark */
+/* Sleek Monospace Index Badge */
 .project-number {
   position: absolute;
-  top: 16px;
-  right: 20px;
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.05);
-  text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.1);
-  z-index: 2;
+  top: 14px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  background: rgba(7, 7, 10, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 3px 9px;
+  border-radius: var(--radius-xs);
+  z-index: 3;
   pointer-events: none;
-  transition: all 0.4s var(--ease);
+  transition: all 0.25s var(--ease);
 }
 
 body.light .project-number {
-  color: rgba(91, 46, 255, 0.08);
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--accent);
 }
 
 .project-card:hover .project-number {
-  color: rgba(var(--accent-rgb), 0.15);
-  transform: translateY(-4px) scale(1.05);
-}
-
-/* Specific overrides for projects page cards */
-.project-card .project-visual {
-  height: clamp(200px, 22vw, 260px);
-}
-
-.project-card .project-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-}
-
-@media (max-width: 768px) {
-  .project-card .project-visual {
-    height: clamp(190px, 45vw, 220px);
-  }
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.25);
+  transform: translateY(-2px);
 }
 
 .project-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--glass-border);
-}
-
-.project-links .card-link {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--accent);
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  min-height: 40px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all 0.3s var(--ease);
+  gap: 14px;
 }
 
-.project-links .card-link:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  gap: 10px;
-  box-shadow: 0 6px 18px rgba(var(--accent-rgb), 0.15);
-}
-
-/* Ensure the back-top link in footer works nicely */
-.back-top {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.card-body h3 {
-  color: var(--text);
-  transition: color 0.3s;
-}
-
-.project-card:hover h3 {
-  color: var(--accent);
+@media (max-width: 640px) {
+  .page-header {
+    padding-top: 100px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .page-header .section-heading {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
 }

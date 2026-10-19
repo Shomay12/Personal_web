@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="nlp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080812"/>
+      <stop offset="100%" stop-color="#120c24"/>
+    </linearGradient>
+    <linearGradient id="nlp-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c1ff72"/>
+      <stop offset="100%" stop-color="#7b61ff"/>
+    </linearGradient>
+    <filter id="nlp-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="30" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#nlp-bg)"/>
+  <circle cx="300" cy="200" r="180" fill="#c1ff72" opacity="0.1" filter="url(#nlp-glow)"/>
+  <circle cx="900" cy="480" r="220" fill="#7b61ff" opacity="0.15" filter="url(#nlp-glow)"/>
+
+  <g transform="translate(100, 95)">
+    <!-- Badge -->
+    <rect x="0" y="0" width="170" height="34" rx="17" fill="rgba(193, 255, 114, 0.12)" stroke="rgba(193, 255, 114, 0.35)" stroke-width="1.5"/>
+    <circle cx="20" cy="17" r="5" fill="#c1ff72"/>
+    <text x="36" y="22" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#c1ff72" letter-spacing="1">NLP RESEARCH</text>
+
+    <!-- Title -->
+    <text x="0" y="85" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="44" font-weight="800" fill="#ffffff" letter-spacing="-0.5">NLP Sentiment Analysis</text>
+    <text x="0" y="125" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="20" font-weight="400" fill="rgba(255,255,255,0.65)">Kindle Reviews Text Classification · BoW vs TF-IDF vs Word2Vec</text>
+
+    <!-- Visual Dashboard -->
+    <g transform="translate(0, 160)">
+      <rect x="0" y="0" width="1000" height="280" rx="16" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      
+      <!-- Metrics Boxes -->
+      <g transform="translate(30, 30)">
+        <rect x="0" y="0" width="290" height="220" rx="12" fill="rgba(193, 255, 114, 0.04)" stroke="rgba(193, 255, 114, 0.25)"/>
+        <text x="24" y="45" font-family="sans-serif" font-size="16" font-weight="700" fill="#c1ff72">Bag of Words (BoW)</text>
+        <text x="24" y="75" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,0.55)">CountVectorizer baseline</text>
+        <text x="24" y="115" font-family="sans-serif" font-size="32" font-weight="800" fill="#ffffff">83.4%</text>
+        <text x="24" y="140" font-family="sans-serif" font-size="12" fill="#c1ff72">MultinomialNB Accuracy</text>
+        <rect x="24" y="170" width="240" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+        <rect x="24" y="170" width="200" height="6" rx="3" fill="#c1ff72"/>
+      </g>
+
+      <g transform="translate(355, 30)">
+        <rect x="0" y="0" width="290" height="220" rx="12" fill="rgba(123, 97, 255, 0.05)" stroke="rgba(123, 97, 255, 0.3)"/>
+        <text x="24" y="45" font-family="sans-serif" font-size="16" font-weight="700" fill="#7b61ff">TF-IDF Vectorizer</text>
+        <text x="24" y="75" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,0.55)">Sublinear term weighting</text>
+        <text x="24" y="115" font-family="sans-serif" font-size="32" font-weight="800" fill="#ffffff">88.7%</text>
+        <text x="24" y="140" font-family="sans-serif" font-size="12" fill="#7b61ff">MultinomialNB Accuracy</text>
+        <rect x="24" y="170" width="240" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+        <rect x="24" y="170" width="213" height="6" rx="3" fill="#7b61ff"/>
+      </g>
+
+      <g transform="translate(680, 30)">
+        <rect x="0" y="0" width="290" height="220" rx="12" fill="rgba(0, 240, 255, 0.05)" stroke="rgba(0, 240, 255, 0.25)"/>
+        <text x="24" y="45" font-family="sans-serif" font-size="16" font-weight="700" fill="#00f0ff">Word2Vec Embeddings</text>
+        <text x="24" y="75" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,0.55)">Continuous dense semantic space</text>
+        <text x="24" y="115" font-family="sans-serif" font-size="32" font-weight="800" fill="#ffffff">86.2%</text>
+        <text x="24" y="140" font-family="sans-serif" font-size="12" fill="#00f0ff">BernoulliNB Accuracy</text>
+        <rect x="24" y="170" width="240" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+        <rect x="24" y="170" width="207" height="6" rx="3" fill="#00f0ff"/>
+      </g>
+    </g>
+  </g>
+</svg>

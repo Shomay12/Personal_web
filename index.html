@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Favicon -->
@@ -84,6 +84,7 @@
       <a href="#philosophy">Philosophy</a>
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
+      <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-resume-link">Resume ↗</a>
       <a href="#contact" class="nav-cta">Let's Talk</a>
     </div>
     <div class="nav-right">
@@ -154,7 +155,8 @@
             <span class="btn-fill"></span>
             <span class="btn-label">Explore My Work ↗</span>
           </a>
-          <a href="https://github.com/shomay12" target="_blank" class="btn-ghost">View GitHub ↗</a>
+          <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn-ghost btn-resume">Download Resume 📄</a>
+          <a href="https://github.com/shomay12" target="_blank" rel="noopener noreferrer" class="btn-ghost">View GitHub ↗</a>
         </div>
       </div>
 
@@ -171,6 +173,22 @@
           <div class="about-left reveal-left">
             <span class="section-label">BACKGROUND</span>
             <h2 class="section-heading">About<br><em>Me</em></h2>
+
+            <!-- Avatar Glass Card -->
+            <div class="about-avatar-card">
+              <div class="avatar-frame">
+                <img src="assets/images/me4.jpg" alt="Shomay Singh Parihar" class="avatar-img" loading="lazy">
+                <div class="avatar-glass-overlay"></div>
+              </div>
+              <div class="avatar-info">
+                <div class="avatar-status-pill">
+                  <span class="status-pulse-dot"></span>
+                  <span class="status-label">Available for AI/ML Opportunities</span>
+                </div>
+                <div class="avatar-location-tag">📍 Noida, India · Amity University</div>
+              </div>
+            </div>
+
             <div class="about-tag-row">
               <span class="chip">AI & ML Systems</span>
               <span class="chip">Transformers & Attention</span>
@@ -243,80 +261,180 @@
       </div>
     </section>
 
-    <!-- SELECTED PROJECTS -->
+    <!-- SELECTED PROJECTS (GITHUB PINNED REPOSITORIES) -->
     <section id="projects" class="section-block">
-      <span class="section-label centered-heading" style="margin-bottom: 8px;">ENGINEERED SYSTEMS</span>
-      <h2 class="section-heading centered-heading reveal-up">Selected<br><em>Projects</em></h2>
+      <span class="section-label centered-heading" style="margin-bottom: 8px;">GITHUB PINNED REPOSITORIES</span>
+      <h2 class="section-heading centered-heading reveal-up">Featured<br><em>Projects</em></h2>
+      <p class="centered-heading reveal-up" style="max-width: 620px; margin: -1rem auto 2.5rem; color: var(--text-muted); font-size: 0.95rem;">Curated selection of my pinned open-source repositories and engineering systems on GitHub.</p>
 
       <div class="projects-grid">
-        <!-- Project 01: ReplyNest -->
+        <!-- Project 01: HotTea -->
         <article class="project-card reveal-up" style="--delay:0s">
           <div class="project-visual">
-            <img src="assets/images/replynest.png" alt="ReplyNest - Instagram Automation Platform" class="project-img"
-              loading="lazy">
+            <img src="assets/images/hottea.png" alt="HotTea - Privacy-First AI Browser" class="project-img" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-meta">
-              <span class="tag">Automation SaaS · Meta Graph API</span>
-              <span class="pill live">● PRODUCTION / SAAS</span>
+              <span class="tag">AI Browser · Workspace</span>
+              <span class="pill pinned">📌 Pinned</span>
             </div>
-            <h3>ReplyNest</h3>
-            <div class="card-subtitle">Instagram Workflow & Engagement Automation Platform</div>
-            <p>A production-grade Instagram DM automation SaaS designed for creators and businesses to scale customer
-              engagement, lead capture, and instant conversational workflows.</p>
-            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Features a
-              visual workflow builder, instant Comment-to-DM triggers, keyword-based conversational flows, real-time
-              execution logs, multi-tenant isolation, Meta OAuth 2.0 authentication, Razorpay billing, and containerized
-              deployment with PostgreSQL and Traefik.</p>
+            <h3>HotTea</h3>
+            <div class="card-subtitle">Privacy-First AI Browser & Research Workspace</div>
+            <p>An open-source, privacy-first AI browser and research workspace built with Flutter. Unifies web browsing, AI assistance, evidence-backed research, local LLM inference, and encrypted personal .tea vaults into one cross-platform application.</p>
             <div class="card-tech">
-              <span>Meta Graph API</span><span>OAuth
-                2.0</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span><span>Traefik</span><span>Razorpay</span><span>SPA</span>
+              <span>Flutter</span><span>Dart</span><span>Local LLM</span><span>AI Agents</span><span>Cryptography</span><span>Cross-Platform</span>
             </div>
-            <div
-              style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
-              Focus: API Architecture · Webhooks · Multi-Tenant SaaS · Workflow Automation
-            </div>
-            <div style="display: flex; gap: 16px;">
-              <a href="http://replynest.tech/#auth" target="_blank" rel="noopener noreferrer" class="card-link">Live
-                Platform ↗</a>
-              <a href="https://github.com/shomay12" target="_blank" rel="noopener noreferrer" class="card-link">GitHub
-                ↗</a>
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="hottea">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://shomay12.github.io/hottea/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo ↗</a>
+                <a href="https://github.com/Shomay12/hottea" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
             </div>
           </div>
         </article>
 
-        <!-- Project 02: UniAssist -->
-        <article class="project-card reveal-up" style="--delay:0.1s">
+        <!-- Project 02: Duezy -->
+        <article class="project-card reveal-up" style="--delay:0.08s">
           <div class="project-visual">
-            <img src="assets/images/uniassist.png" alt="UniAssist - Academic Study Assistant" class="project-img"
-              loading="lazy">
+            <img src="assets/images/duezy.png" alt="Duezy - AI Payment Recovery Platform" class="project-img" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-meta">
-              <span class="tag">AI Assistant · EdTech · LLM / RAG</span>
-              <span class="pill live">● LIVE APP / PRODUCTION</span>
+              <span class="tag">FinTech · Conversational AI</span>
+              <span class="pill pinned">📌 Pinned</span>
+            </div>
+            <h3>Duezy</h3>
+            <div class="card-subtitle">AI-Powered Payment Collection & Recovery Platform</div>
+            <p>An AI-driven payment recovery and invoice collection platform featuring an authoritative FastAPI double-entry ledger backend, conversational installment negotiation agent, Razorpay webhook verification, and multi-platform Flutter app.</p>
+            <div class="card-tech">
+              <span>FastAPI</span><span>Python</span><span>Flutter</span><span>Dart</span><span>Razorpay Webhooks</span><span>Double-Entry Ledger</span>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="duezy">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://github.com/Shomay12/Duezy" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 03: UniAssist -->
+        <article class="project-card reveal-up" style="--delay:0.16s">
+          <div class="project-visual">
+            <img src="assets/images/uniassist.png" alt="UniAssist - Academic Study Assistant" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">Academic AI · RAG & LLM</span>
+              <span class="pill pinned">📌 Pinned</span>
             </div>
             <h3>UniAssist</h3>
             <div class="card-subtitle">Academic Study Companion & Intelligence Platform</div>
-            <p>An intelligent academic study companion and subject-matter assistant built for university students to
-              learn, revise, and explore core computer science and engineering coursework.</p>
-            <p style="font-size: 0.85rem; color: var(--text-subtle); margin-top: -12px; margin-bottom: 18px;">Engineered
-              with dedicated subject knowledge modules (DSA, Cloud Computing, Networking & Data Communication,
-              Foundations of Data Science), encrypted private chat history secured via PostgreSQL Row Level Security
-              (RLS), multi-subject question routing, session persistence, and contextual retrieval.</p>
+            <p>A Retrieval-Augmented Generation (RAG) chatbot that helps students understand academic materials through dense document indexing, semantic vector search, and high-speed Groq-powered LLM generation.</p>
             <div class="card-tech">
-              <span>Streamlit</span><span>Python</span><span>LLM Orchestration</span><span>PostgreSQL
-                (RLS)</span><span>RAG / Embeddings</span><span>Vector Search</span><span>Interactive UI</span>
+              <span>Python</span><span>Streamlit</span><span>RAG</span><span>Groq LLM</span><span>Vector Search</span><span>Sentence Embeddings</span>
             </div>
-            <div
-              style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 18px; font-family: var(--font-mono);">
-              Focus: Academic AI · RAG Pipelines · Row Level Security · Contextual Retrieval
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="uniassist">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://uniassist-shomayyy.streamlit.app/" target="_blank" rel="noopener noreferrer" class="card-link">Live App ↗</a>
+                <a href="https://github.com/Shomay12/UniAssist" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
             </div>
-            <div style="display: flex; gap: 16px;">
-              <a href="https://uniassist-k7r5xoybrl3jpvdsfeskzr.streamlit.app/" target="_blank"
-                rel="noopener noreferrer" class="card-link">Live App ↗</a>
-              <a href="https://github.com/shomay12" target="_blank" rel="noopener noreferrer" class="card-link">GitHub
-                ↗</a>
+          </div>
+        </article>
+
+        <!-- Project 04: Finance Expenditure Tracker -->
+        <article class="project-card reveal-up" style="--delay:0.24s">
+          <div class="project-visual">
+            <img src="assets/images/finance_tracker.png" alt="Finance Expenditure Tracker" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">Machine Learning · Data Science</span>
+              <span class="pill pinned">📌 Pinned</span>
+            </div>
+            <h3>Finance Expenditure Tracker</h3>
+            <div class="card-subtitle">AI-Based Personal Finance Intelligence System</div>
+            <p>An end-to-end Data Science and Machine Learning system to detect spending anomalies, classify transaction patterns, recognize recurring expenses, forecast cash flow, and generate personalized financial insights.</p>
+            <div class="card-tech">
+              <span>Python</span><span>Machine Learning</span><span>Scikit-learn</span><span>Pandas</span><span>Time-Series Forecasting</span>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="finance_tracker">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://github.com/Shomay12/Finance_Expenditure_tracker" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 05: Industrial Machine Monitoring System -->
+        <article class="project-card reveal-up" style="--delay:0.32s">
+          <div class="project-visual">
+            <img src="assets/images/industrial_monitoring.png" alt="Industrial Machine Monitoring System" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">IoT & ML · Predictive Maintenance</span>
+              <span class="pill pinned">📌 Pinned</span>
+            </div>
+            <h3>Industrial Machine Monitoring System</h3>
+            <div class="card-subtitle">Predictive Maintenance & Telemetry Intelligence</div>
+            <p>Full-stack predictive maintenance system streaming real-time sensor telemetry (ESP32/simulator) to a FastAPI backend, running scikit-learn RandomForest anomaly classifiers and a DSA Priority Queue scheduler to rank machines for servicing.</p>
+            <div class="card-tech">
+              <span>FastAPI</span><span>Python</span><span>RandomForest</span><span>TypeScript</span><span>MongoDB</span><span>ESP32</span><span>DSA Priority Queue</span>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="industrial_monitoring">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://github.com/Shomay12/Industrial-Machine-Monitoring-System" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 06: OpenUPSC -->
+        <article class="project-card reveal-up" style="--delay:0.4s">
+          <div class="project-visual">
+            <img src="assets/images/openupsc.svg" alt="OpenUPSC Educational Platform" class="project-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="tag">Web Application · EdTech</span>
+              <span class="pill pinned">📌 Pinned</span>
+            </div>
+            <h3>OpenUPSC</h3>
+            <div class="card-subtitle">Civil Services Educational Platform & Resource Hub</div>
+            <p>Modern educational platform designed for civil services aspirants to streamline competitive exam preparation with structured syllabus roadmaps, organized study resources, and revision tools.</p>
+            <div class="card-tech">
+              <span>TypeScript</span><span>Next.js</span><span>React</span><span>TailwindCSS</span><span>Supabase</span><span>Vercel</span>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="btn-card-details" data-project="openupsc">
+                <span>Details & Specs</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+              <div class="card-links-group">
+                <a href="https://open-upsc.vercel.app" target="_blank" rel="noopener noreferrer" class="card-link">Live App ↗</a>
+                <a href="https://github.com/Shomay12/OpenUpsc" target="_blank" rel="noopener noreferrer" class="card-link">GitHub ↗</a>
+              </div>
             </div>
           </div>
         </article>
@@ -625,11 +743,29 @@
   <footer>
     <div class="footer-inner">
       <span>Shomay Singh Parihar · AI/ML Engineer · Researcher · Software Developer</span>
-      <span style="font-size: 0.72rem; color: var(--text-subtle);">© 2026 Shomay Singh Parihar. All rights
+      <span style="font-size: 0.72rem; color: var(--text-subtle);">© <span id="year">2026</span> Shomay Singh Parihar. All rights
         reserved.</span>
       <a href="#hero" class="back-top">↑ Back to top</a>
     </div>
   </footer>
+
+  <!-- PROJECT DEEP-DIVE MODAL -->
+  <div id="project-modal" class="project-modal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="modal-backdrop"></div>
+    <div class="modal-wrapper">
+      <div class="modal-card">
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="modal-dynamic-content" id="modal-dynamic-content">
+          <!-- Populated dynamically via script.js -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
