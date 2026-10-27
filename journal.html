@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Journal | Shomay Singh Parihar</title>
+  <title>Journal &amp; YouFineMeHere!! | Shomay Singh Parihar</title>
   <meta name="description"
-    content="Personal blog and daily log by Shomay Singh Parihar — notes on AI Engineering, Data Science, projects, and day-to-day life." />
+    content="Personal blog, AI Engineering & Data Science logs, and YouFineMeHere!! — A Journey Beyond the Mountains by Shomay Singh Parihar." />
 
   <!-- Editorial & Technical Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +27,11 @@
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
+  <!-- Top Reading Progress Bar -->
+  <div class="reading-progress-track" aria-hidden="true">
+    <div class="reading-progress-fill" id="reading-progress-fill"></div>
+  </div>
+
   <!-- Ambient Atmospheric Mesh -->
   <div class="ambient-glow-mesh" aria-hidden="true">
     <div class="glow-orb orb-1"></div>
@@ -40,12 +45,13 @@
 
   <!-- Navigation -->
   <header id="nav">
-    <a href="index.html" class="nav-logo">Shomay Singh Parihar</a>
+    <a href="index.html" class="nav-logo"><b>Shomay Singh Parihar</b></a>
     <nav class="nav-links" id="nav-links" aria-label="Primary">
       <a href="index.html#about">About</a>
       <a href="projects.html">Work</a>
       <a href="index.html#stack">Stack</a>
       <a href="journal.html" class="active">Journal</a>
+      <a href="youfinemehere.html">YouFineMeHere!!</a>
       <a href="index.html#contact">Contact</a>
       <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-external">Resume ↗</a>
     </nav>
@@ -84,31 +90,50 @@
 
   <main id="main-content">
 
-    <!-- Minimal Page Header -->
-    <section class="container journal-header">
-      <div class="journal-header-row">
-        <h1 class="journal-page-title">Journal</h1>
-        <p class="journal-page-sub">
-          Day-to-day notes on AI engineering, data science, what I’m building, and life outside the terminal.
-        </p>
+    <!-- 1. THE JOURNAL (RECENT TECHNICAL POST + COLLAPSIBLE OLDER ENTRIES) -->
+    <section class="container journal-main-section" id="journal-top">
+      <div class="yfmh-masthead">
+        <div class="yfmh-badge-row">
+          <span class="yfmh-pill">The Journal</span>
+          <span class="meta-sep">·</span>
+          <span>Engineering &amp; Daily Notes</span>
+          <span class="meta-sep">·</span>
+          <a href="#youfinemehere" class="yfmh-jump-pill">Jump to YouFineMeHere!! ↓</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Main View: Most Recent Blog Post -->
-    <section class="container journal-main-section">
+      <!-- Recent Technical Blog Post -->
       <div id="journal-recent-post"></div>
 
       <!-- Bottom Hidden / Collapsible Archive for Older Posts -->
       <div class="journal-archive-wrap" id="journal-archive-wrap" hidden>
         <div class="archive-toggle-bar">
           <button type="button" class="archive-toggle-btn" id="archive-toggle-btn" aria-expanded="false" aria-controls="journal-older-list">
-            <span id="archive-toggle-label">View Older Posts</span>
+            <span id="archive-toggle-label">Older Entries</span>
             <span class="archive-toggle-arrow" aria-hidden="true">↓</span>
           </button>
         </div>
 
         <div class="journal-older-list" id="journal-older-list" hidden></div>
       </div>
+    </section>
+
+    <!-- 2. BEYOND THE JOURNAL: "YouFineMeHere!!" SECTION -->
+    <section class="container yfmh-section" id="youfinemehere">
+      <div class="yfmh-section-banner">
+        <div class="yfmh-badge-row">
+          <span class="yfmh-pill">Beyond the Journal</span>
+          <span class="meta-sep">·</span>
+          <span>Life, Mountains &amp; Real Roads</span>
+        </div>
+        <h2 class="yfmh-section-heading">YouFineMe<em>Here!!</em></h2>
+        <p class="yfmh-intro">
+          When I step away from loss curves, vector indices, and the terminal — this is where you’ll find me. Interactive stories, photos, and videos from the roads and mountains that keep me grounded.
+        </p>
+      </div>
+
+      <!-- Interactive Story Slot (Populated with "A Journey Beyond the Mountains" + blog/ media) -->
+      <div id="youfinemehere-story-slot"></div>
     </section>
 
   </main>
@@ -135,7 +160,7 @@
             <a href="projects.html">Selected Work</a>
             <a href="index.html#stack">Technical Stack</a>
             <a href="journal.html">Daily Journal</a>
-            <a href="index.html#contact">Contact</a>
+            <a href="youfinemehere.html">YouFineMeHere!!</a>
           </div>
           <div class="footer-nav-group">
             <span class="footer-group-title">Elsewhere</span>

@@ -254,9 +254,18 @@ function formatCategoryLabel(cat) {
 }
 
 function estimateReadingTime(entry) {
-  const proseWords = (entry.paragraphs || []).join(' ').split(/\s+/).filter(Boolean).length;
+  let textBlob = (entry.paragraphs || []).join(' ');
+  if (Array.isArray(entry.chapters)) {
+    textBlob += ' ' + entry.chapters.map(c => [
+      ...(c.prose || []),
+      ...(c.subprose || []),
+      c.quote || '',
+      c.closingNote || ''
+    ].join(' ')).join(' ');
+  }
+  const proseWords = textBlob.split(/\s+/).filter(Boolean).length;
   const codeWords = entry.code && entry.code.snippet ? entry.code.snippet.split(/\s+/).filter(Boolean).length : 0;
-  const minutes = Math.max(1, Math.round((proseWords + codeWords * 0.6) / 160));
+  const minutes = Math.max(1, Math.round((proseWords + codeWords * 0.6) / 170));
   return `${minutes} min read`;
 }
 
@@ -300,13 +309,35 @@ function buildCodeWindowHtml(entry) {
   `;
 }
 
+function renderProseParagraphs(paragraphs) {
+  return (paragraphs || []).map(raw => {
+    const text = String(raw || '').trim();
+    if (!text) return '';
+    if (text === '⸻' || text === '---') {
+      return `<hr class="post-divider" />`;
+    }
+    if (text.startsWith('## ')) {
+      return `<h3 class="post-section-heading">${escapeHtml(text.slice(3))}</h3>`;
+    }
+    if (text.startsWith('### ')) {
+      return `<h4 class="post-subsection-heading">${escapeHtml(text.slice(4))}</h4>`;
+    }
+    if (text.startsWith('*') && text.endsWith('*') && text.length > 2) {
+      return `<p class="post-epilogue"><em>${escapeHtml(text.slice(1, -1))}</em></p>`;
+    }
+    return `<p>${escapeHtml(text)}</p>`;
+  }).join('');
+}
+
 function buildPhotoGridHtml(entry) {
   if (!Array.isArray(entry.images) || entry.images.length === 0) return '';
   return `
     <div class="blog-photo-grid">
       ${entry.images.map(img => `
         <figure class="blog-photo-item">
-          <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(img.caption || '')}">
+          <div class="photo-frame-wrap">
+            <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(img.caption || '')}" ${img.fallbackSrc ? `data-fallback="${escapeHtml(img.fallbackSrc)}"` : ''} onerror="if(this.dataset.fallback && this.src.indexOf(this.dataset.fallback)===-1){this.src=this.dataset.fallback;}">
+          </div>
           ${img.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(img.caption)}</figcaption>` : ''}
         </figure>
       `).join('')}
@@ -315,24 +346,326 @@ function buildPhotoGridHtml(entry) {
 }
 
 function buildVideoHtml(entry) {
-  if (!entry.video || !entry.video.src) return '';
-  const isImg = entry.video.isImagePreview || /\.(gif|png|jpe?g|webp|svg)$/i.test(entry.video.src);
+  const videoList = [];
+  if (Array.isArray(entry.videos)) {
+    videoList.push(...entry.videos);
+  }
+  if (entry.video && entry.video.src) {
+    videoList.push(entry.video);
+  }
+  if (videoList.length === 0) return '';
+
   return `
     <div class="blog-photo-grid">
-      <figure class="blog-photo-item">
-        ${isImg
-          ? `<img src="${escapeHtml(entry.video.src)}" alt="${escapeHtml(entry.video.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(entry.video.caption || '')}">`
-          : `<video controls preload="metadata" ${entry.video.poster ? `poster="${escapeHtml(entry.video.poster)}"` : ''}>
-               <source src="${escapeHtml(entry.video.src)}" type="video/mp4">
-             </video>`
-        }
-        ${entry.video.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(entry.video.caption)}</figcaption>` : ''}
-      </figure>
+      ${videoList.map(vid => {
+        const isImg = vid.isImagePreview || /\.(gif|png|jpe?g|webp|svg)$/i.test(vid.src);
+        return `
+          <figure class="blog-photo-item">
+            ${isImg
+              ? `<img src="${escapeHtml(vid.src)}" alt="${escapeHtml(vid.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(vid.caption || '')}">`
+              : `<video controls preload="metadata" playsinline ${vid.poster ? `poster="${escapeHtml(vid.poster)}"` : ''}>
+                   <source src="${escapeHtml(vid.src)}">
+                 </video>`
+            }
+            ${vid.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(vid.caption)}</figcaption>` : ''}
+          </figure>
+        `;
+      }).join('')}
     </div>
   `;
 }
 
-function initJournal() {
+function buildChapterMediaHtml(media) {
+  if (!media) return '';
+
+  if (media.type === 'photo-pair' && Array.isArray(media.items)) {
+    return `
+      <div class="story-photo-pair">
+        ${media.items.map(item => `
+          <figure class="blog-photo-item">
+            <div class="photo-frame-wrap">
+              <img
+                src="${escapeHtml(item.src)}"
+                alt="${escapeHtml(item.caption || '')}"
+                loading="lazy"
+                data-lightbox="true"
+                data-caption="${escapeHtml(item.caption || '')}"
+              />
+            </div>
+            ${item.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(item.caption)}</figcaption>` : ''}
+          </figure>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  if (media.type === 'video' && media.src) {
+    const posterAttr = media.poster ? `poster="${escapeHtml(media.poster)}"` : '';
+    return `
+      <div class="story-video-card" data-video-src="${escapeHtml(media.src)}">
+        <div class="video-card-header">
+          <span>${escapeHtml(media.title || 'Field Recording')}</span>
+          <span>QuickTime · Himalayan Log</span>
+        </div>
+        <div class="video-stage-wrap">
+          <video controls preload="metadata" playsinline ${posterAttr} style="position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;">
+            <source src="${escapeHtml(media.src)}" type="video/quicktime">
+            <source src="${escapeHtml(media.src)}" type="video/mp4">
+            Your browser does not support QuickTime video playback.
+          </video>
+        </div>
+        <div class="video-card-caption">
+          ${media.caption ? `<span>${escapeHtml(media.caption)}</span> · ` : ''}
+          <a href="${escapeHtml(media.src)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline;">Direct Video Link ↗</a>
+        </div>
+      </div>
+    `;
+  }
+
+  return '';
+}
+
+function buildInteractiveStoryHtml(entry, catLabel, readTime) {
+  const statsHtml = Array.isArray(entry.stats)
+    ? `
+      <div class="story-stats-grid">
+        ${entry.stats.map(s => `
+          <div class="story-stat-cell">
+            <span class="story-stat-label">${escapeHtml(s.label)}</span>
+            <span class="story-stat-val">${escapeHtml(s.value)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `
+    : '';
+
+  const stages = Array.isArray(entry.routeStages) ? entry.routeStages : [];
+  const firstStage = stages[0] || {};
+  const routeExplorerHtml = stages.length > 0
+    ? `
+      <div class="route-explorer-card" id="route-explorer">
+        <div class="route-explorer-top">
+          <span class="route-explorer-label">Interactive Himalayan Route &amp; Elevation Log</span>
+          <span class="route-explorer-hint">Select any stage to inspect &amp; jump ↓</span>
+        </div>
+        <div class="route-nodes-track" role="tablist" aria-label="Expedition stages">
+          ${stages.map((st, idx) => `
+            <button type="button" class="route-node-btn ${idx === 0 ? 'active' : ''}" data-stage-idx="${idx}" data-target-chapter="${escapeHtml(st.id)}">
+              <span class="node-day">${escapeHtml(st.day)}</span>
+              <span class="node-place">${escapeHtml(st.place)}</span>
+              <span class="node-elev">${escapeHtml(st.elevation)}</span>
+            </button>
+          `).join('')}
+        </div>
+        <div class="route-active-detail">
+          <div class="route-detail-left">
+            <div class="route-detail-title" id="route-detail-title">${escapeHtml(firstStage.day || '')} — ${escapeHtml(firstStage.place || '')} (${escapeHtml(firstStage.meta || '')})</div>
+            <div class="route-detail-desc" id="route-detail-desc">${escapeHtml(firstStage.summary || '')}</div>
+          </div>
+          <button type="button" class="route-jump-btn" id="route-jump-btn" data-jump-target="${escapeHtml(firstStage.id || '')}">
+            Jump to Chapter ↓
+          </button>
+        </div>
+      </div>
+    `
+    : '';
+
+  const chapters = Array.isArray(entry.chapters) ? entry.chapters : [];
+  const railHtml = chapters.map((ch, idx) => `
+    <button type="button" class="rail-chapter-link ${idx === 0 ? 'active' : ''}" data-rail-target="${escapeHtml(ch.id)}">
+      ${escapeHtml(ch.kicker ? ch.kicker.split('·')[0].trim() : `Part ${idx + 1}`)} — ${escapeHtml(ch.title)}
+    </button>
+  `).join('');
+
+  const chaptersHtml = chapters.map(ch => {
+    const proseHtml = renderProseParagraphs(ch.prose);
+    const subproseHtml = ch.subprose ? renderProseParagraphs(ch.subprose) : '';
+    const quoteHtml = ch.quote
+      ? `<blockquote class="story-pullquote">“${escapeHtml(ch.quote)}”</blockquote>`
+      : '';
+
+    let waypointsHtml = '';
+    if (Array.isArray(ch.waypoints) && ch.waypoints.length > 0) {
+      waypointsHtml = `
+        <div class="waypoint-tabs-box" data-waypoint-box>
+          <div class="waypoint-tab-buttons">
+            ${ch.waypoints.map((wp, idx) => `
+              <button type="button" class="waypoint-tab-btn ${idx === 0 ? 'active' : ''}" data-wp-idx="${idx}">
+                0${idx + 1} · ${escapeHtml(wp.name)}
+              </button>
+            `).join('')}
+          </div>
+          ${ch.waypoints.map((wp, idx) => `
+            <div class="waypoint-tab-panel ${idx === 0 ? 'active' : ''}" data-wp-panel="${idx}">
+              <span class="waypoint-panel-tag">${escapeHtml(wp.tag)}</span>
+              <p class="waypoint-panel-text">${escapeHtml(wp.text)}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    const closingHtml = ch.closingNote
+      ? `<div class="story-closing-note">${escapeHtml(ch.closingNote)}</div>`
+      : '';
+
+    return `
+      <section class="story-chapter" id="${escapeHtml(ch.id)}">
+        <div class="chapter-kicker">${escapeHtml(ch.kicker || '')}</div>
+        <h3 class="chapter-title">${escapeHtml(ch.title || '')}</h3>
+        <div class="post-prose">${proseHtml}</div>
+        ${waypointsHtml}
+        ${quoteHtml}
+        ${ch.subheading ? `<h4 class="chapter-subheading">${escapeHtml(ch.subheading)}</h4>` : ''}
+        ${subproseHtml ? `<div class="post-prose">${subproseHtml}</div>` : ''}
+        ${buildChapterMediaHtml(ch.media)}
+        ${closingHtml}
+      </section>
+    `;
+  }).join('');
+
+  return `
+    <article class="interactive-story-article" id="${escapeHtml(entry.id)}">
+      <header class="story-hero-header">
+        <div class="post-meta-line">
+          <span class="post-meta-badge">Featured Journal Dispatch</span>
+          <span class="meta-sep">·</span>
+          <time>${escapeHtml(entry.date || '')}</time>
+          <span class="meta-sep">·</span>
+          <span>${escapeHtml(catLabel)}</span>
+          <span class="meta-sep">·</span>
+          <span>${readTime}</span>
+        </div>
+        <h1 class="story-main-title">${escapeHtml(entry.title || '')}</h1>
+        ${entry.subtitle ? `<p class="story-main-subtitle">${escapeHtml(entry.subtitle)}</p>` : ''}
+        ${entry.heroOpening ? `<p class="story-epigraph">“${escapeHtml(entry.heroOpening)}”</p>` : ''}
+        ${statsHtml}
+        ${routeExplorerHtml}
+      </header>
+
+      <div class="story-body-layout">
+        <aside class="story-sticky-rail" aria-label="Story chapters">
+          <span class="rail-heading">Chapters</span>
+          ${railHtml}
+        </aside>
+        <div class="story-chapters-stream">
+          ${chaptersHtml}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function initYouFineMeHereStory(storySlot) {
+  if (!storySlot || !window.YOU_FINE_ME_HERE) return;
+
+  const story = window.YOU_FINE_ME_HERE;
+  const catLabel = formatCategoryLabel(story.category);
+  const readTime = estimateReadingTime(story);
+
+  storySlot.innerHTML = buildInteractiveStoryHtml(story, catLabel, readTime);
+
+  // Wire up Interactive Route Explorer
+  const stages = Array.isArray(story.routeStages) ? story.routeStages : [];
+  const nodeBtns = [...storySlot.querySelectorAll('.route-node-btn')];
+  const detailTitle = storySlot.querySelector('#route-detail-title');
+  const detailDesc = storySlot.querySelector('#route-detail-desc');
+  const jumpBtn = storySlot.querySelector('#route-jump-btn');
+
+  function setActiveStage(idx) {
+    const st = stages[idx];
+    if (!st) return;
+    nodeBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+    if (detailTitle) {
+      detailTitle.textContent = `${st.day} — ${st.place} (${st.meta})`;
+    }
+    if (detailDesc) {
+      detailDesc.textContent = st.summary;
+    }
+    if (jumpBtn) {
+      jumpBtn.setAttribute('data-jump-target', st.id);
+    }
+  }
+
+  nodeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-stage-idx') || '0', 10);
+      setActiveStage(idx);
+      const targetId = btn.getAttribute('data-target-chapter');
+      const el = targetId ? document.getElementById(targetId) : null;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  if (jumpBtn) {
+    jumpBtn.addEventListener('click', () => {
+      const targetId = jumpBtn.getAttribute('data-jump-target');
+      const el = targetId ? document.getElementById(targetId) : null;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // Wire up Sticky Chapter Rail links
+  const railLinks = [...storySlot.querySelectorAll('.rail-chapter-link')];
+  railLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const targetId = link.getAttribute('data-rail-target');
+      const el = targetId ? document.getElementById(targetId) : null;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Wire up Waypoint Tabs
+  storySlot.querySelectorAll('[data-waypoint-box]').forEach(box => {
+    const tabBtns = [...box.querySelectorAll('.waypoint-tab-btn')];
+    const panels = [...box.querySelectorAll('.waypoint-tab-panel')];
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.getAttribute('data-wp-idx');
+        tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+        panels.forEach(p => p.classList.toggle('active', p.getAttribute('data-wp-panel') === idx));
+      });
+    });
+  });
+
+  // Reading progress bar & chapter scroll-spy
+  const chapterEls = [...storySlot.querySelectorAll('.story-chapter')];
+  const progressFill = document.getElementById('reading-progress-fill');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const pct = Math.min(100, Math.max(0, (scrollTop / docHeight) * 100));
+    if (progressFill) {
+      progressFill.style.width = `${pct}%`;
+    }
+
+    if (chapterEls.length > 0) {
+      let currentChapterId = chapterEls[0].id;
+      for (const ch of chapterEls) {
+        const rect = ch.getBoundingClientRect();
+        if (rect.top <= 240) {
+          currentChapterId = ch.id;
+        }
+      }
+      railLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-rail-target') === currentChapterId);
+      });
+      const stageIdx = stages.findIndex(s => s.id === currentChapterId);
+      if (stageIdx !== -1) {
+        setActiveStage(stageIdx);
+      }
+    }
+  }, { passive: true });
+}
+
+function initTechnicalJournal() {
   const recentSlot = document.getElementById('journal-recent-post');
   const archiveWrap = document.getElementById('journal-archive-wrap');
   const toggleBtn = document.getElementById('archive-toggle-btn');
@@ -344,14 +677,14 @@ function initJournal() {
   const entries = Array.isArray(window.JOURNAL_ENTRIES) ? window.JOURNAL_ENTRIES : [];
   if (entries.length === 0) return;
 
-  // 1. Render the Most Recent Blog Post cleanly on the main view
+  // 1. Render the Most Recent Technical Entry
   const recent = entries[0];
   const recentCat = formatCategoryLabel(recent.category);
   const recentReadTime = estimateReadingTime(recent);
 
   recentSlot.innerHTML = `
     <article class="recent-post-article" id="${escapeHtml(recent.id || 'recent-post')}">
-      <header>
+      <header class="story-hero-header">
         <div class="post-meta-line">
           <span class="post-meta-badge">Recent Entry</span>
           <span class="meta-sep">·</span>
@@ -361,21 +694,20 @@ function initJournal() {
           <span class="meta-sep">·</span>
           <span>${recentReadTime}</span>
         </div>
-        <h2 class="recent-post-title">${escapeHtml(recent.title || '')}</h2>
+        <h1 class="story-main-title">${escapeHtml(recent.title || '')}</h1>
+        ${recent.subtitle ? `<p class="story-main-subtitle">${escapeHtml(recent.subtitle)}</p>` : ''}
       </header>
-
-      <div class="post-prose">
-        ${(recent.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
-      </div>
-
-      ${buildAudioPlayerHtml(recent)}
-      ${buildCodeWindowHtml(recent)}
       ${buildPhotoGridHtml(recent)}
       ${buildVideoHtml(recent)}
+      <div class="post-prose" style="padding-top:2rem;">
+        ${renderProseParagraphs(recent.paragraphs)}
+      </div>
+      ${buildAudioPlayerHtml(recent)}
+      ${buildCodeWindowHtml(recent)}
     </article>
   `;
 
-  // 2. Render Older Posts inside the Hidden Bottom Archive
+  // 2. Render Older Technical Entries inside Hidden Bottom Archive
   const olderEntries = entries.slice(1);
   if (archiveWrap && olderList && olderEntries.length > 0) {
     archiveWrap.removeAttribute('hidden');
@@ -399,8 +731,9 @@ function initJournal() {
               <span class="meta-sep">·</span>
               <span>${readTime}</span>
             </div>
+            ${entry.subtitle ? `<p class="story-main-subtitle">${escapeHtml(entry.subtitle)}</p>` : ''}
             <div class="post-prose">
-              ${(entry.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+              ${renderProseParagraphs(entry.paragraphs)}
             </div>
             ${buildAudioPlayerHtml(entry)}
             ${buildCodeWindowHtml(entry)}
@@ -426,6 +759,15 @@ function initJournal() {
       });
     }
   }
+}
+
+function initJournal() {
+  const yfmhSlot = document.getElementById('youfinemehere-story-slot');
+  if (yfmhSlot) {
+    initYouFineMeHereStory(yfmhSlot);
+  }
+
+  initTechnicalJournal();
 
   // Copy code snippet handler
   document.addEventListener('click', e => {
