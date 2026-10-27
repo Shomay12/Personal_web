@@ -34,35 +34,40 @@ jobs:
           echo "Branch: $GITHUB_REF_NAME"
           git log -1 --oneline
 
-      - name: Verify Website Files
-        run: |
-          test -f index.html
-          test -f style.css
-          test -f script.js
-
-          echo "Website files found:"
-          ls -la index.html projects.html style.css projects.css script.js
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Prepare Website
         run: |
+          set -e
+
           mkdir -p _site
-          cp index.html style.css script.js _site/
 
-          if [ -f projects.html ]; then
-            cp projects.html _site/
-          fi
+          # Main website
+          cp index.html _site/
+          cp style.css _site/
+          cp script.js _site/
 
-          if [ -f projects.css ]; then
-            cp projects.css _site/
-          fi
+          # Projects page
+          cp projects.html _site/
+          cp projects.css _site/
 
+          # Journal page
+          cp journal.html _site/
+          cp journal.css _site/
+          cp journal.js _site/
+
+          # Assets
           if [ -d assets ]; then
             cp -R assets _site/
           fi
 
+          # Resume
+          if [ -f Shomay_Singh_Parihar_Resume.pdf ]; then
+            cp Shomay_Singh_Parihar_Resume.pdf _site/
+          fi
+
+          # SEO files
           if [ -f robots.txt ]; then
             cp robots.txt _site/
           fi
@@ -71,12 +76,18 @@ jobs:
             cp sitemap.xml _site/
           fi
 
-          if [ -f Shomay_Singh_Parihar_Resume.pdf ]; then
-            cp Shomay_Singh_Parihar_Resume.pdf _site/
+          # Custom 404 page
+          if [ -f 404.html ]; then
+            cp 404.html _site/
           fi
 
           echo "Published files:"
-          find _site -maxdepth 3 -type f
+          find _site -maxdepth 3 -type f | sort
+
+          # Verify critical pages exist in the deployment artifact
+          test -f _site/index.html
+          test -f _site/projects.html
+          test -f _site/journal.html
 
       - name: Upload Website Artifact
         uses: actions/upload-pages-artifact@v3
