@@ -333,274 +333,102 @@ function buildVideoHtml(entry) {
 }
 
 function initJournal() {
-  const stream = document.getElementById('journal-stream');
-  if (!stream) return;
+  const recentSlot = document.getElementById('journal-recent-post');
+  const archiveWrap = document.getElementById('journal-archive-wrap');
+  const toggleBtn = document.getElementById('archive-toggle-btn');
+  const toggleLabel = document.getElementById('archive-toggle-label');
+  const olderList = document.getElementById('journal-older-list');
 
-  const featuredSection = document.getElementById('featured-section');
-  const featuredSlot = document.getElementById('featured-post-slot');
-  const timelineNav = document.getElementById('blog-timeline-nav');
-  const searchInput = document.getElementById('blog-search');
-  const gridBtn = document.getElementById('view-grid-btn');
-  const streamBtn = document.getElementById('view-stream-btn');
-  const readerModal = document.getElementById('article-reader-modal');
-  const readerContent = document.getElementById('reader-dynamic-content');
-  const readerCloseBtn = document.getElementById('reader-close-btn');
-  const readerBackdrop = document.getElementById('reader-backdrop');
+  if (!recentSlot) return;
 
   const entries = Array.isArray(window.JOURNAL_ENTRIES) ? window.JOURNAL_ENTRIES : [];
+  if (entries.length === 0) return;
 
-  // 1. Render Featured Lead Story (Latest Entry)
-  if (featuredSlot && entries.length > 0) {
-    const lead = entries[0];
-    const readTime = estimateReadingTime(lead);
-    const catLabel = formatCategoryLabel(lead.category);
-    const visualContent = buildCodeWindowHtml(lead) || buildPhotoGridHtml(lead) || buildVideoHtml(lead);
+  // 1. Render the Most Recent Blog Post cleanly on the main view
+  const recent = entries[0];
+  const recentCat = formatCategoryLabel(recent.category);
+  const recentReadTime = estimateReadingTime(recent);
 
-    featuredSlot.innerHTML = `
-      <article class="featured-spread">
-        <div class="featured-content">
-          <div class="post-date-row">
-            <span>Latest Dispatch</span>
-            <span class="meta-sep">·</span>
-            <time>${escapeHtml(lead.date || '')}</time>
-            <span class="meta-sep">·</span>
-            <span>${escapeHtml(catLabel)}</span>
-            <span class="meta-sep">·</span>
-            <span class="post-read-time">${readTime}</span>
-          </div>
-          <h2 class="featured-title" data-read-entry="${escapeHtml(lead.id)}">${escapeHtml(lead.title)}</h2>
-          <p class="featured-excerpt">${escapeHtml((lead.paragraphs && lead.paragraphs[0]) || '')}</p>
-          ${buildAudioPlayerHtml(lead)}
-          <div class="blog-card-footer" style="border-top:none;padding-top:0.25rem;">
-            <button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(lead.id)}">Read Full Dispatch ↗</button>
-          </div>
+  recentSlot.innerHTML = `
+    <article class="recent-post-article" id="${escapeHtml(recent.id || 'recent-post')}">
+      <header>
+        <div class="post-meta-line">
+          <span class="post-meta-badge">Recent Entry</span>
+          <span class="meta-sep">·</span>
+          <time>${escapeHtml(recent.date || '')}</time>
+          <span class="meta-sep">·</span>
+          <span>${escapeHtml(recentCat)}</span>
+          <span class="meta-sep">·</span>
+          <span>${recentReadTime}</span>
         </div>
-        <div class="featured-visual-pane">
-          ${visualContent}
-        </div>
-      </article>
-    `;
-  }
+        <h2 class="recent-post-title">${escapeHtml(recent.title || '')}</h2>
+      </header>
 
-  // 2. Render Sticky Left Timeline Scrubber
-  if (timelineNav && entries.length > 0) {
-    timelineNav.innerHTML = entries.map((entry, idx) => `
-      <button type="button" class="timeline-nav-item ${idx === 0 ? 'active' : ''}" data-scroll-entry="${escapeHtml(entry.id)}">
-        <span class="timeline-nav-date">${escapeHtml(entry.date || '')}</span>
-        <span class="timeline-nav-title">${escapeHtml(entry.title || '')}</span>
-      </button>
-    `).join('');
+      <div class="post-prose">
+        ${(recent.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+      </div>
 
-    timelineNav.addEventListener('click', e => {
-      const btn = e.target.closest('[data-scroll-entry]');
-      if (!btn) return;
-      const targetId = btn.getAttribute('data-scroll-entry');
-      const card = document.getElementById(targetId);
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        timelineNav.querySelectorAll('.timeline-nav-item').forEach(b => b.classList.toggle('active', b === btn));
-      }
-    });
-  }
+      ${buildAudioPlayerHtml(recent)}
+      ${buildCodeWindowHtml(recent)}
+      ${buildPhotoGridHtml(recent)}
+      ${buildVideoHtml(recent)}
+    </article>
+  `;
 
-  // 3. Render Magazine / Bento Feed Cards
-  if (entries.length > 0) {
-    const cardsHtml = entries.map(entry => {
-      const readTime = estimateReadingTime(entry);
+  // 2. Render Older Posts inside the Hidden Bottom Archive
+  const olderEntries = entries.slice(1);
+  if (archiveWrap && olderList && olderEntries.length > 0) {
+    archiveWrap.removeAttribute('hidden');
+    const count = olderEntries.length;
+    if (toggleLabel) {
+      toggleLabel.textContent = `Older Entries (${count})`;
+    }
+
+    olderList.innerHTML = olderEntries.map(entry => {
       const catLabel = formatCategoryLabel(entry.category);
-      const paragraphsHtml = (entry.paragraphs || [])
-        .map(p => `<p>${escapeHtml(p)}</p>`)
-        .join('');
-
-      const hasMultiPhotos = Array.isArray(entry.images) && entry.images.length > 1;
-      const hasComboMedia = (Array.isArray(entry.images) && entry.images.length > 0) && (entry.code && entry.code.snippet);
-      const wideClass = (hasMultiPhotos || hasComboMedia) ? 'card-wide' : '';
-
-      const searchableBlob = [
-        entry.title || '',
-        entry.date || '',
-        catLabel,
-        ...(entry.paragraphs || []),
-        (entry.code && entry.code.snippet) || ''
-      ].join(' ').toLowerCase();
-
+      const readTime = estimateReadingTime(entry);
       return `
-        <article class="blog-card ${wideClass}" id="${escapeHtml(entry.id || '')}" data-category="${escapeHtml(entry.category || 'all')}" data-search="${escapeHtml(searchableBlob)}">
-          <div class="blog-card-top">
-            <div class="post-date-row">
-              <time>${escapeHtml(entry.date || '')}</time>
-              <span class="meta-sep">·</span>
+        <details class="older-post-item" id="${escapeHtml(entry.id || '')}">
+          <summary class="older-post-summary">
+            <span class="older-post-summary-title">${escapeHtml(entry.title || '')}</span>
+            <time class="older-post-summary-date">${escapeHtml(entry.date || '')}</time>
+          </summary>
+          <div class="older-post-body">
+            <div class="post-meta-line">
               <span>${escapeHtml(catLabel)}</span>
               <span class="meta-sep">·</span>
-              <span class="post-read-time">${readTime}</span>
+              <span>${readTime}</span>
             </div>
-            <h3 class="blog-card-title" data-read-entry="${escapeHtml(entry.id)}">${escapeHtml(entry.title || '')}</h3>
-            <div class="blog-card-prose">
-              ${paragraphsHtml}
+            <div class="post-prose">
+              ${(entry.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
             </div>
             ${buildAudioPlayerHtml(entry)}
             ${buildCodeWindowHtml(entry)}
             ${buildPhotoGridHtml(entry)}
             ${buildVideoHtml(entry)}
           </div>
-          <div class="blog-card-footer">
-            <span class="post-date-row">${escapeHtml(catLabel)}</span>
-            <button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(entry.id)}">Open Reader View ↗</button>
-          </div>
-        </article>
+        </details>
       `;
     }).join('');
 
-    stream.innerHTML = cardsHtml + `<div class="blog-empty-state" id="blog-empty-state" hidden>No journal posts match that filter or search query.</div>`;
-  }
-
-  // 4. Category Filtering & Live Search
-  let activeCategory = 'all';
-  let searchQuery = '';
-
-  const filterBtns = [...document.querySelectorAll('.blog-filter-btn, .journal-filters .filter-btn')];
-  const emptyState = document.getElementById('blog-empty-state');
-
-  function applyFilters() {
-    const cards = [...stream.querySelectorAll('.blog-card')];
-    let visibleCount = 0;
-
-    cards.forEach(card => {
-      const cat = card.getAttribute('data-category') || 'all';
-      const hay = card.getAttribute('data-search') || '';
-      const matchesCat = activeCategory === 'all' || cat === activeCategory;
-      const matchesSearch = !searchQuery || hay.includes(searchQuery);
-
-      if (matchesCat && matchesSearch) {
-        card.removeAttribute('hidden');
-        visibleCount++;
-      } else {
-        card.setAttribute('hidden', 'true');
-      }
-    });
-
-    if (featuredSection) {
-      if (activeCategory === 'all' && !searchQuery) {
-        featuredSection.removeAttribute('hidden');
-      } else {
-        featuredSection.setAttribute('hidden', 'true');
-      }
-    }
-
-    if (emptyState) {
-      if (visibleCount === 0) {
-        emptyState.removeAttribute('hidden');
-      } else {
-        emptyState.setAttribute('hidden', 'true');
-      }
-    }
-  }
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeCategory = btn.getAttribute('data-filter') || 'all';
-      filterBtns.forEach(b => b.classList.toggle('active', b === btn));
-      applyFilters();
-    });
-  });
-
-  if (searchInput) {
-    searchInput.addEventListener('input', e => {
-      searchQuery = (e.target.value || '').trim().toLowerCase();
-      applyFilters();
-    });
-  }
-
-  // 5. View Switcher (Magazine Grid vs. Single-Column Stream)
-  if (gridBtn && streamBtn) {
-    gridBtn.addEventListener('click', () => {
-      stream.classList.remove('stream-view');
-      gridBtn.classList.add('active');
-      streamBtn.classList.remove('active');
-    });
-    streamBtn.addEventListener('click', () => {
-      stream.classList.add('stream-view');
-      streamBtn.classList.add('active');
-      gridBtn.classList.remove('active');
-    });
-  }
-
-  // 6. Scroll-spy for Timeline Scrubber
-  if (timelineNav && entries.length > 0) {
-    window.addEventListener('scroll', () => {
-      const cards = [...stream.querySelectorAll('.blog-card:not([hidden])')];
-      let currentId = entries[0].id;
-      for (const card of cards) {
-        const rect = card.getBoundingClientRect();
-        if (rect.top <= 280) {
-          currentId = card.id;
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        const nextState = !isExpanded;
+        toggleBtn.setAttribute('aria-expanded', String(nextState));
+        if (nextState) {
+          olderList.removeAttribute('hidden');
+          if (toggleLabel) toggleLabel.textContent = `Hide Older Entries (${count})`;
+        } else {
+          olderList.setAttribute('hidden', 'true');
+          if (toggleLabel) toggleLabel.textContent = `Older Entries (${count})`;
         }
-      }
-      timelineNav.querySelectorAll('.timeline-nav-item').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-scroll-entry') === currentId);
       });
-    }, { passive: true });
-  }
-
-  // 7. Full Article Reader Modal & Code Copy Handler
-  function openArticleReader(entryId) {
-    if (!readerModal || !readerContent) return;
-    const idx = entries.findIndex(e => e.id === entryId);
-    if (idx === -1) return;
-
-    const entry = entries[idx];
-    const prevEntry = idx < entries.length - 1 ? entries[idx + 1] : null;
-    const nextEntry = idx > 0 ? entries[idx - 1] : null;
-    const readTime = estimateReadingTime(entry);
-    const catLabel = formatCategoryLabel(entry.category);
-
-    readerContent.innerHTML = `
-      <div class="post-date-row">
-        <time>${escapeHtml(entry.date || '')}</time>
-        <span class="meta-sep">·</span>
-        <span>${escapeHtml(catLabel)}</span>
-        <span class="meta-sep">·</span>
-        <span class="post-read-time">${readTime}</span>
-      </div>
-      <h2 class="reader-title">${escapeHtml(entry.title || '')}</h2>
-      <div class="reader-prose">
-        ${(entry.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
-      </div>
-      ${buildAudioPlayerHtml(entry)}
-      ${buildCodeWindowHtml(entry)}
-      ${buildPhotoGridHtml(entry)}
-      ${buildVideoHtml(entry)}
-      <div class="reader-nav-footer">
-        <div>
-          ${prevEntry ? `<button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(prevEntry.id)}">← Older: ${escapeHtml(prevEntry.title.slice(0, 34))}...</button>` : ''}
-        </div>
-        <div>
-          ${nextEntry ? `<button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(nextEntry.id)}">Newer: ${escapeHtml(nextEntry.title.slice(0, 34))}... →</button>` : ''}
-        </div>
-      </div>
-    `;
-
-    readerModal.classList.add('active');
-    readerModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    bindAudioContainers(readerContent);
-  }
-
-  function closeArticleReader() {
-    if (!readerModal) return;
-    readerModal.classList.remove('active');
-    readerModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  document.addEventListener('click', e => {
-    const readTrigger = e.target.closest('[data-read-entry]');
-    if (readTrigger) {
-      e.preventDefault();
-      openArticleReader(readTrigger.getAttribute('data-read-entry'));
-      return;
     }
+  }
 
+  // Copy code snippet handler
+  document.addEventListener('click', e => {
     const copyBtn = e.target.closest('[data-copy-code]');
     if (copyBtn) {
       const codeText = copyBtn.getAttribute('data-copy-code') || '';
@@ -611,15 +439,6 @@ function initJournal() {
           setTimeout(() => { copyBtn.textContent = orig; }, 1800);
         });
       }
-    }
-  });
-
-  if (readerCloseBtn) readerCloseBtn.addEventListener('click', closeArticleReader);
-  if (readerBackdrop) readerBackdrop.addEventListener('click', closeArticleReader);
-
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && readerModal && readerModal.classList.contains('active')) {
-      closeArticleReader();
     }
   });
 
