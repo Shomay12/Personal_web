@@ -25,75 +25,81 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      # 1. Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # 2. Verify latest commit
       - name: Verify Latest Commit
         run: |
           echo "Commit: $GITHUB_SHA"
           echo "Branch: $GITHUB_REF_NAME"
           git log -1 --oneline
 
+      # 3. Configure GitHub Pages
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      # 4. Prepare website
       - name: Prepare Website
         run: |
           set -e
 
           mkdir -p _site
 
-          # Main website
-          cp index.html _site/
-          cp style.css _site/
-          cp script.js _site/
+          # Copy all website files and directories.
+          # Exclude development files and GitHub configuration.
+          rsync -av \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.gitignore' \
+            --exclude='.gitattributes' \
+            --exclude='.vscode/' \
+            --exclude='.qodo/' \
+            --exclude='_site/' \
+            --exclude='README.md' \
+            --exclude='LICENSE' \
+            --exclude='node_modules/' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            ./ _site/
 
-          # Projects page
-          cp projects.html _site/
-          cp projects.css _site/
-
-          # Journal page
-          cp journal.html _site/
-          cp journal.css _site/
-          cp journal.js _site/
-
-          # Assets
-          if [ -d assets ]; then
-            cp -R assets _site/
-          fi
-
-          # Resume
-          if [ -f Shomay_Singh_Parihar_Resume.pdf ]; then
-            cp Shomay_Singh_Parihar_Resume.pdf _site/
-          fi
-
-          # SEO files
-          if [ -f robots.txt ]; then
-            cp robots.txt _site/
-          fi
-
-          if [ -f sitemap.xml ]; then
-            cp sitemap.xml _site/
-          fi
-
-          # Custom 404 page
-          if [ -f 404.html ]; then
-            cp 404.html _site/
-          fi
-
-          echo "Published files:"
-          find _site -maxdepth 3 -type f | sort
-
-          # Verify critical pages exist in the deployment artifact
+          # Verify critical website pages
           test -f _site/index.html
-          test -f _site/projects.html
           test -f _site/journal.html
+          test -f _site/projects.html
 
+          # Verify essential styles and scripts
+          test -f _site/style.css
+          test -f _site/script.js
+          test -f _site/journal.css
+          test -f _site/journal.js
+          test -f _site/projects.css
+
+          # Display all files included in deployment
+          echo "========================================"
+          echo "Published Website Files"
+          echo "========================================"
+
+          find _site -type f | sort
+
+          echo "========================================"
+          echo "Total files:"
+          find _site -type f | wc -l
+
+      # 5. Upload website artifact
       - name: Upload Website Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
+      # 6. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # 7. Display deployment URL
+      - name: Deployment Summary
+        run: |
+          echo "Website deployed successfully."
+          echo "Deployment URL: ${{ steps.deployment.outputs.page_url }}"
