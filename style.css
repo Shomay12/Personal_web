@@ -346,7 +346,22 @@ body.light #nav.scrolled {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+.nav-icon-link {
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.nav-icon-link:hover {
+  color: var(--text);
+  transform: translateY(-1px);
 }
 
 #theme-toggle {
