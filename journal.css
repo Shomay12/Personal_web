@@ -578,6 +578,16 @@ body.light .waypoint-tabs-box {
   aspect-ratio: 16 / 10;
 }
 
+.photo-frame-wrap.portrait {
+  aspect-ratio: 4 / 5;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.single-story-photo {
+  margin: 1.25rem 0 0.5rem 0;
+}
+
 .photo-frame-wrap img,
 .blog-photo-item img {
   width: 100%;

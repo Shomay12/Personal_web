@@ -375,7 +375,7 @@ function buildVideoHtml(entry) {
   `;
 }
 
-function buildChapterMediaHtml(media) {
+function buildSingleMediaHtml(media) {
   if (!media) return '';
 
   if (media.type === 'photo-pair' && Array.isArray(media.items)) {
@@ -383,7 +383,7 @@ function buildChapterMediaHtml(media) {
       <div class="story-photo-pair">
         ${media.items.map(item => `
           <figure class="blog-photo-item">
-            <div class="photo-frame-wrap">
+            <div class="photo-frame-wrap ${item.isPortrait ? 'portrait' : ''}">
               <img
                 src="${escapeHtml(item.src)}"
                 alt="${escapeHtml(item.caption || '')}"
@@ -396,6 +396,23 @@ function buildChapterMediaHtml(media) {
           </figure>
         `).join('')}
       </div>
+    `;
+  }
+
+  if (media.type === 'photo' || media.type === 'single-photo' || media.type === 'image') {
+    return `
+      <figure class="blog-photo-item single-story-photo">
+        <div class="photo-frame-wrap ${media.isPortrait ? 'portrait' : ''}">
+          <img
+            src="${escapeHtml(media.src)}"
+            alt="${escapeHtml(media.caption || '')}"
+            loading="lazy"
+            data-lightbox="true"
+            data-caption="${escapeHtml(media.caption || '')}"
+          />
+        </div>
+        ${media.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(media.caption)}</figcaption>` : ''}
+      </figure>
     `;
   }
 
@@ -423,6 +440,14 @@ function buildChapterMediaHtml(media) {
   }
 
   return '';
+}
+
+function buildChapterMediaHtml(media) {
+  if (!media) return '';
+  if (Array.isArray(media)) {
+    return media.map(m => buildSingleMediaHtml(m)).join('');
+  }
+  return buildSingleMediaHtml(media);
 }
 
 function buildInteractiveStoryHtml(entry, catLabel, readTime) {

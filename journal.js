@@ -86,17 +86,10 @@ window.YOU_FINE_ME_HERE = {
           'I had travelled through mountains before, but this journey felt different. Perhaps it was the places we visited, the silence we encountered, or the simple fact that sometimes, when you leave the familiar world behind, you begin to see things differently. This is the story of that journey.'
         ],
         media: {
-          type: 'photo-pair',
-          items: [
-            {
-              src: 'blog/DSC05123.JPG',
-              caption: 'Morning in the Himalayas — Garhwal mountain range.'
-            },
-            {
-              src: 'blog/panar_bugyal.JPG',
-              caption: 'Pannar Bugyal — high-altitude alpine meadows en route to Rudranath.'
-            }
-          ]
+          type: 'photo',
+          isPortrait: true,
+          src: 'blog/DSC05123.JPG',
+          caption: 'Morning in the Himalayas — Garhwal mountain range.'
         }
       },
       {
@@ -162,7 +155,12 @@ window.YOU_FINE_ME_HERE = {
           'Walking through these places made me realise how rarely we allow ourselves to experience something without simultaneously thinking about what comes next. In ordinary life, we are always moving towards another task, another goal, another achievement. Even when we accomplish something, our minds have usually already moved on to the next thing.',
           'But on a mountain trail, progress becomes much simpler. You take a step. Then another. You breathe, you walk, and you continue.',
           'Some places are beautiful because of what you see. Others become beautiful because of what you feel when you are there. Rudranath was both. We had travelled from Noida, ridden through mountain towns, arrived at Sagar village, and walked for hours to reach this place. We had food, rested for the night, and I went to sleep physically exhausted but inwardly content.'
-        ]
+        ],
+        media: {
+          type: 'photo',
+          src: 'blog/panar_bugyal.JPG',
+          caption: 'Pannar Bugyal — vast high-altitude alpine meadows en route to Rudranath Temple.'
+        }
       },
       {
         id: 'chapter-day-4',
