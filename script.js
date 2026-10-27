@@ -445,7 +445,7 @@ function buildInteractiveStoryHtml(entry, catLabel, readTime) {
     ? `
       <div class="route-explorer-card" id="route-explorer">
         <div class="route-explorer-top">
-          <span class="route-explorer-label">Interactive Himalayan Route &amp; Elevation Log</span>
+          <span class="route-explorer-label">Six-Day Journey Route &amp; Chapters</span>
           <span class="route-explorer-hint">Select any stage to inspect &amp; jump ↓</span>
         </div>
         <div class="route-nodes-track" role="tablist" aria-label="Expedition stages">
@@ -453,7 +453,6 @@ function buildInteractiveStoryHtml(entry, catLabel, readTime) {
             <button type="button" class="route-node-btn ${idx === 0 ? 'active' : ''}" data-stage-idx="${idx}" data-target-chapter="${escapeHtml(st.id)}">
               <span class="node-day">${escapeHtml(st.day)}</span>
               <span class="node-place">${escapeHtml(st.place)}</span>
-              <span class="node-elev">${escapeHtml(st.elevation)}</span>
             </button>
           `).join('')}
         </div>

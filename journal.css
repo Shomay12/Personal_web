@@ -294,12 +294,6 @@ body.light .route-node-btn {
   text-overflow: ellipsis;
 }
 
-.node-elev {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-muted);
-}
-
 /* Live Waypoint Telemetry Detail Bar */
 .route-active-detail {
   display: flex;

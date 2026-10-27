@@ -29,56 +29,49 @@ window.YOU_FINE_ME_HERE = {
         id: 'chapter-intro',
         day: 'Prologue',
         place: 'Noida → Uttarakhand',
-        meta: 'The Departure · 6-Day Expedition',
-        elevation: '200m → 3,600m',
+        meta: 'The Departure · Six Days on the Road',
         summary: 'Leaving familiar routines behind with my friend Ritesh and a motorcycle headed for the Garhwal Himalayas.'
       },
       {
         id: 'chapter-day-1',
         day: 'Day 01',
         place: 'Noida → Dehradun',
-        meta: 'Gateway to the Mountains · ~255 km',
-        elevation: '640m ASL',
+        meta: 'Gateway to the Mountains',
         summary: 'Crossing the plains toward the foothills and letting the anticipation of unknown mountain roads settle in.'
       },
       {
         id: 'chapter-day-2',
         day: 'Day 02',
-        place: 'Rishikesh → Maa Dhari Devi → Sagar',
-        meta: 'Devprayag · Rudraprayag · Chamoli',
-        elevation: '1,650m ASL',
+        place: 'Rishikesh → Sagar Village',
+        meta: 'Devprayag · Maa Dhari Devi · Chamoli',
         summary: 'Following the sacred river confluences of the Ganga, offering prayers at Maa Dhari Devi, and riding deep into Chamoli.'
       },
       {
         id: 'chapter-day-3',
         day: 'Day 03',
         place: '23 km Trek to Rudranath',
-        meta: 'Pung, Lyu Ti & Pannar Bugyal · Pitradhar',
-        elevation: '3,600m ASL',
+        meta: 'Pung, Lyu Ti & Pannar Bugyal',
         summary: 'Starting at 5 a.m. on foot through high-altitude alpine meadows to reach Rudranath Temple in time for evening aarti.'
       },
       {
         id: 'chapter-day-4',
         day: 'Day 04',
-        place: 'Nanda Devi & Saraswati Kund',
-        meta: 'Morning Aarti · High-Altitude Stillness',
-        elevation: '3,600m ASL',
+        place: 'Rudranath & Saraswati Kund',
+        meta: 'Morning Aarti · Nanda Devi',
         summary: 'Standing before Nanda Devi after morning prayers, walking to Saraswati Kund, and descending back to Sagar village.'
       },
       {
         id: 'chapter-day-5',
         day: 'Day 05',
         place: 'Sagar Village → Badrinath',
-        meta: 'Nandprayag · Vishnuprayag · Joshimath',
-        elevation: '3,300m ASL',
+        meta: 'Nandprayag · Joshimath · Badrinath',
         summary: 'Back on the motorcycle through dramatic Himalayan river valleys, arriving in Badrinath at 9 p.m.'
       },
       {
         id: 'chapter-reflections',
         day: 'Reflections',
-        place: 'What the Mountains Left With Me',
+        place: 'What the Mountains Left',
         meta: 'Perspective · Presence · Memory',
-        elevation: 'Homeward',
         summary: 'Why the most meaningful destination is not a coordinate on a map, but the state of mind discovered along the way.'
       }
     ],
@@ -96,12 +89,12 @@ window.YOU_FINE_ME_HERE = {
           type: 'photo-pair',
           items: [
             {
-              src: 'blog/JPEG image-4C64-925E-30-0.jpeg',
-              caption: 'Morning light across the Garhwal Himalayas — from the blog archive (blog/JPEG image-4C64-925E-30-0.jpeg).'
+              src: 'blog/DSC05123.JPG',
+              caption: 'Morning in the Himalayas — Garhwal mountain range.'
             },
             {
-              src: 'blog/JPEG image-4C64-925E-30-1.jpeg',
-              caption: 'Into the high mountain trails — from the blog archive (blog/JPEG image-4C64-925E-30-1.jpeg).'
+              src: 'blog/panar_bugyal.JPG',
+              caption: 'Pannar Bugyal — high-altitude alpine meadows en route to Rudranath.'
             }
           ]
         }
@@ -134,9 +127,9 @@ window.YOU_FINE_ME_HERE = {
         ],
         media: {
           type: 'video',
-          src: 'blog/QuickTime movie-4C64-925E-30-2.mov',
+          src: 'blog/GX012564.mov',
           title: 'Mountain Roads & River Valleys — Motion Log 01',
-          caption: 'Source: blog/QuickTime movie-4C64-925E-30-2.mov · Winding highways through Devprayag, Rudraprayag, and Chamoli.'
+          caption: 'Winding highways through Devprayag, Rudraprayag, and the Chamoli mountain roads.'
         }
       },
       {
@@ -189,9 +182,9 @@ window.YOU_FINE_ME_HERE = {
         ],
         media: {
           type: 'video',
-          src: 'blog/QuickTime movie-4C64-925E-30-3.mov',
+          src: 'blog/Timeline 1.MOV',
           title: 'High Himalayas & Temple Stillness — Motion Log 02',
-          caption: 'Source: blog/QuickTime movie-4C64-925E-30-3.mov · High-altitude vistas from Rudranath, Nanda Devi horizon, and the trail back.'
+          caption: 'High-altitude vistas from Rudranath, Nanda Devi on the horizon, and the trail.'
         }
       },
       {
