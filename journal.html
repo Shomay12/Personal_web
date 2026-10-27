@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Journal | Shomay Singh Parihar</title>
+  <title>The Journal | Shomay Singh Parihar</title>
   <meta name="description"
-    content="Personal journal, daily life updates, AI Engineering and Data Science logs, photos, voice notes, videos, and code by Shomay Singh Parihar." />
+    content="Personal blog, daily life updates, AI Engineering and Data Science logs, photos, voice notes, videos, and code by Shomay Singh Parihar." />
 
   <!-- Editorial & Technical Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +20,7 @@
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-family='Georgia, serif' font-style='italic' font-size='88' fill='%2360a5fa'>S</text></svg>">
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="journal.css">
 </head>
 
 <body>
@@ -83,70 +84,163 @@
 
   <main id="main-content">
 
-    <!-- JOURNAL HEADER -->
-    <section class="container page-hero">
-      <h1 class="hero-title">
-        Personal <em>Journal</em>.
-      </h1>
-
-      <div class="hero-intro-grid">
-        <p class="hero-lead">
-          What I am coding and building each day, the AI engineering and data science problems I am focusing on, day-to-day life, photos, voice notes, videos, and code snippets.
+    <!-- 1. EDITORIAL MASTHEAD & "NOW" STATUS STRIP -->
+    <section class="container journal-masthead">
+      <div class="masthead-top">
+        <h1 class="masthead-title">
+          The <em>Journal</em>.
+        </h1>
+        <p class="masthead-sub">
+          My personal blog and daily log — documenting what I am building in AI engineering and data science, day-to-day life, photos, voice notes, videos, and code experiments.
         </p>
+      </div>
 
-        <div class="hero-links">
-          <a href="index.html" class="link-quiet">← Home</a>
-          <a href="projects.html" class="link-quiet">Selected Work →</a>
+      <!-- Glassmorphic "Now" Strip (Edit anytime to update what you're doing right now) -->
+      <div class="now-strip">
+        <div class="now-item">
+          <span class="now-label">Currently Focusing On</span>
+          <span class="now-value">Dense Retrieval (RAG), FAISS Indexing &amp; Local LLM Pipelines</span>
+        </div>
+        <div class="now-item">
+          <span class="now-label">Data Science &amp; ML</span>
+          <span class="now-value">Time-Series Forecasting, Isolation Forests &amp; Feature Engineering</span>
+        </div>
+        <div class="now-item">
+          <span class="now-label">Life &amp; Base</span>
+          <span class="now-value">Noida, India · Late-night builds &amp; mountain treks</span>
         </div>
       </div>
     </section>
 
-    <!-- JOURNAL STREAM -->
-    <section class="container section-space">
-      <div class="editorial-grid">
-        <div class="editorial-sidebar">
-          <h2 class="section-title">Entries</h2>
-          <div class="journal-filters" role="tablist" aria-label="Filter journal entries">
-            <button type="button" class="filter-btn active" data-filter="all">All</button>
-            <button type="button" class="filter-btn" data-filter="ai">AI Engineering</button>
-            <button type="button" class="filter-btn" data-filter="data-science">Data Science</button>
-            <button type="button" class="filter-btn" data-filter="building">Building</button>
-            <button type="button" class="filter-btn" data-filter="life">Daily Life</button>
-          </div>
+    <!-- 2. STICKY CONTROLS BAR (TOPIC FILTERS, LIVE SEARCH & VIEW TOGGLE) -->
+    <div class="blog-controls-bar">
+      <div class="container blog-controls-inner">
+        <div class="blog-filter-group" role="tablist" aria-label="Filter blog posts">
+          <button type="button" class="blog-filter-btn active" data-filter="all">All Posts</button>
+          <button type="button" class="blog-filter-btn" data-filter="ai">AI Engineering</button>
+          <button type="button" class="blog-filter-btn" data-filter="data-science">Data Science</button>
+          <button type="button" class="blog-filter-btn" data-filter="building">Building</button>
+          <button type="button" class="blog-filter-btn" data-filter="life">Daily Life</button>
         </div>
 
-        <div class="editorial-main">
-          <!--
-            ===================================================================
-            HOW TO POST DIRECTLY IN CODE:
-            Option 1: Add an object to `window.JOURNAL_ENTRIES` in `journal.js`
-            Option 2: Write a raw <article class="journal-entry" data-category="life">
-                      right inside `#journal-stream` below!
-            ===================================================================
-          -->
-          <div id="journal-stream" class="journal-stream"></div>
+        <div class="blog-tools-right">
+          <div class="blog-search-wrap">
+            <svg class="blog-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" id="blog-search" class="blog-search-input" placeholder="Search posts, code, tags..." aria-label="Search blog posts" />
+          </div>
+
+          <div class="view-toggle-group" aria-label="Switch layout view">
+            <button type="button" class="view-mode-btn active" id="view-grid-btn" title="Magazine Grid View" aria-label="Magazine Grid View">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </button>
+            <button type="button" class="view-mode-btn" id="view-stream-btn" title="Full Stream View" aria-label="Full Stream View">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 3. FEATURED LEAD STORY SPREAD -->
+    <section class="container featured-spread-section" id="featured-section">
+      <div id="featured-post-slot"></div>
+    </section>
+
+    <!-- 4. MAIN BLOG ARCHIVE & TIMELINE SCRUBBER -->
+    <section class="container blog-body-section">
+      <div class="blog-layout-wrapper">
+        <!-- Sticky Date Scrubber -->
+        <aside class="blog-timeline-nav" id="blog-timeline-nav" aria-label="Post timeline"></aside>
+
+        <!-- Dynamic Magazine / Stream Feed (Populated from journal.js) -->
+        <div id="journal-stream" class="blog-feed"></div>
       </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-row">
-      <div class="footer-left">
-        <span class="footer-brand">Shomay Singh Parihar</span>
-        <span class="meta-sep">·</span>
-        <span>AI Engineer &amp; Data Science</span>
+    <div class="container">
+      <div class="footer-main-grid">
+        <div class="footer-col-brand">
+          <a href="index.html" class="footer-signature">Shomay Singh Parihar</a>
+          <p class="footer-bio">
+            AI Engineer &amp; Data Science. A personal space on the web for the models I train, the systems I build, and my day-to-day life.
+          </p>
+          <div class="footer-time-line">
+            <span>Noida, India</span>
+            <span class="meta-sep">·</span>
+            <span id="local-time">IST (UTC+5:30)</span>
+          </div>
+        </div>
+
+        <div class="footer-col-links">
+          <div class="footer-nav-group">
+            <span class="footer-group-title">Index</span>
+            <a href="index.html#about">About</a>
+            <a href="projects.html">Selected Work</a>
+            <a href="index.html#stack">Technical Stack</a>
+            <a href="journal.html">Daily Journal</a>
+            <a href="index.html#contact">Contact</a>
+          </div>
+          <div class="footer-nav-group">
+            <span class="footer-group-title">Elsewhere</span>
+            <a href="https://github.com/shomay12" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a href="https://x.com/KJshomayyy" target="_blank" rel="noopener noreferrer">X (Twitter) ↗</a>
+            <a href="https://www.linkedin.com/in/shomay-singh-parihar-b09b2931a/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+            <a href="mailto:shomaysinghparihar@gmail.com">Email ↗</a>
+            <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume ↗</a>
+          </div>
+        </div>
+
+        <div class="footer-col-visitor">
+          <span class="footer-group-title">Visitor Register</span>
+          <div class="visitor-odometer" id="visitor-odometer" aria-live="polite" aria-label="Total site visitors">
+            <span class="odo-digit">0</span>
+            <span class="odo-digit">0</span>
+            <span class="odo-digit">0</span>
+            <span class="odo-digit">0</span>
+            <span class="odo-digit">0</span>
+            <span class="odo-digit">0</span>
+          </div>
+          <p class="visitor-note" id="visitor-note">
+            Recording your visit to the log...
+          </p>
+        </div>
       </div>
-      <div class="footer-right">
-        <a href="index.html" class="back-top">← Home</a>
-        <span class="meta-sep">·</span>
-        <a href="projects.html" class="back-top">Projects</a>
-        <span class="meta-sep">·</span>
-        <span>© <span id="year">2026</span></span>
+
+      <div class="footer-bottom-bar">
+        <span>© <span id="year">2026</span> Shomay Singh Parihar</span>
+        <a href="#main-content" class="back-top">Back to top ↑</a>
       </div>
     </div>
   </footer>
+
+  <!-- FULL ARTICLE READER MODAL -->
+  <div id="article-reader-modal" class="article-reader-modal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="modal-backdrop" id="reader-backdrop"></div>
+    <div class="article-reader-card">
+      <button type="button" class="modal-close-btn" id="reader-close-btn" aria-label="Close article">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div id="reader-dynamic-content"></div>
+    </div>
+  </div>
 
   <!-- IMAGE LIGHTBOX -->
   <div id="media-lightbox" class="media-lightbox" role="dialog" aria-modal="true" aria-hidden="true">

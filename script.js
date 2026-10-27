@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightbox();
   initProjectModal();
   initContact();
+  initVisitorCounter();
   initWebGL();
 
   const yearEl = document.getElementById('year');
@@ -14,6 +15,100 @@ document.addEventListener('DOMContentLoaded', () => {
     yearEl.textContent = new Date().getFullYear();
   }
 });
+
+/* --------------------------------------------------------------------------
+   0. VISITOR REGISTER ODOMETER & LIVE LOCAL TIME
+   -------------------------------------------------------------------------- */
+function initVisitorCounter() {
+  // Live India Standard Time (IST) clock in footer
+  const timeEl = document.getElementById('local-time');
+  if (timeEl) {
+    const updateClock = () => {
+      try {
+        const nowStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        }).format(new Date());
+        timeEl.textContent = `${nowStr} IST`;
+      } catch (_) {
+        timeEl.textContent = 'IST (UTC+5:30)';
+      }
+    };
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  const odometer = document.getElementById('visitor-odometer');
+  const noteEl = document.getElementById('visitor-note');
+  if (!odometer) return;
+
+  const digits = [...odometer.querySelectorAll('.odo-digit')];
+  const STORAGE_KEY = 'shomay_real_visitor_count';
+  const SESSION_KEY = 'shomay_real_session_logged';
+
+  function renderOdometer(targetNumber) {
+    const cleanNum = Math.max(1, parseInt(targetNumber, 10) || 1);
+    const padded = String(cleanNum).padStart(digits.length, '0');
+    const firstSignificantIdx = padded.search(/[1-9]/);
+
+    digits.forEach((el, idx) => {
+      const finalChar = padded[idx] || '0';
+      const isSignificant = firstSignificantIdx !== -1 && idx >= firstSignificantIdx;
+      let ticks = 0;
+      const maxTicks = 5 + idx * 2;
+
+      el.classList.add('rolling');
+      const rollTimer = setInterval(() => {
+        ticks++;
+        if (ticks >= maxTicks) {
+          clearInterval(rollTimer);
+          el.textContent = finalChar;
+          el.classList.remove('rolling');
+          el.classList.toggle('active-digit', isSignificant);
+        } else {
+          el.textContent = String((ticks + idx) % 10);
+        }
+      }, 42);
+    });
+
+    if (noteEl) {
+      noteEl.innerHTML = `You are visitor <strong>#${cleanNum.toLocaleString()}</strong> to this site.`;
+    }
+  }
+
+  const hasLoggedSession = sessionStorage.getItem(SESSION_KEY) === '1';
+  const endpoint = hasLoggedSession
+    ? 'https://api.counterapi.dev/v1/shomay-parihar-personal-web/visits/'
+    : 'https://api.counterapi.dev/v1/shomay-parihar-personal-web/visits/up';
+
+  fetch(endpoint)
+    .then(res => {
+      if (!res.ok) throw new Error('Counter API error');
+      return res.json();
+    })
+    .then(data => {
+      if (typeof data.count === 'number' && data.count >= 1) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        localStorage.setItem(STORAGE_KEY, String(data.count));
+        renderOdometer(data.count);
+      } else {
+        throw new Error('Empty count');
+      }
+    })
+    .catch(() => {
+      let localCount = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+      if (isNaN(localCount) || localCount < 0) localCount = 0;
+      if (!hasLoggedSession) {
+        localCount += 1;
+        sessionStorage.setItem(SESSION_KEY, '1');
+        localStorage.setItem(STORAGE_KEY, String(localCount));
+      }
+      renderOdometer(Math.max(1, localCount));
+    });
+}
 
 /* --------------------------------------------------------------------------
    1. THEME TOGGLE
@@ -101,7 +196,7 @@ function initNav() {
     });
 
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+      if (window.innerWidth > 860 && navLinks.classList.contains('open')) {
         closeMobileMenu();
       }
     }, { passive: true });
@@ -122,7 +217,7 @@ function initNav() {
 }
 
 /* --------------------------------------------------------------------------
-   3. PERSONAL JOURNAL & MULTIMEDIA LOG ENGINE
+   3. PERSONAL JOURNAL & MULTIMEDIA BLOG ENGINE
    -------------------------------------------------------------------------- */
 function escapeHtml(str) {
   return String(str)
@@ -148,120 +243,384 @@ function generateWaveformBars(seedStr, count = 38) {
   return bars.join('');
 }
 
+function formatCategoryLabel(cat) {
+  const map = {
+    'ai': 'AI Engineering',
+    'data-science': 'Data Science',
+    'building': 'Building',
+    'life': 'Daily Life'
+  };
+  return map[cat] || 'Journal';
+}
+
+function estimateReadingTime(entry) {
+  const proseWords = (entry.paragraphs || []).join(' ').split(/\s+/).filter(Boolean).length;
+  const codeWords = entry.code && entry.code.snippet ? entry.code.snippet.split(/\s+/).filter(Boolean).length : 0;
+  const minutes = Math.max(1, Math.round((proseWords + codeWords * 0.6) / 160));
+  return `${minutes} min read`;
+}
+
+function buildAudioPlayerHtml(entry) {
+  if (!entry.audio || !entry.audio.title) return '';
+  return `
+    <div class="entry-audio" data-audio-src="${escapeHtml(entry.audio.src || '')}" data-duration="${escapeHtml(entry.audio.duration || '01:30')}">
+      <button type="button" class="audio-play-btn" aria-label="Play audio note">
+        <svg class="icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="6 3 20 12 6 21 6 3"></polygon>
+        </svg>
+        <svg class="icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="6" y="4" width="4" height="16"></rect>
+          <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-title-row">
+          <span class="audio-title">${escapeHtml(entry.audio.title)}</span>
+          <span class="audio-time">${escapeHtml(entry.audio.duration || '01:30')}</span>
+        </div>
+        <div class="audio-waveform" aria-hidden="true">
+          ${generateWaveformBars(entry.id || entry.title)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function buildCodeWindowHtml(entry) {
+  if (!entry.code || !entry.code.snippet) return '';
+  const langLabel = entry.code.lang || 'snippet.py';
+  return `
+    <div class="blog-code-window">
+      <div class="code-window-bar">
+        <span>${escapeHtml(langLabel)}</span>
+        <button type="button" class="copy-code-btn" data-copy-code="${escapeHtml(entry.code.snippet)}">Copy snippet</button>
+      </div>
+      <pre><code>${escapeHtml(entry.code.snippet)}</code></pre>
+    </div>
+  `;
+}
+
+function buildPhotoGridHtml(entry) {
+  if (!Array.isArray(entry.images) || entry.images.length === 0) return '';
+  return `
+    <div class="blog-photo-grid">
+      ${entry.images.map(img => `
+        <figure class="blog-photo-item">
+          <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(img.caption || '')}">
+          ${img.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(img.caption)}</figcaption>` : ''}
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+
+function buildVideoHtml(entry) {
+  if (!entry.video || !entry.video.src) return '';
+  const isImg = entry.video.isImagePreview || /\.(gif|png|jpe?g|webp|svg)$/i.test(entry.video.src);
+  return `
+    <div class="blog-photo-grid">
+      <figure class="blog-photo-item">
+        ${isImg
+          ? `<img src="${escapeHtml(entry.video.src)}" alt="${escapeHtml(entry.video.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(entry.video.caption || '')}">`
+          : `<video controls preload="metadata" ${entry.video.poster ? `poster="${escapeHtml(entry.video.poster)}"` : ''}>
+               <source src="${escapeHtml(entry.video.src)}" type="video/mp4">
+             </video>`
+        }
+        ${entry.video.caption ? `<figcaption class="blog-photo-caption">${escapeHtml(entry.video.caption)}</figcaption>` : ''}
+      </figure>
+    </div>
+  `;
+}
+
 function initJournal() {
   const stream = document.getElementById('journal-stream');
   if (!stream) return;
 
+  const featuredSection = document.getElementById('featured-section');
+  const featuredSlot = document.getElementById('featured-post-slot');
+  const timelineNav = document.getElementById('blog-timeline-nav');
+  const searchInput = document.getElementById('blog-search');
+  const gridBtn = document.getElementById('view-grid-btn');
+  const streamBtn = document.getElementById('view-stream-btn');
+  const readerModal = document.getElementById('article-reader-modal');
+  const readerContent = document.getElementById('reader-dynamic-content');
+  const readerCloseBtn = document.getElementById('reader-close-btn');
+  const readerBackdrop = document.getElementById('reader-backdrop');
+
   const entries = Array.isArray(window.JOURNAL_ENTRIES) ? window.JOURNAL_ENTRIES : [];
 
+  // 1. Render Featured Lead Story (Latest Entry)
+  if (featuredSlot && entries.length > 0) {
+    const lead = entries[0];
+    const readTime = estimateReadingTime(lead);
+    const catLabel = formatCategoryLabel(lead.category);
+    const visualContent = buildCodeWindowHtml(lead) || buildPhotoGridHtml(lead) || buildVideoHtml(lead);
+
+    featuredSlot.innerHTML = `
+      <article class="featured-spread">
+        <div class="featured-content">
+          <div class="post-date-row">
+            <span>Latest Dispatch</span>
+            <span class="meta-sep">·</span>
+            <time>${escapeHtml(lead.date || '')}</time>
+            <span class="meta-sep">·</span>
+            <span>${escapeHtml(catLabel)}</span>
+            <span class="meta-sep">·</span>
+            <span class="post-read-time">${readTime}</span>
+          </div>
+          <h2 class="featured-title" data-read-entry="${escapeHtml(lead.id)}">${escapeHtml(lead.title)}</h2>
+          <p class="featured-excerpt">${escapeHtml((lead.paragraphs && lead.paragraphs[0]) || '')}</p>
+          ${buildAudioPlayerHtml(lead)}
+          <div class="blog-card-footer" style="border-top:none;padding-top:0.25rem;">
+            <button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(lead.id)}">Read Full Dispatch ↗</button>
+          </div>
+        </div>
+        <div class="featured-visual-pane">
+          ${visualContent}
+        </div>
+      </article>
+    `;
+  }
+
+  // 2. Render Sticky Left Timeline Scrubber
+  if (timelineNav && entries.length > 0) {
+    timelineNav.innerHTML = entries.map((entry, idx) => `
+      <button type="button" class="timeline-nav-item ${idx === 0 ? 'active' : ''}" data-scroll-entry="${escapeHtml(entry.id)}">
+        <span class="timeline-nav-date">${escapeHtml(entry.date || '')}</span>
+        <span class="timeline-nav-title">${escapeHtml(entry.title || '')}</span>
+      </button>
+    `).join('');
+
+    timelineNav.addEventListener('click', e => {
+      const btn = e.target.closest('[data-scroll-entry]');
+      if (!btn) return;
+      const targetId = btn.getAttribute('data-scroll-entry');
+      const card = document.getElementById(targetId);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        timelineNav.querySelectorAll('.timeline-nav-item').forEach(b => b.classList.toggle('active', b === btn));
+      }
+    });
+  }
+
+  // 3. Render Magazine / Bento Feed Cards
   if (entries.length > 0) {
-    const renderedHtml = entries.map(entry => {
+    const cardsHtml = entries.map(entry => {
+      const readTime = estimateReadingTime(entry);
+      const catLabel = formatCategoryLabel(entry.category);
       const paragraphsHtml = (entry.paragraphs || [])
         .map(p => `<p>${escapeHtml(p)}</p>`)
         .join('');
 
-      let imagesHtml = '';
-      if (Array.isArray(entry.images) && entry.images.length > 0) {
-        imagesHtml = `
-          <div class="entry-gallery">
-            ${entry.images.map(img => `
-              <figure class="entry-figure">
-                <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(img.caption || '')}">
-                ${img.caption ? `<figcaption class="entry-figcaption">${escapeHtml(img.caption)}</figcaption>` : ''}
-              </figure>
-            `).join('')}
-          </div>
-        `;
-      }
+      const hasMultiPhotos = Array.isArray(entry.images) && entry.images.length > 1;
+      const hasComboMedia = (Array.isArray(entry.images) && entry.images.length > 0) && (entry.code && entry.code.snippet);
+      const wideClass = (hasMultiPhotos || hasComboMedia) ? 'card-wide' : '';
 
-      let videoHtml = '';
-      if (entry.video && entry.video.src) {
-        const isImg = entry.video.isImagePreview || /\.(gif|png|jpe?g|webp|svg)$/i.test(entry.video.src);
-        videoHtml = `
-          <div class="entry-video-wrap">
-            ${isImg
-              ? `<img src="${escapeHtml(entry.video.src)}" alt="${escapeHtml(entry.video.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(entry.video.caption || '')}">`
-              : `<video controls preload="metadata" ${entry.video.poster ? `poster="${escapeHtml(entry.video.poster)}"` : ''}>
-                   <source src="${escapeHtml(entry.video.src)}" type="video/mp4">
-                 </video>`
-            }
-            ${entry.video.caption ? `<div class="entry-figcaption">${escapeHtml(entry.video.caption)}</div>` : ''}
-          </div>
-        `;
-      }
-
-      let audioHtml = '';
-      if (entry.audio && entry.audio.title) {
-        audioHtml = `
-          <div class="entry-audio" data-audio-src="${escapeHtml(entry.audio.src || '')}" data-duration="${escapeHtml(entry.audio.duration || '01:30')}">
-            <button type="button" class="audio-play-btn" aria-label="Play audio note">
-              <svg class="icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="6 3 20 12 6 21 6 3"></polygon>
-              </svg>
-              <svg class="icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
-            </button>
-            <div class="audio-info">
-              <div class="audio-title-row">
-                <span class="audio-title">${escapeHtml(entry.audio.title)}</span>
-                <span class="audio-time">${escapeHtml(entry.audio.duration || '01:30')}</span>
-              </div>
-              <div class="audio-waveform" aria-hidden="true">
-                ${generateWaveformBars(entry.id || entry.title)}
-              </div>
-            </div>
-          </div>
-        `;
-      }
-
-      let codeHtml = '';
-      if (entry.code && entry.code.snippet) {
-        codeHtml = `
-          <div class="entry-code">
-            <pre><code>${escapeHtml(entry.code.snippet)}</code></pre>
-          </div>
-        `;
-      }
+      const searchableBlob = [
+        entry.title || '',
+        entry.date || '',
+        catLabel,
+        ...(entry.paragraphs || []),
+        (entry.code && entry.code.snippet) || ''
+      ].join(' ').toLowerCase();
 
       return `
-        <article class="journal-entry" id="${escapeHtml(entry.id || '')}" data-category="${escapeHtml(entry.category || 'all')}">
-          <header class="entry-header">
-            <h3 class="entry-title">${escapeHtml(entry.title || '')}</h3>
-            ${entry.date ? `<time class="entry-date">${escapeHtml(entry.date)}</time>` : ''}
-          </header>
-          <div class="entry-prose">
-            ${paragraphsHtml}
+        <article class="blog-card ${wideClass}" id="${escapeHtml(entry.id || '')}" data-category="${escapeHtml(entry.category || 'all')}" data-search="${escapeHtml(searchableBlob)}">
+          <div class="blog-card-top">
+            <div class="post-date-row">
+              <time>${escapeHtml(entry.date || '')}</time>
+              <span class="meta-sep">·</span>
+              <span>${escapeHtml(catLabel)}</span>
+              <span class="meta-sep">·</span>
+              <span class="post-read-time">${readTime}</span>
+            </div>
+            <h3 class="blog-card-title" data-read-entry="${escapeHtml(entry.id)}">${escapeHtml(entry.title || '')}</h3>
+            <div class="blog-card-prose">
+              ${paragraphsHtml}
+            </div>
+            ${buildAudioPlayerHtml(entry)}
+            ${buildCodeWindowHtml(entry)}
+            ${buildPhotoGridHtml(entry)}
+            ${buildVideoHtml(entry)}
           </div>
-          ${audioHtml}
-          ${codeHtml}
-          ${imagesHtml}
-          ${videoHtml}
+          <div class="blog-card-footer">
+            <span class="post-date-row">${escapeHtml(catLabel)}</span>
+            <button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(entry.id)}">Open Reader View ↗</button>
+          </div>
         </article>
       `;
     }).join('');
 
-    stream.insertAdjacentHTML('afterbegin', renderedHtml);
+    stream.innerHTML = cardsHtml + `<div class="blog-empty-state" id="blog-empty-state" hidden>No journal posts match that filter or search query.</div>`;
   }
 
-  // Filter logic
-  const filterBtns = [...document.querySelectorAll('.journal-filters .filter-btn')];
+  // 4. Category Filtering & Live Search
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  const filterBtns = [...document.querySelectorAll('.blog-filter-btn, .journal-filters .filter-btn')];
+  const emptyState = document.getElementById('blog-empty-state');
+
+  function applyFilters() {
+    const cards = [...stream.querySelectorAll('.blog-card')];
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category') || 'all';
+      const hay = card.getAttribute('data-search') || '';
+      const matchesCat = activeCategory === 'all' || cat === activeCategory;
+      const matchesSearch = !searchQuery || hay.includes(searchQuery);
+
+      if (matchesCat && matchesSearch) {
+        card.removeAttribute('hidden');
+        visibleCount++;
+      } else {
+        card.setAttribute('hidden', 'true');
+      }
+    });
+
+    if (featuredSection) {
+      if (activeCategory === 'all' && !searchQuery) {
+        featuredSection.removeAttribute('hidden');
+      } else {
+        featuredSection.setAttribute('hidden', 'true');
+      }
+    }
+
+    if (emptyState) {
+      if (visibleCount === 0) {
+        emptyState.removeAttribute('hidden');
+      } else {
+        emptyState.setAttribute('hidden', 'true');
+      }
+    }
+  }
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const cat = btn.getAttribute('data-filter') || 'all';
+      activeCategory = btn.getAttribute('data-filter') || 'all';
       filterBtns.forEach(b => b.classList.toggle('active', b === btn));
-
-      const allEntries = [...stream.querySelectorAll('.journal-entry')];
-      allEntries.forEach(item => {
-        const itemCat = item.getAttribute('data-category') || 'all';
-        if (cat === 'all' || itemCat === cat) {
-          item.removeAttribute('hidden');
-        } else {
-          item.setAttribute('hidden', 'true');
-        }
-      });
+      applyFilters();
     });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', e => {
+      searchQuery = (e.target.value || '').trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  // 5. View Switcher (Magazine Grid vs. Single-Column Stream)
+  if (gridBtn && streamBtn) {
+    gridBtn.addEventListener('click', () => {
+      stream.classList.remove('stream-view');
+      gridBtn.classList.add('active');
+      streamBtn.classList.remove('active');
+    });
+    streamBtn.addEventListener('click', () => {
+      stream.classList.add('stream-view');
+      streamBtn.classList.add('active');
+      gridBtn.classList.remove('active');
+    });
+  }
+
+  // 6. Scroll-spy for Timeline Scrubber
+  if (timelineNav && entries.length > 0) {
+    window.addEventListener('scroll', () => {
+      const cards = [...stream.querySelectorAll('.blog-card:not([hidden])')];
+      let currentId = entries[0].id;
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        if (rect.top <= 280) {
+          currentId = card.id;
+        }
+      }
+      timelineNav.querySelectorAll('.timeline-nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-scroll-entry') === currentId);
+      });
+    }, { passive: true });
+  }
+
+  // 7. Full Article Reader Modal & Code Copy Handler
+  function openArticleReader(entryId) {
+    if (!readerModal || !readerContent) return;
+    const idx = entries.findIndex(e => e.id === entryId);
+    if (idx === -1) return;
+
+    const entry = entries[idx];
+    const prevEntry = idx < entries.length - 1 ? entries[idx + 1] : null;
+    const nextEntry = idx > 0 ? entries[idx - 1] : null;
+    const readTime = estimateReadingTime(entry);
+    const catLabel = formatCategoryLabel(entry.category);
+
+    readerContent.innerHTML = `
+      <div class="post-date-row">
+        <time>${escapeHtml(entry.date || '')}</time>
+        <span class="meta-sep">·</span>
+        <span>${escapeHtml(catLabel)}</span>
+        <span class="meta-sep">·</span>
+        <span class="post-read-time">${readTime}</span>
+      </div>
+      <h2 class="reader-title">${escapeHtml(entry.title || '')}</h2>
+      <div class="reader-prose">
+        ${(entry.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+      </div>
+      ${buildAudioPlayerHtml(entry)}
+      ${buildCodeWindowHtml(entry)}
+      ${buildPhotoGridHtml(entry)}
+      ${buildVideoHtml(entry)}
+      <div class="reader-nav-footer">
+        <div>
+          ${prevEntry ? `<button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(prevEntry.id)}">← Older: ${escapeHtml(prevEntry.title.slice(0, 34))}...</button>` : ''}
+        </div>
+        <div>
+          ${nextEntry ? `<button type="button" class="read-entry-btn" data-read-entry="${escapeHtml(nextEntry.id)}">Newer: ${escapeHtml(nextEntry.title.slice(0, 34))}... →</button>` : ''}
+        </div>
+      </div>
+    `;
+
+    readerModal.classList.add('active');
+    readerModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    bindAudioContainers(readerContent);
+  }
+
+  function closeArticleReader() {
+    if (!readerModal) return;
+    readerModal.classList.remove('active');
+    readerModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => {
+    const readTrigger = e.target.closest('[data-read-entry]');
+    if (readTrigger) {
+      e.preventDefault();
+      openArticleReader(readTrigger.getAttribute('data-read-entry'));
+      return;
+    }
+
+    const copyBtn = e.target.closest('[data-copy-code]');
+    if (copyBtn) {
+      const codeText = copyBtn.getAttribute('data-copy-code') || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(codeText).then(() => {
+          const orig = copyBtn.textContent;
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(() => { copyBtn.textContent = orig; }, 1800);
+        });
+      }
+    }
+  });
+
+  if (readerCloseBtn) readerCloseBtn.addEventListener('click', closeArticleReader);
+  if (readerBackdrop) readerBackdrop.addEventListener('click', closeArticleReader);
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && readerModal && readerModal.classList.contains('active')) {
+      closeArticleReader();
+    }
   });
 
   initAudioPlayers();
@@ -270,6 +629,8 @@ function initJournal() {
 /* --------------------------------------------------------------------------
    3B. AUDIO / VOICE NOTE PLAYER (SUPPORTS LOCAL MP3/WAV OR WEB AUDIO SYNTH)
    -------------------------------------------------------------------------- */
+let bindAudioContainers = () => {};
+
 function initAudioPlayers() {
   let activeContainer = null;
   let activeAudio = null;
@@ -328,50 +689,6 @@ function initAudioPlayers() {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
-  document.querySelectorAll('.entry-audio').forEach(container => {
-    const btn = container.querySelector('.audio-play-btn');
-    const bars = [...container.querySelectorAll('.wave-bar')];
-    const timeEl = container.querySelector('.audio-time');
-    const src = container.getAttribute('data-audio-src');
-
-    if (!btn) return;
-
-    btn.addEventListener('click', () => {
-      if (activeContainer === container) {
-        stopCurrent();
-        return;
-      }
-
-      stopCurrent();
-      activeContainer = container;
-      container.classList.add('playing');
-
-      const playIcon = container.querySelector('.icon-play');
-      const pauseIcon = container.querySelector('.icon-pause');
-      if (playIcon) playIcon.style.display = 'none';
-      if (pauseIcon) pauseIcon.style.display = 'block';
-
-      if (src) {
-        const audio = new Audio(src);
-        activeAudio = audio;
-        audio.addEventListener('timeupdate', () => {
-          const pct = audio.duration ? audio.currentTime / audio.duration : 0;
-          const activeCount = Math.floor(pct * bars.length);
-          bars.forEach((b, idx) => b.classList.toggle('played', idx <= activeCount));
-          if (timeEl) timeEl.textContent = formatSec(audio.currentTime);
-        });
-        audio.addEventListener('ended', stopCurrent);
-        audio.addEventListener('error', () => {
-          startPreviewLoop(container, bars, timeEl);
-        });
-        audio.play().catch(() => startPreviewLoop(container, bars, timeEl));
-      } else {
-        playSoftChime();
-        startPreviewLoop(container, bars, timeEl);
-      }
-    });
-  });
-
   function startPreviewLoop(container, bars, timeEl) {
     let step = 0;
     const totalSteps = bars.length;
@@ -384,6 +701,57 @@ function initAudioPlayers() {
       }
     }, 350);
   }
+
+  bindAudioContainers = function (root = document) {
+    root.querySelectorAll('.entry-audio').forEach(container => {
+      if (container.dataset.bound === '1') return;
+      container.dataset.bound = '1';
+
+      const btn = container.querySelector('.audio-play-btn');
+      const bars = [...container.querySelectorAll('.wave-bar')];
+      const timeEl = container.querySelector('.audio-time');
+      const src = container.getAttribute('data-audio-src');
+
+      if (!btn) return;
+
+      btn.addEventListener('click', () => {
+        if (activeContainer === container) {
+          stopCurrent();
+          return;
+        }
+
+        stopCurrent();
+        activeContainer = container;
+        container.classList.add('playing');
+
+        const playIcon = container.querySelector('.icon-play');
+        const pauseIcon = container.querySelector('.icon-pause');
+        if (playIcon) playIcon.style.display = 'none';
+        if (pauseIcon) pauseIcon.style.display = 'block';
+
+        if (src) {
+          const audio = new Audio(src);
+          activeAudio = audio;
+          audio.addEventListener('timeupdate', () => {
+            const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+            const activeCount = Math.floor(pct * bars.length);
+            bars.forEach((b, idx) => b.classList.toggle('played', idx <= activeCount));
+            if (timeEl) timeEl.textContent = formatSec(audio.currentTime);
+          });
+          audio.addEventListener('ended', stopCurrent);
+          audio.addEventListener('error', () => {
+            startPreviewLoop(container, bars, timeEl);
+          });
+          audio.play().catch(() => startPreviewLoop(container, bars, timeEl));
+        } else {
+          playSoftChime();
+          startPreviewLoop(container, bars, timeEl);
+        }
+      });
+    });
+  };
+
+  bindAudioContainers(document);
 }
 
 /* --------------------------------------------------------------------------
