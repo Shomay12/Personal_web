@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal | Shomay Singh Parihar</title>
+  <meta name="description"
+    content="Personal journal, daily life updates, AI Engineering and Data Science logs, photos, voice notes, videos, and code by Shomay Singh Parihar." />
+
+  <!-- Editorial & Technical Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-family='Georgia, serif' font-style='italic' font-size='88' fill='%2360a5fa'>S</text></svg>">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Ambient Atmospheric Mesh -->
+  <div class="ambient-glow-mesh" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+  </div>
+
+  <!-- Interactive Latent-Space WebGL Canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Navigation -->
+  <header id="nav">
+    <a href="index.html" class="nav-logo">Shomay Singh Parihar</a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <a href="index.html#about">About</a>
+      <a href="projects.html">Work</a>
+      <a href="index.html#stack">Stack</a>
+      <a href="journal.html" class="active">Journal</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-external">Resume ↗</a>
+    </nav>
+    <div class="nav-right">
+      <button id="theme-toggle" aria-label="Toggle color theme">
+        <svg id="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg id="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- JOURNAL HEADER -->
+    <section class="container page-hero">
+      <h1 class="hero-title">
+        Personal <em>Journal</em>.
+      </h1>
+
+      <div class="hero-intro-grid">
+        <p class="hero-lead">
+          What I am coding and building each day, the AI engineering and data science problems I am focusing on, day-to-day life, photos, voice notes, videos, and code snippets.
+        </p>
+
+        <div class="hero-links">
+          <a href="index.html" class="link-quiet">← Home</a>
+          <a href="projects.html" class="link-quiet">Selected Work →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNAL STREAM -->
+    <section class="container section-space">
+      <div class="editorial-grid">
+        <div class="editorial-sidebar">
+          <h2 class="section-title">Entries</h2>
+          <div class="journal-filters" role="tablist" aria-label="Filter journal entries">
+            <button type="button" class="filter-btn active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="ai">AI Engineering</button>
+            <button type="button" class="filter-btn" data-filter="data-science">Data Science</button>
+            <button type="button" class="filter-btn" data-filter="building">Building</button>
+            <button type="button" class="filter-btn" data-filter="life">Daily Life</button>
+          </div>
+        </div>
+
+        <div class="editorial-main">
+          <!--
+            ===================================================================
+            HOW TO POST DIRECTLY IN CODE:
+            Option 1: Add an object to `window.JOURNAL_ENTRIES` in `journal.js`
+            Option 2: Write a raw <article class="journal-entry" data-category="life">
+                      right inside `#journal-stream` below!
+            ===================================================================
+          -->
+          <div id="journal-stream" class="journal-stream"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-left">
+        <span class="footer-brand">Shomay Singh Parihar</span>
+        <span class="meta-sep">·</span>
+        <span>AI Engineer &amp; Data Science</span>
+      </div>
+      <div class="footer-right">
+        <a href="index.html" class="back-top">← Home</a>
+        <span class="meta-sep">·</span>
+        <a href="projects.html" class="back-top">Projects</a>
+        <span class="meta-sep">·</span>
+        <span>© <span id="year">2026</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div id="media-lightbox" class="media-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <button type="button" class="lightbox-close" aria-label="Close image">×</button>
+    <img id="lightbox-img" src="" alt="" />
+    <div id="lightbox-caption" class="lightbox-caption"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="journal.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

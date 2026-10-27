@@ -1,11 +1,12 @@
-/* ===== SHOMAY SINGH PARIHAR — CLIENT-SIDE CORE SCRIPT ===== */
+/* ===== SHOMAY SINGH PARIHAR — PERSONAL WEB & JOURNAL ENGINE ===== */
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initNav();
-  initContact();
+  initJournal();
+  initLightbox();
   initProjectModal();
-  initScrollReveal();
+  initContact();
   initWebGL();
 
   const yearEl = document.getElementById('year');
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initTheme() {
   const btn = document.getElementById('theme-toggle');
   const saved = localStorage.getItem('theme');
-  
+
   if (saved === 'light') {
     document.body.classList.add('light');
   }
@@ -35,7 +36,7 @@ function initTheme() {
 }
 
 /* --------------------------------------------------------------------------
-   2. NAVIGATION & SMOOTH SCROLLING
+   2. NAVIGATION & SCROLL STATE
    -------------------------------------------------------------------------- */
 function initNav() {
   const nav = document.getElementById('nav');
@@ -52,17 +53,19 @@ function initNav() {
     requestAnimationFrame(() => {
       const y = window.scrollY;
       if (nav) {
-        nav.classList.toggle('scrolled', y > 40);
+        nav.classList.toggle('scrolled', y > 32);
       }
 
-      let current = '';
-      for (const sec of sections) {
-        if (y >= sec.offsetTop - 200) {
-          current = sec.id;
+      if (links.length && sections.length) {
+        let current = '';
+        for (const sec of sections) {
+          if (y >= sec.offsetTop - 220) {
+            current = sec.id;
+          }
         }
-      }
-      for (const a of links) {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+        for (const a of links) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+        }
       }
       ticking = false;
     });
@@ -71,49 +74,39 @@ function initNav() {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // Mobile menu
   if (mobileBtn && navLinks) {
+    const closeMobileMenu = () => {
+      mobileBtn.classList.remove('active');
+      navLinks.classList.remove('open');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
     mobileBtn.addEventListener('click', () => {
       const isOpen = navLinks.classList.contains('open');
       mobileBtn.classList.toggle('active');
       navLinks.classList.toggle('open');
-      if (nav) nav.classList.toggle('menu-open', !isOpen);
       mobileBtn.setAttribute('aria-expanded', String(!isOpen));
       document.body.style.overflow = !isOpen ? 'hidden' : '';
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileBtn.classList.remove('active');
-        navLinks.classList.remove('open');
-        if (nav) nav.classList.remove('menu-open');
-        mobileBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
-    });
-
-    document.addEventListener('click', e => {
-      if (navLinks.classList.contains('open') && !e.target.closest('#nav')) {
-        mobileBtn.classList.remove('active');
-        navLinks.classList.remove('open');
-        if (nav) nav.classList.remove('menu-open');
-        mobileBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
+      link.addEventListener('click', closeMobileMenu);
     });
 
     window.addEventListener('keydown', e => {
       if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-        mobileBtn.classList.remove('active');
-        navLinks.classList.remove('open');
-        if (nav) nav.classList.remove('menu-open');
-        mobileBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        closeMobileMenu();
       }
     });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+        closeMobileMenu();
+      }
+    }, { passive: true });
   }
 
-  // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const targetId = a.getAttribute('href');
@@ -129,70 +122,311 @@ function initNav() {
 }
 
 /* --------------------------------------------------------------------------
-   3. SCROLL REVEAL (CLEAN & NON-BLOCKING)
+   3. PERSONAL JOURNAL & MULTIMEDIA LOG ENGINE
    -------------------------------------------------------------------------- */
-function initScrollReveal() {
-  // Content is immediately visible for instant, accessible rendering
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function generateWaveformBars(seedStr, count = 38) {
+  let hash = 2166136261;
+  for (let i = 0; i < seedStr.length; i++) {
+    hash ^= seedStr.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  const bars = [];
+  for (let i = 0; i < count; i++) {
+    hash ^= i * 31;
+    hash = Math.imul(hash, 16777619);
+    const norm = (Math.abs(hash) % 75) + 22;
+    bars.push(`<span class="wave-bar" style="height:${norm}%"></span>`);
+  }
+  return bars.join('');
+}
+
+function initJournal() {
+  const stream = document.getElementById('journal-stream');
+  if (!stream) return;
+
+  const entries = Array.isArray(window.JOURNAL_ENTRIES) ? window.JOURNAL_ENTRIES : [];
+
+  if (entries.length > 0) {
+    const renderedHtml = entries.map(entry => {
+      const paragraphsHtml = (entry.paragraphs || [])
+        .map(p => `<p>${escapeHtml(p)}</p>`)
+        .join('');
+
+      let imagesHtml = '';
+      if (Array.isArray(entry.images) && entry.images.length > 0) {
+        imagesHtml = `
+          <div class="entry-gallery">
+            ${entry.images.map(img => `
+              <figure class="entry-figure">
+                <img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(img.caption || '')}">
+                ${img.caption ? `<figcaption class="entry-figcaption">${escapeHtml(img.caption)}</figcaption>` : ''}
+              </figure>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      let videoHtml = '';
+      if (entry.video && entry.video.src) {
+        const isImg = entry.video.isImagePreview || /\.(gif|png|jpe?g|webp|svg)$/i.test(entry.video.src);
+        videoHtml = `
+          <div class="entry-video-wrap">
+            ${isImg
+              ? `<img src="${escapeHtml(entry.video.src)}" alt="${escapeHtml(entry.video.caption || entry.title)}" loading="lazy" data-lightbox="true" data-caption="${escapeHtml(entry.video.caption || '')}">`
+              : `<video controls preload="metadata" ${entry.video.poster ? `poster="${escapeHtml(entry.video.poster)}"` : ''}>
+                   <source src="${escapeHtml(entry.video.src)}" type="video/mp4">
+                 </video>`
+            }
+            ${entry.video.caption ? `<div class="entry-figcaption">${escapeHtml(entry.video.caption)}</div>` : ''}
+          </div>
+        `;
+      }
+
+      let audioHtml = '';
+      if (entry.audio && entry.audio.title) {
+        audioHtml = `
+          <div class="entry-audio" data-audio-src="${escapeHtml(entry.audio.src || '')}" data-duration="${escapeHtml(entry.audio.duration || '01:30')}">
+            <button type="button" class="audio-play-btn" aria-label="Play audio note">
+              <svg class="icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="6 3 20 12 6 21 6 3"></polygon>
+              </svg>
+              <svg class="icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            </button>
+            <div class="audio-info">
+              <div class="audio-title-row">
+                <span class="audio-title">${escapeHtml(entry.audio.title)}</span>
+                <span class="audio-time">${escapeHtml(entry.audio.duration || '01:30')}</span>
+              </div>
+              <div class="audio-waveform" aria-hidden="true">
+                ${generateWaveformBars(entry.id || entry.title)}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      let codeHtml = '';
+      if (entry.code && entry.code.snippet) {
+        codeHtml = `
+          <div class="entry-code">
+            <pre><code>${escapeHtml(entry.code.snippet)}</code></pre>
+          </div>
+        `;
+      }
+
+      return `
+        <article class="journal-entry" id="${escapeHtml(entry.id || '')}" data-category="${escapeHtml(entry.category || 'all')}">
+          <header class="entry-header">
+            <h3 class="entry-title">${escapeHtml(entry.title || '')}</h3>
+            ${entry.date ? `<time class="entry-date">${escapeHtml(entry.date)}</time>` : ''}
+          </header>
+          <div class="entry-prose">
+            ${paragraphsHtml}
+          </div>
+          ${audioHtml}
+          ${codeHtml}
+          ${imagesHtml}
+          ${videoHtml}
+        </article>
+      `;
+    }).join('');
+
+    stream.insertAdjacentHTML('afterbegin', renderedHtml);
+  }
+
+  // Filter logic
+  const filterBtns = [...document.querySelectorAll('.journal-filters .filter-btn')];
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-filter') || 'all';
+      filterBtns.forEach(b => b.classList.toggle('active', b === btn));
+
+      const allEntries = [...stream.querySelectorAll('.journal-entry')];
+      allEntries.forEach(item => {
+        const itemCat = item.getAttribute('data-category') || 'all';
+        if (cat === 'all' || itemCat === cat) {
+          item.removeAttribute('hidden');
+        } else {
+          item.setAttribute('hidden', 'true');
+        }
+      });
+    });
+  });
+
+  initAudioPlayers();
 }
 
 /* --------------------------------------------------------------------------
-   4. CONTACT FORM HANDLING
+   3B. AUDIO / VOICE NOTE PLAYER (SUPPORTS LOCAL MP3/WAV OR WEB AUDIO SYNTH)
    -------------------------------------------------------------------------- */
-function initContact() {
-  const form = document.getElementById('contact-form');
-  const status = document.getElementById('form-status');
-  if (!form) return;
+function initAudioPlayers() {
+  let activeContainer = null;
+  let activeAudio = null;
+  let synthTimer = null;
+  let audioCtx = null;
 
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = form.querySelector('[type="submit"]');
-
-    if (status) {
-      status.textContent = 'Sending message…';
-      status.style.color = 'var(--text-dim)';
+  function stopCurrent() {
+    if (activeAudio) {
+      activeAudio.pause();
+      activeAudio = null;
     }
-    if (btn) btn.setAttribute('disabled', 'true');
+    if (synthTimer) {
+      clearInterval(synthTimer);
+      synthTimer = null;
+    }
+    if (activeContainer) {
+      activeContainer.classList.remove('playing');
+      const playIcon = activeContainer.querySelector('.icon-play');
+      const pauseIcon = activeContainer.querySelector('.icon-pause');
+      const timeEl = activeContainer.querySelector('.audio-time');
+      if (playIcon) playIcon.style.display = 'block';
+      if (pauseIcon) pauseIcon.style.display = 'none';
+      if (timeEl) timeEl.textContent = activeContainer.getAttribute('data-duration') || '01:30';
+      activeContainer.querySelectorAll('.wave-bar').forEach(b => b.classList.remove('played'));
+      activeContainer = null;
+    }
+  }
 
-    const formData = new FormData(form);
-    formData.append('_subject', `Portfolio Inquiry from ${formData.get('name') || 'Visitor'}`);
-    formData.append('_captcha', 'false');
-    formData.append('_template', 'table');
-
+  function playSoftChime() {
     try {
-      const res = await fetch('https://formsubmit.co/ajax/shomaysinghparihar@gmail.com', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json'
-        },
-        body: formData
-      });
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!audioCtx) audioCtx = new Ctx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
 
-      const data = await res.json();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(329.63, now + 0.18);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.46);
+    } catch (_) {
+      // Ignore audio context restrictions
+    }
+  }
 
-      if (res.ok || data.success === 'true' || data.success === true) {
-        status.textContent = 'Message sent directly to Shomay!';
-        status.style.color = 'var(--accent)';
-        form.reset();
-      } else {
-        throw new Error(data.message || 'Transmission failed');
+  function formatSec(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  document.querySelectorAll('.entry-audio').forEach(container => {
+    const btn = container.querySelector('.audio-play-btn');
+    const bars = [...container.querySelectorAll('.wave-bar')];
+    const timeEl = container.querySelector('.audio-time');
+    const src = container.getAttribute('data-audio-src');
+
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      if (activeContainer === container) {
+        stopCurrent();
+        return;
       }
-    } catch (err) {
-      console.error('Submission Error:', err);
-      // Fallback: mailto link
-      const name = encodeURIComponent(formData.get('name') || '');
-      const email = encodeURIComponent(formData.get('email') || '');
-      const message = encodeURIComponent(formData.get('message') || '');
-      window.location.href = `mailto:shomaysinghparihar@gmail.com?subject=Portfolio%20Inquiry%20from%20${name}&body=${message}%0A%0AFrom:%20${name}%20(${email})`;
-      status.textContent = 'Opening mail client to send…';
-      status.style.color = 'var(--accent)';
-    } finally {
-      if (btn) btn.removeAttribute('disabled');
+
+      stopCurrent();
+      activeContainer = container;
+      container.classList.add('playing');
+
+      const playIcon = container.querySelector('.icon-play');
+      const pauseIcon = container.querySelector('.icon-pause');
+      if (playIcon) playIcon.style.display = 'none';
+      if (pauseIcon) pauseIcon.style.display = 'block';
+
+      if (src) {
+        const audio = new Audio(src);
+        activeAudio = audio;
+        audio.addEventListener('timeupdate', () => {
+          const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+          const activeCount = Math.floor(pct * bars.length);
+          bars.forEach((b, idx) => b.classList.toggle('played', idx <= activeCount));
+          if (timeEl) timeEl.textContent = formatSec(audio.currentTime);
+        });
+        audio.addEventListener('ended', stopCurrent);
+        audio.addEventListener('error', () => {
+          startPreviewLoop(container, bars, timeEl);
+        });
+        audio.play().catch(() => startPreviewLoop(container, bars, timeEl));
+      } else {
+        playSoftChime();
+        startPreviewLoop(container, bars, timeEl);
+      }
+    });
+  });
+
+  function startPreviewLoop(container, bars, timeEl) {
+    let step = 0;
+    const totalSteps = bars.length;
+    synthTimer = setInterval(() => {
+      step++;
+      bars.forEach((b, idx) => b.classList.toggle('played', idx <= step));
+      if (timeEl) timeEl.textContent = formatSec(step * 2);
+      if (step >= totalSteps) {
+        stopCurrent();
+      }
+    }, 350);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. IMAGE LIGHTBOX FOR JOURNAL PHOTOS
+   -------------------------------------------------------------------------- */
+function initLightbox() {
+  const lightbox = document.getElementById('media-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  if (!lightbox || !lightboxImg) return;
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+  }
+
+  document.addEventListener('click', e => {
+    const img = e.target.closest('img[data-lightbox="true"]');
+    if (img) {
+      lightboxImg.src = img.getAttribute('src');
+      lightboxImg.alt = img.getAttribute('alt') || '';
+      if (lightboxCaption) {
+        lightboxCaption.textContent = img.getAttribute('data-caption') || '';
+      }
+      lightbox.classList.add('active');
+      lightbox.setAttribute('aria-hidden', 'false');
+      return;
+    }
+
+    if (e.target.closest('.lightbox-close') || e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
     }
   });
 }
 
 /* --------------------------------------------------------------------------
-   5. PROJECT DEEP-DIVE MODAL & CATALOG
+   5. PROJECT ARCHITECTURE DRAWER / SPECIFICATIONS
    -------------------------------------------------------------------------- */
 function initProjectModal() {
   const modal = document.getElementById('project-modal');
@@ -202,282 +436,200 @@ function initProjectModal() {
   if (!modal || !modalContent) return;
 
   const projectCatalog = {
-    hottea: {
-      title: 'HotTea — Privacy-First AI Browser & Research Workspace',
-      badge: 'LIVE DEMO · PRIVACY-FIRST',
-      typeTag: 'AI BROWSER · PRIVACY-FIRST · FLUTTER CROSS-PLATFORM',
-      image: 'assets/images/hottea.png',
-      alt: 'HotTea AI Browser and Research Workspace',
-      liveUrl: 'https://shomay12.github.io/hottea/',
-      githubUrl: 'https://github.com/Shomay12/hottea',
-      summary: 'An open-source, privacy-first AI browser and research workspace built with Flutter. Unifies web browsing, AI assistance, evidence-backed research, local LLM inference, and encrypted personal .tea vaults into one cross-platform application.',
-      description: 'HotTea transforms standard web browsing into an active, evidence-grounded research environment. Rather than routing personal browsing telemetry to third-party ad networks, HotTea integrates local LLM inference, encrypted offline .tea vaults, multi-tab intelligence, and seamless citation capture into a high-performance Flutter desktop and mobile application.',
-      features: [
-        {
-          title: 'Local & Cloud AI Inference',
-          desc: 'Flexible model runtime supporting on-device LLMs via llama.cpp/Ollama and cloud APIs (Gemini, Groq) with user-controlled API keys.'
-        },
-        {
-          title: 'Encrypted Research Vaults (.tea)',
-          desc: 'Client-side AES-GCM encrypted notebook vaults allowing users to save web clips, structured summaries, and bookmarks with zero telemetry.'
-        },
-        {
-          title: 'Evidence-Backed Web Grounding',
-          desc: 'Automated citation extraction and side-by-side verification linking every AI-generated conclusion directly to the source paragraph.'
-        },
-        {
-          title: 'Multi-Tab State Engine',
-          desc: 'Lightweight reactive state architecture managing concurrent tabs, session restores, and decoupled background web workers.'
-        },
-        {
-          title: 'Cross-Platform Flutter Core',
-          desc: 'Unified codebase compiled natively for macOS, Linux, Windows, Android, and Web with native webview bindings.'
-        }
-      ],
-      architecture: 'Flutter Reactive UI → WebView / DOM Scraper → Citation & Evidence Extraction Engine → Local / Cloud LLM Client → AES-GCM Encrypted Vault Store.',
-      techStack: [
-        'Flutter', 'Dart', 'Gemini API', 'Ollama / Local LLM', 'AES-GCM Encryption', 'Cross-Platform', 'State Management'
-      ]
-    },
-    replynest: {
-      title: 'ReplyNest — Instagram Automation Platform',
-      badge: 'PRODUCTION SAAS · LIVE SYSTEM',
-      typeTag: 'AUTOMATION SAAS · META GRAPH API · WEBHOOK ORCHESTRATION',
-      image: 'assets/images/replynest.png',
-      alt: 'ReplyNest Instagram Automation Platform',
-      liveUrl: 'http://replynest.tech/#auth',
-      githubUrl: 'https://github.com/Shomay12',
-      summary: 'An Instagram automation and conversation orchestration SaaS platform helping businesses automate customer interactions, comment-to-DM funnels, and keyword triggers through Meta Graph APIs.',
-      description: 'ReplyNest streamlines Instagram marketing and customer communication through automated keyword detection, comment-to-direct-message delivery, and structured multi-tenant workflow execution. Built with robust webhook ingestion, PostgreSQL persistence, and containerized deployment behind Traefik reverse proxying.',
-      features: [
-        {
-          title: 'Meta Graph API & OAuth 2.0',
-          desc: 'Official Instagram Business and Messenger API integration with OAuth 2.0 account authentication and token lifecycle management.'
-        },
-        {
-          title: 'Comment-to-DM Trigger Engine',
-          desc: 'Real-time webhook ingestion matching user comments against customizable keyword rules to trigger automated personalized DMs.'
-        },
-        {
-          title: 'Live Execution & Webhook Logs',
-          desc: 'Transparent observability dashboard streaming incoming webhook events, message delivery receipts, and dispatch statuses.'
-        },
-        {
-          title: 'Multi-Tenant Architecture',
-          desc: 'Secure account isolation supporting multiple business profiles, permission scopes, and dedicated webhook listener channels.'
-        },
-        {
-          title: 'Containerized Microservices',
-          desc: 'Dockerized services orchestrated behind Traefik reverse proxy with automatic SSL certificate renewal and PostgreSQL persistence.'
-        }
-      ],
-      architecture: 'Instagram Webhooks / Meta Graph API → Node.js Webhook Router → Keyword & Intent Matcher → PostgreSQL Event Log → Docker & Traefik Microservice Mesh.',
-      techStack: [
-        'Instagram Business API', 'OAuth 2.0', 'Node.js', 'PostgreSQL', 'Docker', 'Traefik', 'Webhooks', 'REST APIs'
-      ]
-    },
-    duezy: {
-      title: 'Duezy — AI-Powered Payment Collection & Recovery Platform',
-      badge: 'FINTECH AI · AUTOMATED LEDGER',
-      typeTag: 'FINTECH AI · FASTAPI LEDGER · CONVERSATIONAL AGENT',
-      image: 'assets/images/duezy.png',
-      alt: 'Duezy AI Payment Recovery Platform',
-      liveUrl: '',
-      githubUrl: 'https://github.com/Shomay12/Duezy',
-      summary: 'An AI-driven automated debt collection and invoice recovery system featuring an authoritative double-entry ledger backend, conversational installment negotiation agent, and payment gateway integration.',
-      description: 'Duezy streamlines overdue invoice collection by replacing adversarial collection calls with respectful, intelligent AI negotiation. It provides an immutable double-entry ledger backend in FastAPI, automated payment plan scheduling, Razorpay webhook signature verification, and a companion Flutter management application.',
-      features: [
-        {
-          title: 'Authoritative Double-Entry Ledger',
-          desc: 'Guarantees strict financial accounting invariants, preventing money creation or loss across debits and credits for all transactions.'
-        },
-        {
-          title: 'Conversational Installment Agent',
-          desc: 'AI negotiator that understands customer payment constraints and autonomously constructs mutually agreed installment schedules.'
-        },
-        {
-          title: 'Razorpay Webhook Verification',
-          desc: 'Cryptographically verified webhook listeners with idempotency keys preventing replay attacks and duplicate payment captures.'
-        },
-        {
-          title: 'Automated Dunning Workflows',
-          desc: 'Event-driven payment reminder triggers with smart escalation curves, SMS/Email dispatches, and real-time status tracking.'
-        },
-        {
-          title: 'Flutter Cross-Platform Client',
-          desc: 'Intuitive merchant dashboard for inspecting delinquent invoices, payment plan compliance, and transaction logs.'
-        }
-      ],
-      architecture: 'Invoice Event → Dunning Orchestrator → Conversational AI Agent (Installment Calculator) → Double-Entry Ledger DB → Razorpay Payment Gateway & Webhook Validator.',
-      techStack: [
-        'FastAPI', 'Python', 'Flutter', 'Dart', 'Razorpay Webhooks', 'Double-Entry Accounting', 'PostgreSQL', 'Docker'
-      ]
-    },
     uniassist: {
-      title: 'UniAssist — Academic Study Companion & Intelligence Platform',
-      badge: 'LIVE APP · ACADEMIC RAG',
-      typeTag: 'ACADEMIC AI · RAG ARCHITECTURE · VECTOR SEARCH',
+      title: 'UniAssist — Dense Retrieval & RAG Pipeline',
       image: 'assets/images/uniassist.png',
-      alt: 'UniAssist Academic Study Assistant',
+      alt: 'UniAssist RAG Pipeline',
       liveUrl: 'https://uniassist-shomayyy.streamlit.app/',
       githubUrl: 'https://github.com/Shomay12/UniAssist',
-      summary: 'A Retrieval-Augmented Generation (RAG) study companion that helps students master complex academic coursework through dense document indexing and high-speed LLM generation.',
-      description: 'UniAssist eliminates hallucinated answers in academic subjects by grounding model responses directly in verified course syllabi, lecture slides, and engineering textbooks. Built with Python and Streamlit, it supports interactive document Q&A, automatic flashcard synthesis, and high-speed Groq-accelerated inference.',
+      description: 'UniAssist mitigates hallucination on technical coursework by grounding language model synthesis in verified syllabi, lecture notes, and textbooks. It combines structure-aware document chunking, dense sentence embeddings, FAISS inner-product search, and sub-second Groq LPU inference.',
       features: [
         {
-          title: 'Contextual RAG Retrieval Pipeline',
-          desc: 'Dense sentence embeddings vector search indexing computer science syllabi and lecture materials for grounded retrieval.'
+          title: 'Dense Vector Indexing',
+          desc: 'Sentence-transformer embeddings indexed in FAISS for fast semantic retrieval across multi-subject PDFs.'
         },
         {
-          title: 'High-Throughput Groq LLM Acceleration',
-          desc: 'Sub-second token streaming via Groq LPU inference delivering instant answers to complex student technical queries.'
+          title: 'Structure-Aware Chunking',
+          desc: 'Preserves theorem definitions, equations, and code blocks across chunk boundaries to prevent context fragmentation.'
         },
         {
-          title: 'Multi-Subject Knowledge Routing',
-          desc: 'Automated intent categorization routing questions to specialized rubrics for DSA, Computer Networks, and Machine Learning.'
+          title: 'Groq LPU Inference',
+          desc: 'Low-latency token streaming paired with deterministic context assembly and LaTeX mathematical rendering.'
         },
         {
-          title: 'Interactive Code & LaTeX Rendering',
-          desc: 'Full mathematical notation rendering via LaTeX alongside syntax-highlighted code blocks for algorithmic walkthroughs.'
-        },
-        {
-          title: 'Streamlit Cloud Deployment',
-          desc: 'Production-ready cloud interface with session state management, chat export, and file upload parsing.'
+          title: 'Multi-Subject Routing',
+          desc: 'Routes student queries to domain-specific rubrics covering Machine Learning, Algorithms, and Systems.'
         }
       ],
-      architecture: 'Student Query / PDF Upload → Document Chunking & Embeddings → FAISS / Vector Index → Context Assembler → Groq LLM Inference → LaTeX / Code Syntax Formatter.',
-      techStack: [
-        'Python', 'Streamlit', 'RAG', 'Groq API', 'LangChain', 'FAISS Vector Search', 'Sentence Embeddings'
-      ]
+      architecture: 'PDF / Syllabus Ingestion → Structure-Aware Chunker → Sentence Embeddings → FAISS Vector Index → Context Reranker → Groq LLM Synthesis.',
+      techStack: 'Python · FAISS · Sentence-Transformers · RAG · Groq API · LangChain · Streamlit'
     },
     finance_tracker: {
-      title: 'Finance Expenditure Tracker — AI Personal Finance Intelligence',
-      badge: 'APPLIED ML · DATA SCIENCE',
-      typeTag: 'MACHINE LEARNING · TIME-SERIES · ANOMALY DETECTION',
+      title: 'Finance Expenditure Intelligence — Anomaly Detection & Forecasting',
       image: 'assets/images/finance_tracker.png',
-      alt: 'Finance Expenditure Tracker System',
+      alt: 'Finance Expenditure Data Science Pipeline',
       liveUrl: '',
       githubUrl: 'https://github.com/Shomay12/Finance_Expenditure_tracker',
-      summary: 'An end-to-end Machine Learning and Data Science system for expense anomaly detection, multi-class transaction categorization, and cash flow forecasting.',
-      description: 'This project applies applied machine learning to personal financial records. It automatically ingests banking and expense logs, identifies statistically anomalous transactions using Isolation Forests, categorizes expenditure with supervised classifiers, detects recurring subscriptions, and projects future account balances using time-series forecasting.',
+      description: 'An end-to-end Data Science and Machine Learning system designed for noisy personal financial data. Automatically ingests transaction logs, isolates fixed recurring bills, flags statistical spending anomalies using Isolation Forests, classifies merchants via NLP features, and projects cash flow.',
       features: [
         {
-          title: 'Isolation Forest Anomaly Detection',
-          desc: 'Unsupervised outlier identification flagging uncharacteristic spending spikes and suspicious multi-charge events.'
+          title: 'Isolation Forest Outliers',
+          desc: 'Unsupervised anomaly scoring over rolling window features, category z-scores, and inter-arrival times.'
         },
         {
-          title: 'Automated Transaction Classification',
-          desc: 'Supervised NLP and tabular ML models trained to classify merchant descriptions into granular expense categories.'
+          title: 'Merchant NLP Classifier',
+          desc: 'Supervised multi-class classification mapping raw banking descriptions into structured expenditure categories.'
         },
         {
-          title: 'Recurring Bill & Subscription Discovery',
-          desc: 'Periodicity detection algorithm that isolates recurring fixed commitments (rent, utilities, software SaaS) from variable spend.'
+          title: 'Periodicity Discovery',
+          desc: 'Temporal clustering algorithm separating fixed recurring subscriptions and rent from discretionary spend.'
         },
         {
-          title: 'Time-Series Cash Flow Forecasting',
-          desc: 'Statistical forecasting modeling monthly burn rates and projecting runway and savings milestones.'
-        },
-        {
-          title: 'Interactive Analytics Dashboard',
-          desc: 'Rich data visualizations built with Pandas, Plotly, and Streamlit for deep financial exploration.'
+          title: 'Time-Series Forecasting',
+          desc: 'Statistical burn-rate modeling and monthly runway projection visualized with Plotly and Streamlit.'
         }
       ],
-      architecture: 'CSV / Transaction Ingestion → Feature Engineering & NLP Tokenizer → Scikit-Learn Classifier & Isolation Forest → Time-Series Predictor → Streamlit / Plotly Dashboard.',
-      techStack: [
-        'Python', 'Scikit-learn', 'Pandas', 'NumPy', 'Isolation Forest', 'Time-Series Forecasting', 'Plotly', 'Streamlit'
-      ]
+      architecture: 'Raw Transaction Logs → Temporal & Cyclical Feature Engineering → Periodicity Filter + Isolation Forest → Time-Series Forecaster → Plotly Analytics.',
+      techStack: 'Python · Scikit-learn · Isolation Forest · Pandas · NumPy · Time-Series Forecasting · Plotly · Streamlit'
     },
     industrial_monitoring: {
-      title: 'Industrial Machine Monitoring System — Predictive Maintenance',
-      badge: 'IOT & ML · PREDICTIVE SYSTEMS',
-      typeTag: 'PREDICTIVE MAINTENANCE · IOT SENSORS · DSA PRIORITY QUEUE',
+      title: 'Industrial Machine Monitoring — Predictive Maintenance ML',
       image: 'assets/images/industrial_monitoring.png',
       alt: 'Industrial Machine Monitoring System',
       liveUrl: '',
       githubUrl: 'https://github.com/Shomay12/Industrial-Machine-Monitoring-System',
-      summary: 'Full-stack IoT and Machine Learning predictive maintenance platform streaming sensor telemetry to detect anomalous vibrations and schedule machine repairs via a Priority Queue.',
-      description: 'A robust industrial IoT solution engineered to prevent catastrophic factory equipment failures. Edge devices (ESP32 / simulator) stream vibration, temperature, and acoustic telemetry to a FastAPI backend. Machine learning models (RandomForest) classify failure risk in real time, while a Min-Heap / Priority Queue scheduler automatically ranks machines based on failure urgency for maintenance engineers.',
+      description: 'Predictive maintenance platform engineered to detect early mechanical degradation before breakdown. Edge sensors (ESP32 / simulator) stream vibration, rotational, and thermal telemetry to a FastAPI backend where a Scikit-learn RandomForest model scores failure risk and feeds a min-heap dispatch queue.',
       features: [
         {
-          title: 'Real-Time Sensor Telemetry Ingestion',
-          desc: 'High-throughput FastAPI telemetry endpoints consuming temperature, rotational speed, and vibration metrics.'
+          title: 'RandomForest Failure Classifier',
+          desc: 'Supervised ensemble model trained on multivariate sensor telemetry to classify bearing and thermal failure risk.'
         },
         {
-          title: 'RandomForest Predictive ML Classifier',
-          desc: 'Scikit-learn classifier trained on industrial sensor datasets to predict impending bearing and motor failures before breakdown.'
+          title: 'Streaming Telemetry Ingest',
+          desc: 'Low-latency FastAPI endpoints consuming continuous vibration, RPM, and temperature time-series.'
         },
         {
-          title: 'DSA Priority Queue Servicing Engine',
-          desc: 'Algorithmic min-heap scheduling queue dynamically ordering equipment by severity score for technician dispatch.'
+          title: 'Min-Heap Dispatch Queue',
+          desc: 'Algorithmic priority queue dynamically ordering machines by predicted severity score for maintenance crews.'
         },
         {
-          title: 'MongoDB Telemetry Time-Series Store',
-          desc: 'Persistent historical sensor logging for trend analysis, degradation curves, and model retraining.'
-        },
-        {
-          title: 'Hardware Simulation & ESP32 Integration',
-          desc: 'Dual-mode telemetry ingest supporting physical ESP32 microcontrollers as well as synthetic multi-machine stress simulators.'
+          title: 'Time-Series Persistence',
+          desc: 'Historical sensor logging in MongoDB supporting degradation curve analysis and periodic model retraining.'
         }
       ],
-      architecture: 'ESP32 / Simulator → FastAPI REST Gateway → Scikit-Learn ML Anomaly Scorer → Priority Queue Scheduler → MongoDB Telemetry Store → Monitoring Dashboard.',
-      techStack: [
-        'FastAPI', 'Python', 'RandomForest', 'IoT Telemetry', 'ESP32', 'Priority Queue DSA', 'MongoDB', 'TypeScript'
-      ]
+      architecture: 'ESP32 / Telemetry Simulator → FastAPI Ingestion → Feature Extractor & RandomForest Scorer → Min-Heap Priority Queue → MongoDB & Live Monitor.',
+      techStack: 'Python · Scikit-learn (RandomForest) · FastAPI · Priority Queue DSA · MongoDB · ESP32 Telemetry · TypeScript'
+    },
+    hottea: {
+      title: 'HotTea — Local LLM Inference & AI Workspace',
+      image: 'assets/images/hottea.png',
+      alt: 'HotTea AI Browser and Local LLM Workspace',
+      liveUrl: 'https://shomay12.github.io/hottea/',
+      githubUrl: 'https://github.com/Shomay12/hottea',
+      description: 'An open-source, privacy-first AI browser and local LLM workspace built with Flutter. Integrates on-device model inference (Ollama / llama.cpp) and cloud LLMs with automated DOM context extraction and client-side AES-GCM encrypted .tea vaults.',
+      features: [
+        {
+          title: 'Local & Cloud LLM Runtime',
+          desc: 'Unified inference layer supporting on-device models via Ollama/llama.cpp alongside Gemini and Groq APIs.'
+        },
+        {
+          title: 'DOM Context Grounding',
+          desc: 'Links every synthesized response directly to the source DOM paragraph for side-by-side verification.'
+        },
+        {
+          title: 'AES-GCM Encrypted Vaults',
+          desc: 'Client-side encrypted .tea notebook files keeping notes, clips, and browsing history offline.'
+        },
+        {
+          title: 'Cross-Platform Native Core',
+          desc: 'Compiled from a single Flutter/Dart architecture for macOS, Linux, Windows, Android, and Web.'
+        }
+      ],
+      architecture: 'Flutter Reactive Workspace → DOM Content Extractor → Context Grounding Engine → Local / Cloud LLM Stream → AES-GCM Encrypted .tea Vault.',
+      techStack: 'Flutter · Dart · Ollama / Local LLM · Gemini API · AES-GCM Encryption · Cross-Platform'
+    },
+    duezy: {
+      title: 'Duezy — Conversational AI Agent & Double-Entry Ledger',
+      image: 'assets/images/duezy.png',
+      alt: 'Duezy AI Payment Recovery Platform',
+      liveUrl: '',
+      githubUrl: 'https://github.com/Shomay12/Duezy',
+      description: 'Automated invoice recovery system pairing an authoritative FastAPI double-entry accounting ledger with a conversational AI negotiation agent and cryptographic Razorpay webhook verification.',
+      features: [
+        {
+          title: 'Double-Entry Ledger Backend',
+          desc: 'Enforces strict accounting invariants across debits and credits for every invoice and installment.'
+        },
+        {
+          title: 'Conversational Negotiation Agent',
+          desc: 'Autonomously structures installment schedules based on customer cash-flow constraints.'
+        },
+        {
+          title: 'Idempotent Webhook Verification',
+          desc: 'Cryptographically validates Razorpay webhook signatures to prevent replay and duplicate captures.'
+        }
+      ],
+      architecture: 'Invoice Event → Dunning Orchestrator → Conversational AI Agent → Double-Entry PostgreSQL Ledger → Razorpay Webhook Validator.',
+      techStack: 'FastAPI · Python · Conversational AI · PostgreSQL · Razorpay Webhooks · Flutter · Docker'
+    },
+    replynest: {
+      title: 'ReplyNest — Webhook Orchestration & Messaging Infrastructure',
+      image: 'assets/images/replynest.png',
+      alt: 'ReplyNest Messaging Platform',
+      liveUrl: 'http://replynest.tech/#auth',
+      githubUrl: 'https://github.com/Shomay12',
+      description: 'Multi-tenant messaging automation infrastructure built on Meta Graph APIs, featuring real-time webhook ingestion, keyword intent matching, PostgreSQL event persistence, and Dockerized deployment behind Traefik.',
+      features: [
+        {
+          title: 'Real-Time Webhook Router',
+          desc: 'High-concurrency Node.js webhook ingestion matching incoming events against tenant keyword rules.'
+        },
+        {
+          title: 'OAuth 2.0 Lifecycle Engine',
+          desc: 'Automated token refresh and multi-tenant permission isolation across business accounts.'
+        },
+        {
+          title: 'Containerized Deployment',
+          desc: 'Orchestrated with Docker Compose and Traefik reverse proxy with automated TLS provisioning.'
+        }
+      ],
+      architecture: 'Meta Graph Webhooks → Traefik Reverse Proxy → Node.js Event Router → Keyword Matcher → PostgreSQL Event Store.',
+      techStack: 'Node.js · PostgreSQL · Meta Graph API · OAuth 2.0 · Docker · Traefik'
     },
     openupsc: {
-      title: 'OpenUPSC — Civil Services Educational Platform & Resource Hub',
-      badge: 'LIVE PLATFORM · EDTECH',
-      typeTag: 'FULL-STACK WEB · NEXT.JS · EDTECH PLATFORM',
+      title: 'OpenUPSC — Structured Knowledge Index & Learning Platform',
       image: 'assets/images/openupsc.svg',
-      alt: 'OpenUPSC Educational Platform',
+      alt: 'OpenUPSC Platform',
       liveUrl: 'https://open-upsc.vercel.app',
       githubUrl: 'https://github.com/Shomay12/OpenUpsc',
-      summary: 'A modern, high-performance educational platform designed for civil services aspirants featuring syllabus tracking, curated resources, and structured revision tools.',
-      description: 'OpenUPSC streamlines preparation for one of the world’s most competitive examinations. Built with Next.js, React, and TypeScript, it transforms thousands of pages of unstructured syllabus topics and reference materials into an interactive, checklist-driven learning roadmap with zero fluff and instant search.',
+      description: 'High-performance syllabus indexing and study platform built with Next.js, TypeScript, and Supabase, organizing thousands of curriculum topics and historical questions into a fast, distraction-free interface.',
       features: [
         {
-          title: 'Interactive Syllabus Roadmap',
-          desc: 'Hierarchical syllabus breakdown across Prelims and Mains (GS I-IV, CSAT) with granular completion tracking.'
+          title: 'Hierarchical Curriculum Graph',
+          desc: 'Granular topic indexing across Prelims and Mains with persistent progress state.'
         },
         {
-          title: 'Curated Resource Index & PYQ Vault',
-          desc: 'Organized database of Previous Year Questions (PYQs), topper notes, and official answer keys with topic tags.'
-        },
-        {
-          title: 'Lightweight & Blazing Fast',
-          desc: 'Static generation and edge caching via Next.js and Vercel ensuring near-instantaneous page loads even on low-bandwidth connections.'
-        },
-        {
-          title: 'Responsive Accessible UI',
-          desc: 'Clean, distraction-free study interface built with Tailwind CSS, supporting dark/light reading modes and offline caching.'
-        },
-        {
-          title: 'Open Source Community Driven',
-          desc: 'Public open-source repository inviting contributions from educators and successful candidates.'
+          title: 'Edge-Cached Performance',
+          desc: 'Static and edge-rendered routes on Vercel for instant navigation on low-bandwidth connections.'
         }
       ],
-      architecture: 'Next.js App Router → Server Components & Edge Cache → Structured Markdown / Supabase Content Store → Tailwind CSS Responsive Layout → Vercel Global CDN.',
-      techStack: [
-        'Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Supabase', 'Vercel Edge', 'Markdown CMS'
-      ]
+      architecture: 'Next.js App Router → Edge Cache → Structured Markdown & Supabase Store → Responsive Reading UI.',
+      techStack: 'TypeScript · Next.js · React · Supabase · Tailwind CSS'
     }
   };
 
-  let lastFocusedElement = null;
+  let lastFocused = null;
 
   function openModal(projectId) {
     const data = projectCatalog[projectId];
     if (!data) return;
 
-    lastFocusedElement = document.activeElement;
+    lastFocused = document.activeElement;
 
     modalContent.innerHTML = `
-      <div class="modal-header-top">
-        <span class="modal-pill">${data.badge}</span>
-        <span class="modal-type-tag">${data.typeTag}</span>
+      <div>
+        <h3 class="modal-title">${data.title}</h3>
       </div>
-
-      <h3 class="modal-title">${data.title}</h3>
 
       <div class="modal-hero-grid">
         <div class="modal-image-wrap">
@@ -489,10 +641,10 @@ function initProjectModal() {
       </div>
 
       <div>
-        <div class="modal-section-title">Architectural Features & Systems Engineering</div>
-        <div class="modal-features-grid">
+        <div class="modal-section-title">Engineering &amp; Modeling Details</div>
+        <div class="modal-features-list">
           ${data.features.map(f => `
-            <div class="modal-feature-item">
+            <div class="modal-feature-row">
               <h5>${f.title}</h5>
               <p>${f.desc}</p>
             </div>
@@ -501,28 +653,18 @@ function initProjectModal() {
       </div>
 
       <div>
-        <div class="modal-section-title">System Architecture Flow</div>
-        <div class="modal-arch-box">
-          ${data.architecture}
-        </div>
+        <div class="modal-section-title">Pipeline Flow</div>
+        <div class="modal-arch-line">${data.architecture}</div>
       </div>
 
       <div>
-        <div class="modal-section-title">Technologies & Frameworks</div>
-        <div class="modal-tech-pills">
-          ${data.techStack.map(t => `<span>${t}</span>`).join('')}
-        </div>
+        <div class="modal-section-title">Stack</div>
+        <div class="work-stack-line">${data.techStack}</div>
       </div>
 
       <div class="modal-cta-row">
-        ${data.liveUrl ? `
-        <a href="${data.liveUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          <span>Launch Live System ↗</span>
-        </a>` : ''}
-        ${data.githubUrl ? `
-        <a href="${data.githubUrl}" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          View GitHub Repository ↗
-        </a>` : ''}
+        ${data.liveUrl ? `<a href="${data.liveUrl}" target="_blank" rel="noopener noreferrer" class="link-primary">Launch Live System ↗</a>` : ''}
+        ${data.githubUrl ? `<a href="${data.githubUrl}" target="_blank" rel="noopener noreferrer" class="link-quiet">View Source Repository ↗</a>` : ''}
       </div>
     `;
 
@@ -536,29 +678,17 @@ function initProjectModal() {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-      lastFocusedElement.focus();
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
     }
   }
 
-  // Event delegation for opening modal
   document.addEventListener('click', e => {
-    const detailBtn = e.target.closest('.btn-card-details');
-    if (detailBtn) {
+    const trigger = e.target.closest('[data-project]');
+    if (trigger) {
       e.preventDefault();
-      const proj = detailBtn.getAttribute('data-project');
+      const proj = trigger.getAttribute('data-project');
       if (proj) openModal(proj);
-      return;
-    }
-
-    const cardVisual = e.target.closest('.project-card .project-visual');
-    if (cardVisual) {
-      const card = cardVisual.closest('.project-card');
-      const btn = card ? card.querySelector('.btn-card-details') : null;
-      if (btn) {
-        const proj = btn.getAttribute('data-project');
-        if (proj) openModal(proj);
-      }
     }
   });
 
@@ -573,7 +703,55 @@ function initProjectModal() {
 }
 
 /* --------------------------------------------------------------------------
-   6. THREE.JS WEBGL BACKGROUND GRAPHICS
+   6. CONTACT FORM HANDLING
+   -------------------------------------------------------------------------- */
+function initContact() {
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  if (!form) return;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('[type="submit"]');
+
+    if (status) {
+      status.textContent = 'Sending...';
+    }
+    if (btn) btn.setAttribute('disabled', 'true');
+
+    const formData = new FormData(form);
+    formData.append('_subject', `Message from ${formData.get('name') || 'Visitor'}`);
+    formData.append('_captcha', 'false');
+    formData.append('_template', 'table');
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/shomaysinghparihar@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+      const data = await res.json();
+
+      if (res.ok || data.success === 'true' || data.success === true) {
+        if (status) status.textContent = 'Received — thank you.';
+        form.reset();
+      } else {
+        throw new Error('Submission error');
+      }
+    } catch (_) {
+      const name = encodeURIComponent(formData.get('name') || '');
+      const email = encodeURIComponent(formData.get('email') || '');
+      const message = encodeURIComponent(formData.get('message') || '');
+      window.location.href = `mailto:shomaysinghparihar@gmail.com?subject=Message%20from%20${name}&body=${message}%0A%0AFrom:%20${name}%20(${email})`;
+      if (status) status.textContent = 'Opening mail client...';
+    } finally {
+      if (btn) btn.removeAttribute('disabled');
+    }
+  });
+}
+
+/* --------------------------------------------------------------------------
+   7. LATENT-SPACE WEBGL BACKGROUND (CONSTELLATION MANIFOLD + GEODESICS)
    -------------------------------------------------------------------------- */
 function initWebGL() {
   if (typeof THREE === 'undefined') return;
@@ -590,12 +768,11 @@ function initWebGL() {
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: false,
+      antialias: true,
       alpha: true,
       powerPreference: 'high-performance'
     });
   } catch (err) {
-    console.warn('WebGL init skipped:', err);
     return;
   }
 
@@ -603,84 +780,180 @@ function initWebGL() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.z = 4;
+  const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
 
-  /* — Technical Particle Field — */
+  // Create soft radial glow texture for particles (eliminates harsh square dots)
+  function createRadialSprite() {
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 64;
+    const ctx = c.getContext('2d');
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    grad.addColorStop(0.35, 'rgba(180, 215, 255, 0.65)');
+    grad.addColorStop(1, 'rgba(59, 130, 246, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c);
+  }
+
+  const spriteTex = createRadialSprite();
+
+  // 1. Deep Field Star / Embedding Nodes
   const isMob = window.innerWidth < 768;
-  const N = isMob ? 350 : 1200;
+  const N = isMob ? 420 : 1350;
   const pos = new Float32Array(N * 3);
   const col = new Float32Array(N * 3);
+
   for (let i = 0; i < N; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 20;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+    pos[i * 3] = (Math.random() - 0.5) * 24;
+    pos[i * 3 + 1] = (Math.random() - 0.5) * 24;
     pos[i * 3 + 2] = (Math.random() - 0.5) * 20;
-    const t = Math.random();
-    col[i * 3] = t < 0.5 ? 0.23 : 0.54;
-    col[i * 3 + 1] = t < 0.5 ? 0.51 : 0.36;
-    col[i * 3 + 2] = t < 0.5 ? 0.96 : 0.96;
+
+    const paletteRoll = Math.random();
+    if (paletteRoll < 0.55) {
+      // Sapphire Blue
+      col[i * 3] = 0.35;
+      col[i * 3 + 1] = 0.62;
+      col[i * 3 + 2] = 0.98;
+    } else if (paletteRoll < 0.82) {
+      // Indigo Violet
+      col[i * 3] = 0.58;
+      col[i * 3 + 1] = 0.42;
+      col[i * 3 + 2] = 0.96;
+    } else {
+      // Cool Cyan
+      col[i * 3] = 0.18;
+      col[i * 3 + 1] = 0.78;
+      col[i * 3 + 2] = 0.92;
+    }
   }
+
   const ptGeo = new THREE.BufferGeometry();
   ptGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   ptGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
   const ptMat = new THREE.PointsMaterial({
-    size: 0.014,
+    size: isMob ? 0.09 : 0.075,
+    map: spriteTex,
     vertexColors: true,
     transparent: true,
-    opacity: 0.45,
+    opacity: 0.72,
     blending: THREE.AdditiveBlending,
     depthWrite: false
   });
+
   const particles = new THREE.Points(ptGeo, ptMat);
   scene.add(particles);
 
-  /* — Geometric Wireframe Objects — */
-  const icoGeo = new THREE.IcosahedronGeometry(1, 0);
-  const icoMat = new THREE.MeshPhongMaterial({
+  // 2. Latent Manifold Constellation Graph (Connected Nodes + Filaments)
+  const graphCount = isMob ? 42 : 85;
+  const graphNodes = [];
+  const nodePositions = new Float32Array(graphCount * 3);
+
+  for (let i = 0; i < graphCount; i++) {
+    const x = (Math.random() - 0.5) * 14;
+    const y = (Math.random() - 0.5) * 10;
+    const z = (Math.random() - 0.5) * 6 - 1.5;
+    graphNodes.push({
+      baseX: x,
+      baseY: y,
+      baseZ: z,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.3 + Math.random() * 0.4
+    });
+    nodePositions[i * 3] = x;
+    nodePositions[i * 3 + 1] = y;
+    nodePositions[i * 3 + 2] = z;
+  }
+
+  // Build edges between nearby manifold nodes
+  const edgeIndices = [];
+  const threshold = isMob ? 3.2 : 2.85;
+  for (let i = 0; i < graphCount; i++) {
+    for (let j = i + 1; j < graphCount; j++) {
+      const dx = graphNodes[i].baseX - graphNodes[j].baseX;
+      const dy = graphNodes[i].baseY - graphNodes[j].baseY;
+      const dz = graphNodes[i].baseZ - graphNodes[j].baseZ;
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      if (dist < threshold) {
+        edgeIndices.push(i, j);
+      }
+    }
+  }
+
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(nodePositions, 3));
+  lineGeo.setIndex(edgeIndices);
+
+  const lineMat = new THREE.LineBasicMaterial({
+    color: 0x60a5fa,
+    transparent: true,
+    opacity: isMob ? 0.06 : 0.085,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+
+  const constellationLines = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(constellationLines);
+
+  // 3. Dual Counter-Rotating Geodesic Polyhedra & Torus Manifold
+  const icoGroup = new THREE.Group();
+  const outerIcoGeo = new THREE.IcosahedronGeometry(1.15, 1);
+  const outerIcoMat = new THREE.MeshBasicMaterial({
     color: 0x3b82f6,
     wireframe: true,
     transparent: true,
-    opacity: 0.22,
-    shininess: 100
+    opacity: 0.14
   });
-  const icosahedron = new THREE.Mesh(icoGeo, icoMat);
-  scene.add(icosahedron);
+  const outerIco = new THREE.Mesh(outerIcoGeo, outerIcoMat);
 
-  const knotGeo = new THREE.TorusKnotGeometry(0.6, 0.2, 80, 12);
-  const knotMat = new THREE.MeshPhongMaterial({
+  const innerIcoGeo = new THREE.IcosahedronGeometry(0.68, 0);
+  const innerIcoMat = new THREE.MeshBasicMaterial({
     color: 0x8b5cf6,
     wireframe: true,
     transparent: true,
-    opacity: 0.18,
-    shininess: 100
+    opacity: 0.2
+  });
+  const innerIco = new THREE.Mesh(innerIcoGeo, innerIcoMat);
+
+  icoGroup.add(outerIco);
+  icoGroup.add(innerIco);
+  scene.add(icoGroup);
+
+  const knotGeo = new THREE.TorusKnotGeometry(0.68, 0.18, 96, 14);
+  const knotMat = new THREE.MeshBasicMaterial({
+    color: 0x6366f1,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.11
   });
   const torusKnot = new THREE.Mesh(knotGeo, knotMat);
   scene.add(torusKnot);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-  const ptLight = new THREE.PointLight(0xffffff, 0.8);
-  ptLight.position.set(5, 5, 5);
-  scene.add(ptLight);
-
   function placeObjects() {
     const m = window.innerWidth < 768;
-    icosahedron.position.set(m ? 1.6 : 4, m ? 2.6 : 2, m ? -3.5 : -2);
-    torusKnot.position.set(m ? -1.6 : -4, m ? -3.0 : -2, m ? -3.5 : -2);
-    icosahedron.scale.setScalar(m ? 0.45 : 1.2);
-    torusKnot.scale.setScalar(m ? 0.45 : 1.0);
-    icoMat.opacity = m ? 0.12 : 0.22;
-    knotMat.opacity = m ? 0.10 : 0.18;
+    icoGroup.position.set(m ? 1.7 : 4.2, m ? 2.4 : 1.8, m ? -3.5 : -2.2);
+    torusKnot.position.set(m ? -1.7 : -4.4, m ? -2.8 : -2.0, m ? -3.8 : -2.5);
+    icoGroup.scale.setScalar(m ? 0.55 : 1.15);
+    torusKnot.scale.setScalar(m ? 0.5 : 1.0);
   }
   placeObjects();
 
-  /* — Subtle Mouse Parallax — */
+  // Interactive Mouse & Scroll Drift
   let mx = 0, my = 0, tx = 0, ty = 0;
+  let scrollY = window.scrollY || 0;
+
   window.addEventListener('mousemove', e => {
-    mx = (e.clientX / window.innerWidth - 0.5) * 1.5;
-    my = (e.clientY / window.innerHeight - 0.5) * 1.5;
+    mx = (e.clientX / window.innerWidth - 0.5) * 1.4;
+    my = (e.clientY / window.innerHeight - 0.5) * 1.4;
   }, { passive: true });
 
-  // Debounced resize
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY || 0;
+  }, { passive: true });
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -692,31 +965,48 @@ function initWebGL() {
     }, 150);
   }, { passive: true });
 
-  // Stop rendering when tab hidden (saves CPU/battery)
   let visible = true;
   document.addEventListener('visibilitychange', () => {
     visible = !document.hidden;
   });
 
   const clock = new THREE.Clock();
+
   function animate() {
     requestAnimationFrame(animate);
     if (!visible) return;
 
     const t = clock.getElapsedTime();
-    tx += (mx - tx) * 0.04;
-    ty += (my - ty) * 0.04;
+    tx += (mx - tx) * 0.035;
+    ty += (my - ty) * 0.035;
 
-    particles.rotation.y = t * 0.05 + tx * 0.3;
-    particles.rotation.x = t * 0.025 + ty * 0.2;
+    const scrollDrift = scrollY * 0.00065;
 
-    icosahedron.rotation.y = t * 0.18 + tx * 0.5;
-    icosahedron.rotation.x = t * 0.09 + ty * 0.4;
+    // Gentle wave motion across manifold nodes
+    const posAttr = lineGeo.attributes.position;
+    for (let i = 0; i < graphCount; i++) {
+      const n = graphNodes[i];
+      posAttr.array[i * 3] = n.baseX + Math.sin(t * n.speed + n.phase) * 0.22;
+      posAttr.array[i * 3 + 1] = n.baseY + Math.cos(t * n.speed + n.phase) * 0.22;
+    }
+    posAttr.needsUpdate = true;
 
-    torusKnot.rotation.y = -t * 0.13 + tx * 0.4;
-    torusKnot.rotation.z = t * 0.09 + ty * 0.3;
+    constellationLines.rotation.y = t * 0.02 + tx * 0.18;
+    constellationLines.rotation.x = ty * 0.12 + scrollDrift * 0.5;
+
+    particles.rotation.y = t * 0.035 + tx * 0.25;
+    particles.rotation.x = t * 0.018 + ty * 0.18 + scrollDrift;
+
+    outerIco.rotation.y = t * 0.14 + tx * 0.4;
+    outerIco.rotation.x = t * 0.08 + ty * 0.3;
+    innerIco.rotation.y = -t * 0.22;
+    innerIco.rotation.z = t * 0.15;
+
+    torusKnot.rotation.y = -t * 0.11 + tx * 0.35;
+    torusKnot.rotation.z = t * 0.07 + ty * 0.25;
 
     renderer.render(scene, camera);
   }
+
   animate();
 }

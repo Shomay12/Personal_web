@@ -4,36 +4,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects Archive | Shomay Singh Parihar — AI/ML Engineer</title>
-  <meta name="description" content="Visual showcase of engineering and AI projects by Shomay Singh Parihar." />
+  <title>Selected Work | Shomay Singh Parihar — AI Engineer & Data Science</title>
+  <meta name="description" content="Complete archive of AI Engineering, Data Science, and Machine Learning systems built by Shomay Singh Parihar." />
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="projects.css" />
 
-  <!-- Fonts: Inter & JetBrains Mono -->
+  <!-- Editorial & Technical Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>S</text></svg>">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://shomay12.github.io/shomay-portfolio.in/projects.html">
-  <meta property="og:title" content="Projects Archive | Shomay Singh Parihar">
-  <meta property="og:description" content="Visual showcase of engineering and AI projects by Shomay Singh Parihar.">
-  <meta property="og:image" content="assets/images/me.JPG">
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-family='Georgia, serif' font-style='italic' font-size='88' fill='%2360a5fa'>S</text></svg>">
 </head>
 
 <body>
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- AMBIENT GLOW MESH -->
+  <!-- Ambient Atmospheric Mesh -->
   <div class="ambient-glow-mesh" aria-hidden="true">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
@@ -41,26 +34,23 @@
     <div class="glow-orb orb-4"></div>
   </div>
 
-  <!-- WebGL Background Canvas -->
+  <!-- Interactive Latent-Space WebGL Canvas -->
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <!-- Nav -->
-  <nav id="nav">
-    <a href="index.html" class="nav-logo">Shomay<span>.</span></a>
-    <div class="nav-links" id="nav-links">
-      <a href="index.html">Home</a>
+  <!-- Navigation -->
+  <header id="nav">
+    <a href="index.html" class="nav-logo">Shomay Singh Parihar</a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
       <a href="index.html#about">About</a>
-      <a href="index.html#exploring">Exploring</a>
-      <a href="index.html#projects">Projects</a>
-      <a href="index.html#research">Research</a>
-      <a href="index.html#skills">Skills</a>
-      <a href="index.html#education">Education</a>
-      <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-resume-link">Resume ↗</a>
-      <a href="index.html#contact" class="nav-cta">Let's Talk</a>
-    </div>
+      <a href="projects.html" class="active">Work</a>
+      <a href="index.html#stack">Stack</a>
+      <a href="journal.html">Journal</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-external">Resume ↗</a>
+    </nav>
     <div class="nav-right">
-      <button id="theme-toggle" aria-label="Toggle theme">
-        <svg id="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button id="theme-toggle" aria-label="Toggle color theme">
+        <svg id="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -71,285 +61,249 @@
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
-        <svg id="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg id="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       </button>
       <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+        <span></span><span></span>
       </button>
     </div>
-  </nav>
+  </header>
 
   <main id="main-content">
+
     <!-- Page Header -->
-    <section class="page-header section-block">
-      <div class="section-label">SELECTED ENGINEERING WORK</div>
-      <h1 class="section-heading reveal-up">Things I've<br><em>Built</em></h1>
-      <p class="reveal-up">Selected works showcasing
-        machine learning, AI agents, software engineering, and systems research.</p>
+    <section class="container page-hero">
+      <h1 class="hero-title">
+        Selected <em>Work</em> &amp; Models.
+      </h1>
+
+      <div class="hero-intro-grid">
+        <p class="hero-lead">
+          Complete collection of machine learning pipelines, data science models, retrieval architectures, and backend systems I have built.
+        </p>
+
+        <div class="hero-links">
+          <a href="index.html" class="link-quiet">← Home</a>
+          <a href="journal.html" class="link-quiet">Journal →</a>
+        </div>
+      </div>
     </section>
 
-    <!-- Projects Grid -->
-    <section class="projects-grid section-block">
-      <!-- Project 01: HotTea -->
-      <article class="project-card reveal-up">
-        <div class="project-number">01</div>
-        <div class="project-visual">
-          <img src="assets/images/hottea.png" alt="HotTea - Privacy-First AI Browser" class="project-img"
-            loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">AI Browser · Workspace</span>
-          </div>
-          <h3>HotTea</h3>
-          <div class="card-subtitle">Privacy-First AI Browser & Research Workspace</div>
-          <p>An open-source, privacy-first AI browser and research workspace built with Flutter. Unifies web browsing,
-            AI assistance, evidence-backed research, local LLM inference, and encrypted personal .tea vaults into one
-            cross-platform application.</p>
-          <div class="card-tech">
-            <span>Flutter</span><span>Dart</span><span>Local LLM</span><span>AI Agents</span><span>Cryptography</span><span>Cross-Platform</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="hottea">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://shomay12.github.io/hottea/" target="_blank" rel="noopener noreferrer"
-                class="card-link">Live Demo ↗</a>
-              <a href="https://github.com/Shomay12/hottea" target="_blank" rel="noopener noreferrer"
-                class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 02: ReplyNest -->
-      <article class="project-card reveal-up">
-        <div class="project-number">02</div>
-        <div class="project-visual">
-          <img src="assets/images/replynest.png" alt="ReplyNest - Instagram Automation Platform" class="project-img"
-            loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">Automation SaaS · Backend</span>
-          </div>
-          <h3>ReplyNest</h3>
-          <div class="card-subtitle">Instagram Automation Platform & Messaging Infrastructure</div>
-          <p>An Instagram automation platform designed to help businesses automate conversations and customer engagement
-            through Meta’s Graph APIs, featuring comment-to-DM triggers, keyword rules, and containerized microservices.</p>
-          <div class="card-tech">
-            <span>Meta Graph API</span><span>OAuth 2.0</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span><span>Traefik</span><span>Webhooks</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="replynest">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="http://replynest.tech/#auth" target="_blank" rel="noopener noreferrer"
-                class="card-link">Live App ↗</a>
-              <a href="https://github.com/Shomay12" target="_blank" rel="noopener noreferrer"
-                class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 03: UniAssist -->
-      <article class="project-card reveal-up">
-        <div class="project-number">03</div>
-        <div class="project-visual">
-          <img src="assets/images/uniassist.png" alt="UniAssist - Academic Study Assistant" class="project-img"
-            loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">Academic AI · RAG & LLM</span>
-          </div>
-          <h3>UniAssist</h3>
-          <div class="card-subtitle">Academic Study Companion & Intelligence Platform</div>
-          <p>A Retrieval-Augmented Generation (RAG) chatbot that helps students understand academic materials through
-            dense document indexing, semantic vector search, and high-speed Groq-powered LLM generation.</p>
-          <div class="card-tech">
-            <span>Python</span><span>Streamlit</span><span>RAG</span><span>Groq LLM</span><span>Vector Search</span><span>Sentence Embeddings</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="uniassist">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://uniassist-shomayyy.streamlit.app/" target="_blank" rel="noopener noreferrer"
-                class="card-link">Live App ↗</a>
-              <a href="https://github.com/Shomay12/UniAssist" target="_blank" rel="noopener noreferrer"
-                class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 04: Duezy -->
-      <article class="project-card reveal-up">
-        <div class="project-number">04</div>
-        <div class="project-visual">
-          <img src="assets/images/duezy.png" alt="Duezy - AI Payment Recovery Platform" class="project-img"
-            loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">FinTech · Conversational AI</span>
-          </div>
-          <h3>Duezy</h3>
-          <div class="card-subtitle">AI-Powered Payment Collection & Recovery Platform</div>
-          <p>An AI-driven payment recovery and invoice collection platform featuring an authoritative FastAPI
-            double-entry ledger backend, conversational installment negotiation agent, Razorpay webhook verification,
-            and multi-platform Flutter app.</p>
-          <div class="card-tech">
-            <span>FastAPI</span><span>Python</span><span>Flutter</span><span>Dart</span><span>Razorpay Webhooks</span><span>Double-Entry Ledger</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="duezy">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://github.com/Shomay12/Duezy" target="_blank" rel="noopener noreferrer"
-                class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 05: Finance Expenditure Tracker -->
-      <article class="project-card reveal-up">
-        <div class="project-number">05</div>
-        <div class="project-visual">
-          <img src="assets/images/finance_tracker.png" alt="Finance Expenditure Tracker" class="project-img"
-            loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">Machine Learning · Data Science</span>
-          </div>
-          <h3>Finance Expenditure Tracker</h3>
-          <div class="card-subtitle">AI-Based Personal Finance Intelligence System</div>
-          <p>An end-to-end Data Science and Machine Learning system to detect spending anomalies, classify transaction
-            patterns, recognize recurring expenses, forecast cash flow, and generate personalized financial insights.
+    <!-- Archive List -->
+    <section class="container section-space">
+      <div class="editorial-grid">
+        <div class="editorial-sidebar">
+          <h2 class="section-title">All <em>Projects</em></h2>
+          <p class="sidebar-note">
+            Focused on AI Engineering, Applied Machine Learning, Data Science, and backend infrastructure.
           </p>
-          <div class="card-tech">
-            <span>Python</span><span>Machine Learning</span><span>Scikit-learn</span><span>Pandas</span><span>Time-Series Forecasting</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="finance_tracker">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://github.com/Shomay12/Finance_Expenditure_tracker" target="_blank"
-                rel="noopener noreferrer" class="card-link">GitHub ↗</a>
-            </div>
-          </div>
+          <a href="index.html" class="sidebar-link">← Back to Main Page</a>
         </div>
-      </article>
 
-      <!-- Project 06: Industrial Machine Monitoring System -->
-      <article class="project-card reveal-up">
-        <div class="project-number">06</div>
-        <div class="project-visual">
-          <img src="assets/images/industrial_monitoring.png" alt="Industrial Machine Monitoring System"
-            class="project-img" loading="lazy">
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">IoT & ML · Predictive Maintenance</span>
-          </div>
-          <h3>Industrial Machine Monitoring System</h3>
-          <div class="card-subtitle">Predictive Maintenance & Telemetry Intelligence</div>
-          <p>Full-stack predictive maintenance system streaming real-time sensor telemetry (ESP32/simulator) to a
-            FastAPI backend, running scikit-learn RandomForest anomaly classifiers and a DSA Priority Queue scheduler to
-            rank machines for servicing.</p>
-          <div class="card-tech">
-            <span>FastAPI</span><span>Python</span><span>RandomForest</span><span>TypeScript</span><span>MongoDB</span><span>ESP32</span><span>DSA Priority Queue</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="industrial_monitoring">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://github.com/Shomay12/Industrial-Machine-Monitoring-System" target="_blank"
-                rel="noopener noreferrer" class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
+        <div class="editorial-main">
+          <div class="work-list">
 
-      <!-- Project 07: OpenUPSC -->
-      <article class="project-card reveal-up">
-        <div class="project-number">07</div>
-        <div class="project-visual">
-          <img src="assets/images/openupsc.svg" alt="OpenUPSC Educational Platform" class="project-img" loading="lazy">
+            <!-- UniAssist -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="uniassist">UniAssist</button>
+                </h3>
+                <p class="work-summary">
+                  A Retrieval-Augmented Generation (RAG) system that grounds LLM responses in verified academic syllabi and engineering textbooks using dense sentence embeddings, FAISS vector search, and high-speed Groq LPU token streaming.
+                </p>
+                <div class="work-stack-line">
+                  Python · FAISS Vector Search · Sentence Embeddings · RAG · Groq LLM · LangChain · Streamlit
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="uniassist">Architecture &amp; Specs</button>
+                  <a href="https://uniassist-shomayyy.streamlit.app/" target="_blank" rel="noopener noreferrer">Live System ↗</a>
+                  <a href="https://github.com/Shomay12/UniAssist" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="uniassist">
+                <img src="assets/images/uniassist.png" alt="UniAssist" loading="lazy">
+              </div>
+            </article>
+
+            <!-- Finance Expenditure Tracker -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="finance_tracker">Finance Expenditure Intelligence</button>
+                </h3>
+                <p class="work-summary">
+                  End-to-end applied data science and machine learning system for financial records. Detects spending outliers via unsupervised Isolation Forests, classifies merchant descriptions with supervised NLP models, identifies recurring commitments, and forecasts monthly cash flow.
+                </p>
+                <div class="work-stack-line">
+                  Python · Scikit-learn · Isolation Forest · Time-Series Forecasting · Pandas · NumPy · Plotly
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="finance_tracker">Architecture &amp; Specs</button>
+                  <a href="https://github.com/Shomay12/Finance_Expenditure_tracker" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="finance_tracker">
+                <img src="assets/images/finance_tracker.png" alt="Finance Expenditure Tracker" loading="lazy">
+              </div>
+            </article>
+
+            <!-- Industrial Machine Monitoring System -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="industrial_monitoring">Industrial Machine Monitoring</button>
+                </h3>
+                <p class="work-summary">
+                  Full-stack predictive maintenance platform streaming real-time vibration, thermal, and rotational sensor telemetry (ESP32 / simulator) to a FastAPI backend, running Scikit-learn RandomForest anomaly classifiers and a min-heap priority queue scheduler.
+                </p>
+                <div class="work-stack-line">
+                  Python · Scikit-learn (RandomForest) · FastAPI · Sensor Telemetry · Priority Queue DSA · MongoDB
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="industrial_monitoring">Architecture &amp; Specs</button>
+                  <a href="https://github.com/Shomay12/Industrial-Machine-Monitoring-System" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="industrial_monitoring">
+                <img src="assets/images/industrial_monitoring.png" alt="Industrial Machine Monitoring" loading="lazy">
+              </div>
+            </article>
+
+            <!-- HotTea -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="hottea">HotTea</button>
+                </h3>
+                <p class="work-summary">
+                  Open-source, privacy-first AI browser and local LLM workspace unifying web browsing, on-device model inference (Ollama / llama.cpp), automated DOM context grounding, and client-side AES-GCM encrypted personal vaults (.tea).
+                </p>
+                <div class="work-stack-line">
+                  Local LLM (Ollama) · Context Grounding · AES-GCM Cryptography · Flutter · Dart · Cross-Platform
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="hottea">Architecture &amp; Specs</button>
+                  <a href="https://shomay12.github.io/hottea/" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
+                  <a href="https://github.com/Shomay12/hottea" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="hottea">
+                <img src="assets/images/hottea.png" alt="HotTea" loading="lazy">
+              </div>
+            </article>
+
+            <!-- Duezy -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="duezy">Duezy</button>
+                </h3>
+                <p class="work-summary">
+                  AI-driven invoice recovery platform featuring an authoritative FastAPI double-entry accounting ledger, a conversational installment negotiation agent, cryptographic Razorpay webhook verification, and a cross-platform Flutter client.
+                </p>
+                <div class="work-stack-line">
+                  FastAPI · Python · Conversational Agent · Double-Entry Ledger · PostgreSQL · Flutter
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="duezy">Architecture &amp; Specs</button>
+                  <a href="https://github.com/Shomay12/Duezy" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="duezy">
+                <img src="assets/images/duezy.png" alt="Duezy" loading="lazy">
+              </div>
+            </article>
+
+            <!-- ReplyNest -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="replynest">ReplyNest</button>
+                </h3>
+                <p class="work-summary">
+                  Messaging automation infrastructure built on Meta’s Graph APIs, featuring real-time webhook ingestion, keyword intent matching, comment-to-DM pipelines, and containerized microservices behind Traefik.
+                </p>
+                <div class="work-stack-line">
+                  Node.js · PostgreSQL · Meta Graph API · OAuth 2.0 · Docker · Traefik · Webhooks
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="replynest">Architecture &amp; Specs</button>
+                  <a href="http://replynest.tech/#auth" target="_blank" rel="noopener noreferrer">Live App ↗</a>
+                  <a href="https://github.com/Shomay12" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="replynest">
+                <img src="assets/images/replynest.png" alt="ReplyNest" loading="lazy">
+              </div>
+            </article>
+
+            <!-- OpenUPSC -->
+            <article class="work-row">
+              <div class="work-row-content">
+                <h3 class="work-heading">
+                  <button type="button" class="work-title-btn" data-project="openupsc">OpenUPSC</button>
+                </h3>
+                <p class="work-summary">
+                  Structured educational resource hub and syllabus indexing platform built with Next.js, TypeScript, and Supabase for fast curriculum navigation and revision tracking.
+                </p>
+                <div class="work-stack-line">
+                  TypeScript · Next.js · React · Supabase · Tailwind CSS · Vercel Edge
+                </div>
+                <div class="work-links">
+                  <button type="button" class="btn-text-trigger" data-project="openupsc">Architecture &amp; Specs</button>
+                  <a href="https://open-upsc.vercel.app" target="_blank" rel="noopener noreferrer">Live App ↗</a>
+                  <a href="https://github.com/Shomay12/OpenUpsc" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                </div>
+              </div>
+              <div class="work-row-visual" data-project="openupsc">
+                <img src="assets/images/openupsc.svg" alt="OpenUPSC" loading="lazy">
+              </div>
+            </article>
+
+          </div>
         </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="tag">Web Application · EdTech</span>
-          </div>
-          <h3>OpenUPSC</h3>
-          <div class="card-subtitle">Civil Services Educational Platform & Resource Hub</div>
-          <p>Modern educational platform designed for civil services aspirants to streamline competitive exam
-            preparation with structured syllabus roadmaps, organized study resources, and revision tools.</p>
-          <div class="card-tech">
-            <span>TypeScript</span><span>Next.js</span><span>React</span><span>TailwindCSS</span><span>Supabase</span><span>Vercel</span>
-          </div>
-          <div class="card-actions">
-            <button type="button" class="btn-card-details" data-project="openupsc">
-              <span>Details & Specs</span>
-              <span class="btn-icon">↗</span>
-            </button>
-            <div class="project-links">
-              <a href="https://open-upsc.vercel.app" target="_blank" rel="noopener noreferrer" class="card-link">Live App ↗</a>
-              <a href="https://github.com/Shomay12/OpenUpsc" target="_blank" rel="noopener noreferrer"
-                class="card-link">GitHub ↗</a>
-            </div>
-          </div>
-        </div>
-      </article>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-inner">
-      <span>Shomay Singh Parihar · AI/ML Engineer · Researcher · Software Developer</span>
-      <span style="font-size: 0.78rem; color: var(--text-dim);">© <span id="year">2026</span> Shomay Singh Parihar.
-        All rights reserved.</span>
-      <a href="index.html" class="back-top">← Home</a>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-left">
+        <span class="footer-brand">Shomay Singh Parihar</span>
+        <span class="meta-sep">·</span>
+        <span>AI Engineer &amp; Data Science</span>
+      </div>
+      <div class="footer-right">
+        <a href="index.html" class="back-top">← Home</a>
+        <span class="meta-sep">·</span>
+        <a href="journal.html" class="back-top">Journal</a>
+        <span class="meta-sep">·</span>
+        <span>© <span id="year">2026</span></span>
+      </div>
     </div>
   </footer>
 
-  <!-- PROJECT DEEP-DIVE MODAL -->
+  <!-- PROJECT ARCHITECTURE MODAL -->
   <div id="project-modal" class="project-modal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="modal-backdrop"></div>
     <div class="modal-wrapper">
       <div class="modal-card">
-        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close specifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
             stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        <div class="modal-dynamic-content" id="modal-dynamic-content">
-          <!-- Populated dynamically via script.js -->
-        </div>
+        <div class="modal-dynamic-content" id="modal-dynamic-content"></div>
       </div>
     </div>
   </div>
 
-  <!-- Three.js WebGL Engine -->
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="script.js"></script>
 
