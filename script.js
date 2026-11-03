@@ -309,6 +309,39 @@ function buildCodeWindowHtml(entry) {
   `;
 }
 
+function buildConnectedProjectCardHtml(entry) {
+  if (!entry || !entry.project) return '';
+  const p = entry.project;
+  const liveLinkHtml = p.liveUrl
+    ? `<a href="${escapeHtml(p.liveUrl)}" target="_blank" rel="noopener noreferrer" class="journal-proj-link">Live System ↗</a>`
+    : '';
+  const githubLinkHtml = p.githubUrl
+    ? `<a href="${escapeHtml(p.githubUrl)}" target="_blank" rel="noopener noreferrer" class="journal-proj-link">Source ↗</a>`
+    : '';
+  const specsBtnHtml = p.id
+    ? `<button type="button" class="btn-text-trigger" data-project="${escapeHtml(p.id)}">Architecture &amp; Specs</button>`
+    : '';
+
+  return `
+    <div class="journal-connected-project-card">
+      <div class="journal-proj-header">
+        <div class="journal-proj-tagline">
+          <span class="journal-proj-badge">Connected Project</span>
+          <span class="journal-proj-name">${escapeHtml(p.name)}</span>
+          ${p.tag ? `<span class="journal-proj-role">· ${escapeHtml(p.tag)}</span>` : ''}
+        </div>
+      </div>
+      ${p.summary ? `<p class="journal-proj-summary">${escapeHtml(p.summary)}</p>` : ''}
+      ${p.techStack ? `<div class="journal-proj-stack">${escapeHtml(p.techStack)}</div>` : ''}
+      <div class="journal-proj-actions">
+        ${specsBtnHtml}
+        ${liveLinkHtml}
+        ${githubLinkHtml}
+      </div>
+    </div>
+  `;
+}
+
 function renderProseParagraphs(paragraphs) {
   return (paragraphs || []).map(raw => {
     const text = String(raw || '').trim();
@@ -726,6 +759,7 @@ function initTechnicalJournal() {
       <div class="post-prose" style="padding-top:2rem;">
         ${renderProseParagraphs(recent.paragraphs)}
       </div>
+      ${buildConnectedProjectCardHtml(recent)}
       ${buildAudioPlayerHtml(recent)}
       ${buildCodeWindowHtml(recent)}
     </article>
@@ -759,6 +793,7 @@ function initTechnicalJournal() {
             <div class="post-prose">
               ${renderProseParagraphs(entry.paragraphs)}
             </div>
+            ${buildConnectedProjectCardHtml(entry)}
             ${buildAudioPlayerHtml(entry)}
             ${buildCodeWindowHtml(entry)}
             ${buildPhotoGridHtml(entry)}
@@ -1168,6 +1203,34 @@ function initProjectModal() {
       ],
       architecture: 'Next.js App Router → Edge Cache → Structured Markdown & Supabase Store → Responsive Reading UI.',
       techStack: 'TypeScript · Next.js · React · Supabase · Tailwind CSS'
+    },
+    ritesh_web: {
+      title: 'Ritesh — Portfolio & Business Web Platform',
+      image: 'assets/images/me4.jpg',
+      alt: 'Ritesh Portfolio & Business Platform',
+      liveUrl: '',
+      githubUrl: 'https://github.com/Shomay12/Ritesh-project-web',
+      description: 'A bespoke, performance-first portfolio and business platform crafted to showcase professional services, past client engagements, and creative work with fluid responsive interactions and minimal bundle overhead.',
+      features: [
+        {
+          title: 'Lightweight Modular Architecture',
+          desc: 'Built with zero bloated runtime dependencies, leveraging modern CSS Grid, Flexbox, and native DOM APIs for blazing-fast load times.'
+        },
+        {
+          title: 'Conversion-Focused Layout',
+          desc: 'Structured service sections, project showcases, and frictionless contact touchpoints engineered to turn visitors into business inquiries.'
+        },
+        {
+          title: 'Fluid Hardware-Accelerated Motion',
+          desc: 'Smooth scroll-driven transitions and micro-interactions powered by CSS custom properties and IntersectionObserver.'
+        },
+        {
+          title: 'Responsive Cross-Device Layout',
+          desc: 'Pixel-perfect typography and fluid scaling across smartphones, tablets, laptops, and ultra-wide desktop monitors.'
+        }
+      ],
+      architecture: 'Semantic HTML5 Structure → CSS Custom Properties & Tokenized Design → Native IntersectionObserver Motion → Client Inquiry Funnel.',
+      techStack: 'HTML5 · CSS3 · Vanilla JavaScript · Responsive Design · Git'
     }
   };
 

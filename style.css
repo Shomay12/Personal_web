@@ -818,6 +818,106 @@ body.light #moon { display: block; }
 }
 
 /* --------------------------------------------------------------------------
+   CONNECTED PROJECT CARD (Used in Journal entries on index.html & journal.html)
+   -------------------------------------------------------------------------- */
+.journal-connected-project-card {
+  margin: 1.5rem 0 0.5rem;
+  padding: 1.25rem 1.45rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+body.light .journal-connected-project-card {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.journal-proj-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.journal-proj-tagline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+}
+
+.journal-proj-badge {
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(96, 165, 250, 0.12);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.journal-proj-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+.journal-proj-role {
+  color: var(--text-muted);
+}
+
+.journal-proj-summary {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.journal-proj-stack {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.journal-proj-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.35rem;
+  margin-top: 0.25rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.journal-proj-actions a,
+.journal-proj-actions button,
+.journal-proj-link {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 2px;
+  cursor: pointer;
+  transition: color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.journal-proj-actions a:hover,
+.journal-proj-actions button:hover,
+.journal-proj-link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
    9. PERSONAL JOURNAL / DAILY LOG STREAM (journal.html)
    -------------------------------------------------------------------------- */
 .journal-filters {

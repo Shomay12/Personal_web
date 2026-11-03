@@ -59,8 +59,8 @@
       <a href="#about">About</a>
       <a href="#work">Work</a>
       <a href="#stack">Stack</a>
-      <a href="journal.html">Journal</a>
-      <a href="youfinemehere.html">YouFineMeHere!!</a>
+      <a href="#journal">Journal</a>
+      <a href="#youfinemehere">YouFineMeHere!!</a>
       <a href="#contact">Contact</a>
       <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-external">Resume
         ↗</a>
@@ -123,8 +123,8 @@
 
         <div class="hero-links">
           <a href="#work" class="link-primary">Selected Work ↓</a>
-          <a href="journal.html" class="link-quiet">Journal →</a>
-          <a href="youfinemehere.html" class="link-quiet">YouFineMeHere!! →</a>
+          <a href="#journal" class="link-quiet">Journal ↓</a>
+          <a href="#youfinemehere" class="link-quiet">YouFineMeHere!! ↓</a>
           <a href="Shomay_Singh_Parihar_Resume.pdf" target="_blank" rel="noopener noreferrer" class="link-quiet">Resume
             ↗</a>
           <a href="https://github.com/shomay12" target="_blank" rel="noopener noreferrer" class="link-quiet">GitHub
@@ -162,7 +162,7 @@
               LLM applications, I care about measurable accuracy and clean execution.
             </p>
             <p>
-              Alongside my engineering work here, I keep a personal <a href="journal.html"
+              Alongside my engineering work here, I keep an active <a href="#journal"
                 class="inline-anchor">Journal</a> where I share my day-to-day life, what tech I am focusing on, photos,
               voice notes, videos, and code from my daily builds.
             </p>
@@ -380,6 +380,72 @@
       </div>
     </section>
 
+    <!-- THE JOURNAL SECTION -->
+    <section id="journal" class="container section-space">
+      <div class="editorial-grid">
+        <div class="editorial-sidebar">
+          <h2 class="section-title">The <em>Journal</em></h2>
+          <p class="sidebar-note">
+            Engineering dispatches, model evaluations, architectural post-mortems, and daily technical builds.
+          </p>
+          <a href="journal.html" class="sidebar-link">All Journal Entries (8) →</a>
+        </div>
+
+        <div class="editorial-main">
+          <article class="work-row" style="padding-top:0; border-bottom:none;">
+            <div class="work-row-content">
+              <div class="work-meta">
+                <span>Recent Dispatch</span>
+                <span class="meta-sep">·</span>
+                <span>October 25, 2026</span>
+                <span class="meta-sep">·</span>
+                <span>AI Engineering</span>
+                <span class="meta-sep">·</span>
+                <span>4 min read</span>
+              </div>
+              <h3 class="work-heading">
+                <a href="journal.html" class="work-title-btn">Why naive chunking quietly breaks RAG pipelines (and what I changed in UniAssist)</a>
+              </h3>
+              <p class="work-summary">
+                Benchmarking retrieval quality on dense engineering syllabi and derivation-heavy lecture PDFs. When you split documents purely by fixed character counts, equations and proofs get sliced right down the middle. Switched my ingestion pipeline to structure-aware semantic windowing with dense sentence embeddings and FAISS inner-product search before Groq synthesis.
+              </p>
+
+              <!-- Connected Project Info Card -->
+              <div class="journal-connected-project-card">
+                <div class="journal-proj-header">
+                  <div class="journal-proj-tagline">
+                    <span class="journal-proj-badge">Connected Project</span>
+                    <span class="journal-proj-name">UniAssist</span>
+                    <span class="journal-proj-role">· Dense Retrieval &amp; RAG Pipeline</span>
+                  </div>
+                </div>
+                <p class="journal-proj-summary">
+                  A Retrieval-Augmented Generation system that grounds LLM responses in verified academic syllabi and textbooks with dense FAISS vector search and sub-second Groq token streaming.
+                </p>
+                <div class="journal-proj-stack">
+                  Python · FAISS Vector Search · Sentence-Transformers · RAG · Groq LLM · LangChain · Streamlit
+                </div>
+                <div class="journal-proj-actions">
+                  <button type="button" class="btn-text-trigger" data-project="uniassist">Architecture &amp; Specs</button>
+                  <a href="https://uniassist-shomayyy.streamlit.app/" target="_blank" rel="noopener noreferrer">Live System ↗</a>
+                  <a href="https://github.com/Shomay12/UniAssist" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                  <a href="journal.html" class="journal-proj-link">Read Full Dispatch in Journal →</a>
+                </div>
+              </div>
+
+              <div class="work-links" style="margin-top: 0.5rem;">
+                <a href="journal.html" class="link-primary">Open Full Technical Journal (8 Entries) →</a>
+              </div>
+            </div>
+
+            <div class="work-row-visual" data-project="uniassist" style="cursor: pointer;" title="Click to view UniAssist architecture specifications">
+              <img src="assets/images/uniassist.png" alt="UniAssist RAG Pipeline" loading="lazy">
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- YOUFINEMEHERE!! (BEYOND THE TERMINAL & JOURNAL) -->
     <section id="youfinemehere" class="container section-space">
       <div class="editorial-grid">
@@ -519,8 +585,10 @@
             <a href="#about">About</a>
             <a href="#work">Selected Work</a>
             <a href="#stack">Technical Stack</a>
-            <a href="journal.html">Daily Journal</a>
-            <a href="projects.html">All Projects</a>
+            <a href="#journal">Journal</a>
+            <a href="#youfinemehere">YouFineMeHere!!</a>
+            <a href="projects.html">All Projects (7)</a>
+            <a href="journal.html">Full Journal Archive (8)</a>
           </div>
           <div class="footer-nav-group">
             <span class="footer-group-title">Elsewhere</span>
