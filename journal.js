@@ -221,6 +221,58 @@ window.YOU_FINE_ME_HERE = {
 
 window.JOURNAL_ENTRIES = [
   {
+    id: 'ritesh-portfolio-business-web',
+    date: 'November 3, 2026',
+    category: 'building',
+    title: 'Building a modern portfolio & business showcase: performance-focused web architecture',
+    subtitle: 'Engineering a bespoke digital showcase for Ritesh with zero runtime dependencies, fluid CSS layout, and hardware-accelerated scroll reveals',
+    images: [
+      {
+        src: 'assets/images/ritesh_project_web.svg',
+        caption: 'Ritesh Portfolio & Business Web — Architecture overview, Lighthouse 100/100 performance scores, and modular design system.'
+      }
+    ],
+    paragraphs: [
+      'Many modern business portfolios and developer showcases suffer from severe template bloat: multi-megabyte JavaScript runtime bundles, sluggish mobile rendering, fragile third-party animation libraries, and unpredictable Cumulative Layout Shifts (CLS). When building the personal brand and commercial platform for Ritesh, the engineering objective was uncompromising: deliver a visually captivating, conversion-driven digital presence built on a strict zero-dependency performance budget.',
+      '## Fluid Layout & Tokenized CSS Architecture',
+      'Rather than importing heavy component frameworks, the platform is structured with semantic HTML5 elements and modular CSS custom properties for effortless design token management. A fluid grid and flexbox layout was engineered from first principles, ensuring elements scale seamlessly across smartphone screens, tablets, laptops, and ultra-wide desktop monitors without layout reflows or horizontal jitter.',
+      'Typography and spacing leverage CSS mathematical clamp functions—such as clamp(1.1rem, 2.5vw, 1.75rem)—to ensure optimal typographic rhythm and effortless legibility regardless of screen density or viewport dimensions.',
+      '## Hardware-Accelerated Native Motion with Zero Dependencies',
+      'Instead of bundling bulky animation suites like GSAP or Framer Motion, scroll-driven storytelling and micro-interactions are powered by a lightweight native IntersectionObserver harness. Elements reveal themselves with subtle GPU-accelerated CSS transforms (translate3d) and opacity transitions only as they enter the visible viewport. Crucially, each element unobserves immediately upon reveal, keeping the browser main thread completely idle during active scrolling.',
+      '## Conversion Funnel & Commercial Impact',
+      'The site architecture is deliberately organized around clear client conversion paths: structured service capabilities, proof-of-work project breakdowns, and frictionless contact touchpoints that guide visitors from discovery to direct business inquiries. The outcome is a pristine commercial presentation achieving 100/100 Lighthouse performance metrics, sub-50ms paint times, and complete device responsiveness.'
+    ],
+    code: {
+      lang: 'motion_observer.js',
+      snippet: `// Native hardware-accelerated scroll reveal observer (0 dependencies)
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      // Unobserve immediately to free up browser main thread
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.15,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+document.querySelectorAll('.showcase-card, .service-item, .lead-metric').forEach(el => {
+  revealObserver.observe(el);
+});`
+    },
+    project: {
+      id: 'ritesh_web',
+      name: 'Ritesh Portfolio & Business Web',
+      tag: 'Portfolio & Commercial Web Showcase',
+      summary: 'A high-performance portfolio and commercial web platform engineered with clean semantic HTML, modular responsive CSS architecture, zero-dependency native motion, and frictionless client inquiry funnels.',
+      techStack: 'HTML5 · CSS3 (Custom Properties) · Vanilla JavaScript · Responsive UI/UX · Web Performance',
+      liveUrl: '',
+      githubUrl: 'https://github.com/Shomay12/Ritesh-project-web'
+    }
+  },
+  {
     id: 'rag-chunking-retrieval-experiments',
     date: 'October 25, 2026',
     category: 'ai',
@@ -329,42 +381,6 @@ df['anomaly_score'] = iso_forest.fit_predict(features)`
       techStack: 'Python · Scikit-learn · Isolation Forest · Pandas · NumPy · Time-Series Forecasting · Plotly · Streamlit',
       liveUrl: '',
       githubUrl: 'https://github.com/Shomay12/Finance_Expenditure_tracker'
-    }
-  },
-  {
-    id: 'ritesh-portfolio-business-web',
-    date: 'October 8, 2026',
-    category: 'building',
-    title: 'Building a modern portfolio & business showcase: performance-focused web architecture',
-    subtitle: 'Crafting a high-speed digital presence with modular responsive layout, crisp typography, and zero-dependency motion',
-    paragraphs: [
-      'Many modern business portfolios and developer showcases suffer from template bloat: heavy third-party animation bundles, sluggish mobile rendering, and excessive dependencies that slow down time-to-interactive. When building the portfolio and business platform for Ritesh, the priority was lean, high-performance web engineering with zero superfluous baggage.',
-      'Designed a modular component hierarchy using semantic HTML5 and CSS custom properties for effortless theme tokens. Implemented fluid responsive grid systems that scale gracefully from narrow mobile screens to large desktop viewports without cumulative layout shifts. Added hardware-accelerated scroll reveals using a lightweight native IntersectionObserver harness, keeping bundle size minimal while delivering a polished commercial feel.'
-    ],
-    code: {
-      lang: 'motion_observer.js',
-      snippet: `// Native hardware-accelerated scroll reveal observer
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
-
-document.querySelectorAll('.showcase-card, .service-item').forEach(el => {
-  revealObserver.observe(el);
-});`
-    },
-    project: {
-      id: 'ritesh_web',
-      name: 'Ritesh Portfolio & Business Web',
-      tag: 'Portfolio & Business Web Platform',
-      summary: 'A high-performance portfolio and commercial web platform engineered with clean semantic HTML, modular responsive CSS architecture, and fluid hardware-accelerated micro-interactions.',
-      techStack: 'HTML5 · CSS3 (Custom Properties) · Vanilla JavaScript · Responsive UI/UX · Web Performance',
-      liveUrl: '',
-      githubUrl: 'https://github.com/Shomay12/Ritesh-project-web'
     }
   },
   {

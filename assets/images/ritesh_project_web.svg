@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="ritesh-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c14"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="ritesh-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.07)"/>
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)"/>
+    </linearGradient>
+    <filter id="ritesh-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="35" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Deep background -->
+  <rect width="1200" height="675" fill="url(#ritesh-bg)"/>
+
+  <!-- Atmospheric Grid Overlay -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <path d="M0,75 H1200 M0,150 H1200 M0,225 H1200 M0,300 H1200 M0,375 H1200 M0,450 H1200 M0,525 H1200 M0,600 H1200"/>
+    <path d="M100,0 V675 M200,0 V675 M300,0 V675 M400,0 V675 M500,0 V675 M600,0 V675 M700,0 V675 M800,0 V675 M900,0 V675 M1000,0 V675 M1100,0 V675"/>
+  </g>
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="280" cy="220" r="220" fill="#38bdf8" opacity="0.12" filter="url(#ritesh-glow)"/>
+  <circle cx="960" cy="420" r="240" fill="#818cf8" opacity="0.14" filter="url(#ritesh-glow)"/>
+  <circle cx="600" cy="560" r="180" fill="#c084fc" opacity="0.08" filter="url(#ritesh-glow)"/>
+
+  <g transform="translate(80, 70)">
+    <!-- Category Badge -->
+    <rect x="0" y="0" width="230" height="34" rx="17" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.35)" stroke-width="1.5"/>
+    <circle cx="20" cy="17" r="5" fill="#38bdf8"/>
+    <text x="36" y="22" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#38bdf8" letter-spacing="1.2">PORTFOLIO &amp; BUSINESS WEB</text>
+
+    <!-- Main Title & Description -->
+    <text x="0" y="80" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="40" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Ritesh — Portfolio &amp; Business Web</text>
+    <text x="0" y="118" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.7)">High-Performance Commercial Showcase · Modular Responsive Layout · Zero-Dependency Motion</text>
+
+    <!-- Interactive Mockup Canvas Container -->
+    <g transform="translate(0, 150)">
+      <!-- Main Browser Frame Window -->
+      <rect x="0" y="0" width="1040" height="360" rx="14" fill="url(#card-grad)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.2"/>
+      
+      <!-- Window Title Bar -->
+      <path d="M0,14 Q0,0 14,0 L1026,0 Q1040,0 1040,14 L1040,42 L0,42 Z" fill="rgba(255, 255, 255, 0.04)"/>
+      <line x1="0" y1="42" x2="1040" y2="42" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <circle cx="24" cy="21" r="5" fill="#ff5f56"/>
+      <circle cx="42" cy="21" r="5" fill="#ffbd2e"/>
+      <circle cx="60" cy="21" r="5" fill="#27c93f"/>
+      <rect x="360" y="11" width="320" height="20" rx="6" fill="rgba(255, 255, 255, 0.06)" stroke="rgba(255, 255, 255, 0.08)"/>
+      <text x="440" y="25" font-family="JetBrains Mono, monospace, sans-serif" font-size="11" fill="rgba(255, 255, 255, 0.5)">ritesh-project-web / portfolio</text>
+
+      <!-- Inside Mockup Layout (Split: Left Hero Preview, Right Performance & Architecture Specs) -->
+      
+      <!-- Left: Mockup Hero & Services Preview -->
+      <g transform="translate(30, 64)">
+        <rect x="0" y="0" width="560" height="266" rx="10" fill="rgba(10, 15, 26, 0.6)" stroke="rgba(255, 255, 255, 0.06)"/>
+        
+        <!-- Mock Nav -->
+        <rect x="24" y="20" width="90" height="10" rx="4" fill="#38bdf8" opacity="0.9"/>
+        <rect x="360" y="22" width="40" height="6" rx="3" fill="rgba(255,255,255,0.4)"/>
+        <rect x="415" y="22" width="40" height="6" rx="3" fill="rgba(255,255,255,0.4)"/>
+        <rect x="470" y="18" width="65" height="16" rx="8" fill="rgba(56, 189, 248, 0.2)" stroke="rgba(56, 189, 248, 0.5)"/>
+        <line x1="24" y1="44" x2="536" y2="44" stroke="rgba(255,255,255,0.06)"/>
+
+        <!-- Mock Hero text -->
+        <text x="24" y="78" font-family="sans-serif" font-size="11" font-weight="700" fill="#38bdf8" letter-spacing="1">CLIENT SHOWCASE</text>
+        <text x="24" y="106" font-family="sans-serif" font-size="22" font-weight="800" fill="#ffffff">Creative Direction &amp; Modern Craft</text>
+        <text x="24" y="130" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">Engineering a bespoke identity for Ritesh with high-speed web foundations.</text>
+
+        <!-- 3 Feature Mock Cards -->
+        <g transform="translate(24, 152)">
+          <!-- Card 1 -->
+          <rect x="0" y="0" width="160" height="92" rx="8" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(56, 189, 248, 0.25)"/>
+          <circle cx="20" cy="22" r="8" fill="rgba(56, 189, 248, 0.2)"/>
+          <text x="20" y="26" text-anchor="middle" font-size="10" fill="#38bdf8">⚡</text>
+          <text x="36" y="25" font-family="sans-serif" font-size="12" font-weight="700" fill="#ffffff">Zero Bloat</text>
+          <text x="14" y="48" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">0 external JS libs</text>
+          <text x="14" y="64" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Sub-50ms paint</text>
+          <text x="14" y="80" font-family="sans-serif" font-size="10" fill="#38bdf8">100 Performance</text>
+
+          <!-- Card 2 -->
+          <rect x="175" y="0" width="160" height="92" rx="8" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(129, 140, 248, 0.25)"/>
+          <circle cx="195" cy="22" r="8" fill="rgba(129, 140, 248, 0.2)"/>
+          <text x="195" y="26" text-anchor="middle" font-size="10" fill="#818cf8">📐</text>
+          <text x="211" y="25" font-family="sans-serif" font-size="12" font-weight="700" fill="#ffffff">Fluid CSS Grid</text>
+          <text x="189" y="48" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Mobile to 4K Ultrawide</text>
+          <text x="189" y="64" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">CSS Custom Tokens</text>
+          <text x="189" y="80" font-family="sans-serif" font-size="10" fill="#818cf8">No Layout Shift (CLS 0)</text>
+
+          <!-- Card 3 -->
+          <rect x="350" y="0" width="160" height="92" rx="8" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(192, 132, 252, 0.25)"/>
+          <circle cx="370" cy="22" r="8" fill="rgba(192, 132, 252, 0.2)"/>
+          <text x="370" y="26" text-anchor="middle" font-size="10" fill="#c084fc">✨</text>
+          <text x="386" y="25" font-family="sans-serif" font-size="12" font-weight="700" fill="#ffffff">Native Motion</text>
+          <text x="364" y="48" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">IntersectionObserver</text>
+          <text x="364" y="64" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Hardware Acceleration</text>
+          <text x="364" y="80" font-family="sans-serif" font-size="10" fill="#c084fc">60 FPS Scroll Reveal</text>
+        </g>
+      </g>
+
+      <!-- Right: Engineering Telemetry & Specs -->
+      <g transform="translate(620, 64)">
+        <rect x="0" y="0" width="390" height="266" rx="10" fill="rgba(10, 15, 26, 0.6)" stroke="rgba(255, 255, 255, 0.06)"/>
+
+        <!-- Header -->
+        <text x="24" y="32" font-family="sans-serif" font-size="13" font-weight="700" fill="#ffffff">Architecture Benchmarks</text>
+        <line x1="24" y1="46" x2="366" y2="46" stroke="rgba(255,255,255,0.06)"/>
+
+        <!-- Lighthouse metric row -->
+        <g transform="translate(24, 62)">
+          <rect x="0" y="0" width="70" height="48" rx="8" fill="rgba(39, 201, 63, 0.12)" stroke="rgba(39, 201, 63, 0.4)"/>
+          <text x="35" y="28" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="800" fill="#27c93f">100</text>
+          <text x="35" y="42" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#27c93f">PERF</text>
+
+          <rect x="85" y="0" width="70" height="48" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.4)"/>
+          <text x="120" y="28" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="800" fill="#38bdf8">100</text>
+          <text x="120" y="42" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#38bdf8">SEO</text>
+
+          <rect x="170" y="0" width="70" height="48" rx="8" fill="rgba(129, 140, 248, 0.12)" stroke="rgba(129, 140, 248, 0.4)"/>
+          <text x="205" y="28" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="800" fill="#818cf8">100</text>
+          <text x="205" y="42" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#818cf8">BEST PRAC</text>
+
+          <rect x="255" y="0" width="85" height="48" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="rgba(192, 132, 252, 0.4)"/>
+          <text x="297" y="28" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="800" fill="#c084fc">0.00</text>
+          <text x="297" y="42" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#c084fc">CLS SHIFT</text>
+        </g>
+
+        <!-- Tech tags -->
+        <g transform="translate(24, 130)">
+          <text x="0" y="0" font-family="sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.4)" letter-spacing="0.5">ENGINEERING STACK</text>
+          <rect x="0" y="12" width="105" height="24" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="12" y="28" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.85)">Semantic HTML5</text>
+
+          <rect x="115" y="12" width="105" height="24" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="127" y="28" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.85)">CSS Variables</text>
+
+          <rect x="230" y="12" width="112" height="24" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="242" y="28" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.85)">Vanilla JS (ES6)</text>
+
+          <rect x="0" y="44" width="160" height="24" rx="12" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.3)"/>
+          <text x="12" y="60" font-family="JetBrains Mono, monospace" font-size="11" fill="#38bdf8">IntersectionObserver API</text>
+
+          <rect x="170" y="44" width="172" height="24" rx="12" fill="rgba(129,140,248,0.1)" stroke="rgba(129,140,248,0.3)"/>
+          <text x="182" y="60" font-family="JetBrains Mono, monospace" font-size="11" fill="#818cf8">Fluid Viewport Typography</text>
+        </g>
+
+        <!-- GitHub link badge -->
+        <g transform="translate(24, 218)">
+          <rect x="0" y="0" width="342" height="34" rx="8" fill="rgba(56, 189, 248, 0.08)" stroke="rgba(56, 189, 248, 0.25)"/>
+          <text x="16" y="22" font-family="JetBrains Mono, monospace" font-size="11" fill="#38bdf8">github.com/Shomay12/Ritesh-project-web</text>
+          <text x="320" y="22" font-family="sans-serif" font-size="13" fill="#38bdf8">↗</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

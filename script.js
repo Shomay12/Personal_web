@@ -1206,7 +1206,7 @@ function initProjectModal() {
     },
     ritesh_web: {
       title: 'Ritesh — Portfolio & Business Web Platform',
-      image: 'assets/images/me4.jpg',
+      image: 'assets/images/ritesh_project_web.svg',
       alt: 'Ritesh Portfolio & Business Platform',
       liveUrl: '',
       githubUrl: 'https://github.com/Shomay12/Ritesh-project-web',
